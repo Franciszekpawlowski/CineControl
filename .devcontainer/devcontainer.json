@@ -18,7 +18,9 @@
                 "VisualStudioExptTeam.intellicode-api-usage-examples",
                 "esbenp.prettier-vscode",
                 "ms-dotnettools.csdevkit",
-                "ms-dotnettools.vscodeintellicode-csharp"
+                "ms-dotnettools.vscodeintellicode-csharp",
+                "ms-azuretools.vscode-docker",
+                "humao.rest-client"
             ]
         }
     }
