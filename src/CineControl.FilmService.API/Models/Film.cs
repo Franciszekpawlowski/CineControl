@@ -8,5 +8,6 @@ namespace CineControl.FilmService.API.Models
         public DateTime ReleaseDate { get; set; }
         public int Duration { get; set; } // in minutes
         public string PosterUrl { get; set; }
+        public int tenantID {get; set;}
     }
 }

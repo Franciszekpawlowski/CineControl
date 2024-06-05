@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CineControl.FilmService.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ead103788c297ee2c065a32de77092224a245e7a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e11a25222085c756a3c7c364e8b427a6384880e9")]
 [assembly: System.Reflection.AssemblyProductAttribute("CineControl.FilmService.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CineControl.FilmService.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
