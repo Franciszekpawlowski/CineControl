@@ -22,9 +22,9 @@
                 "ms-azuretools.vscode-docker",
                 "humao.rest-client"
             ]
-        },
-        "forwardPorts": [5185]
-    }
+        }
+    },
+    "forwardPorts": [5432]
     
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
