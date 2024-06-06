@@ -8,6 +8,6 @@ namespace CineControl.SeanceService.API.Data
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<Seance> Seances { get; set; }
-        public DbSet<Film> Films { get; set; }
+        public DbSet<Movie> Movies { get; set; }
     }
 }

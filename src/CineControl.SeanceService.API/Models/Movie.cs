@@ -1,6 +1,6 @@
 namespace CineControl.SeanceService.API.Models
 {
-    public class Film
+    public class Movie
     {
         public int Id { get; set; }
         public string Title { get; set; }
@@ -8,6 +8,6 @@ namespace CineControl.SeanceService.API.Models
         public DateTime ReleaseDate { get; set; }
         public int Duration { get; set; } // in minutes
         public string PosterUrl { get; set; }
-        public int tenantID {get; set;}
+        public int TenantID { get; set; }
     }
 }

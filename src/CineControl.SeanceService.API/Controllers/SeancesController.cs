@@ -41,19 +41,18 @@ namespace CineControl.SeanceService.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Seance>> PostSeance(Seance seance)
         {
-            var film = await _context.Films.FindAsync(seance.FilmId);
-            if (film == null)
+            var movie = await _context.Movies.FindAsync(seance.MovieId);
+            if (movie == null)
             {
-                return BadRequest("Film not found.");
+                return BadRequest("Movie not found.");
             }
 
-            seance.EndTime = seance.StartTime.AddMinutes(film.Duration);
+            seance.EndTime = seance.StartTime.AddMinutes(movie.Duration);
             _context.Seances.Add(seance);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetSeance), new { id = seance.Id }, seance);
         }
-
 
         [HttpPut("{id}")]
         public async Task<IActionResult> PutSeance(int id, Seance seance)
@@ -63,10 +62,10 @@ namespace CineControl.SeanceService.API.Controllers
                 return BadRequest();
             }
 
-            var film = await _context.Films.FindAsync(seance.FilmId);
-            if (film == null)
+            var movie = await _context.Movies.FindAsync(seance.MovieId);
+            if (movie == null)
             {
-                return BadRequest("Film not found.");
+                return BadRequest("Movie not found.");
             }
 
             _context.Entry(seance).State = EntityState.Modified;

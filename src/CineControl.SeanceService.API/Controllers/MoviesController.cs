@@ -9,52 +9,52 @@ namespace CineControl.SeanceService.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FilmsController : ControllerBase
+    public class MoviesController : ControllerBase
     {
         private readonly AppDbContext _context;
 
-        public FilmsController(AppDbContext context)
+        public MoviesController(AppDbContext context)
         {
             _context = context;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Film>>> GetFilms()
+        public async Task<ActionResult<IEnumerable<Movie>>> GetMovies()
         {
-            return await _context.Films.ToListAsync();
+            return await _context.Movies.ToListAsync();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Film>> GetFilm(int id)
+        public async Task<ActionResult<Movie>> GetMovie(int id)
         {
-            var film = await _context.Films.FindAsync(id);
+            var movie = await _context.Movies.FindAsync(id);
 
-            if (film == null)
+            if (movie == null)
             {
                 return NotFound();
             }
 
-            return film;
+            return movie;
         }
 
         [HttpPost]
-        public async Task<ActionResult<Film>> PostFilm(Film film)
+        public async Task<ActionResult<Movie>> PostMovie(Movie movie)
         {
-            _context.Films.Add(film);
+            _context.Movies.Add(movie);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetFilm), new { id = film.Id }, film);
+            return CreatedAtAction(nameof(GetMovie), new { id = movie.Id }, movie);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutFilm(int id, Film film)
+        public async Task<IActionResult> PutMovie(int id, Movie movie)
         {
-            if (id != film.Id)
+            if (id != movie.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(film).State = EntityState.Modified;
+            _context.Entry(movie).State = EntityState.Modified;
 
             try
             {
@@ -62,7 +62,7 @@ namespace CineControl.SeanceService.API.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!FilmExists(id))
+                if (!MovieExists(id))
                 {
                     return NotFound();
                 }
@@ -76,23 +76,23 @@ namespace CineControl.SeanceService.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteFilm(int id)
+        public async Task<IActionResult> DeleteMovie(int id)
         {
-            var film = await _context.Films.FindAsync(id);
-            if (film == null)
+            var movie = await _context.Movies.FindAsync(id);
+            if (movie == null)
             {
                 return NotFound();
             }
 
-            _context.Films.Remove(film);
+            _context.Movies.Remove(movie);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool FilmExists(int id)
+        private bool MovieExists(int id)
         {
-            return _context.Films.Any(e => e.Id == id);
+            return _context.Movies.Any(e => e.Id == id);
         }
     }
 }
