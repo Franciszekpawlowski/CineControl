@@ -20,18 +20,34 @@ namespace CineControl.SeanceService.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Seance>>> GetSeances()
+        public async Task<ActionResult<IEnumerable<SeanceDto>>> GetSeances()
         {
             return await _context.Seances
                 .Include(s => s.Movie) // Include the related Movie entity
+                .Select(s => new SeanceDto
+                {
+                    Id = s.Id,
+                    MovieId = s.MovieId,
+                    MovieTitle = s.Movie.Title,
+                    StartTime = s.StartTime,
+                    EndTime = s.EndTime
+                })
                 .ToListAsync();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Seance>> GetSeance(int id)
+        public async Task<ActionResult<SeanceDto>> GetSeance(int id)
         {
             var seance = await _context.Seances
                 .Include(s => s.Movie) // Include the related Movie entity
+                .Select(s => new SeanceDto
+                {
+                    Id = s.Id,
+                    MovieId = s.MovieId,
+                    MovieTitle = s.Movie.Title,
+                    StartTime = s.StartTime,
+                    EndTime = s.EndTime
+                })
                 .FirstOrDefaultAsync(s => s.Id == id);
 
             if (seance == null)
@@ -43,7 +59,7 @@ namespace CineControl.SeanceService.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Seance>> PostSeance(Seance seance)
+        public async Task<ActionResult<SeanceDto>> PostSeance(Seance seance)
         {
             var movie = await _context.Movies.FindAsync(seance.MovieId);
             if (movie == null)
@@ -55,7 +71,16 @@ namespace CineControl.SeanceService.API.Controllers
             _context.Seances.Add(seance);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetSeance), new { id = seance.Id }, seance);
+            var seanceDto = new SeanceDto
+            {
+                Id = seance.Id,
+                MovieId = seance.MovieId,
+                MovieTitle = movie.Title,
+                StartTime = seance.StartTime,
+                EndTime = seance.EndTime
+            };
+
+            return CreatedAtAction(nameof(GetSeance), new { id = seance.Id }, seanceDto);
         }
 
         [HttpPut("{id}")]
