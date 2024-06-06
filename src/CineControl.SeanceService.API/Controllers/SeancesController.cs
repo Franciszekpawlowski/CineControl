@@ -2,7 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CineControl.SeanceService.API.Data;
 using CineControl.SeanceService.API.Models;
-using CineControl.SeanceService.API.Services;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CineControl.SeanceService.API.Controllers
 {
@@ -11,12 +13,10 @@ namespace CineControl.SeanceService.API.Controllers
     public class SeancesController : ControllerBase
     {
         private readonly AppDbContext _context;
-        private readonly IFilmService _filmService;
 
-        public SeancesController(AppDbContext context, IFilmService filmService)
+        public SeancesController(AppDbContext context)
         {
             _context = context;
-            _filmService = filmService;
         }
 
         [HttpGet]
@@ -41,17 +41,19 @@ namespace CineControl.SeanceService.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Seance>> PostSeance(Seance seance)
         {
-            var film = await _filmService.GetFilmById(seance.FilmId);
+            var film = await _context.Films.FindAsync(seance.FilmId);
             if (film == null)
             {
                 return BadRequest("Film not found.");
             }
 
+            seance.EndTime = seance.StartTime.AddMinutes(film.Duration);
             _context.Seances.Add(seance);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetSeance), new { id = seance.Id }, seance);
         }
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> PutSeance(int id, Seance seance)
@@ -61,7 +63,7 @@ namespace CineControl.SeanceService.API.Controllers
                 return BadRequest();
             }
 
-            var film = await _filmService.GetFilmById(seance.FilmId);
+            var film = await _context.Films.FindAsync(seance.FilmId);
             if (film == null)
             {
                 return BadRequest("Film not found.");
