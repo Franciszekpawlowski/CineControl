@@ -22,13 +22,17 @@ namespace CineControl.SeanceService.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Seance>>> GetSeances()
         {
-            return await _context.Seances.ToListAsync();
+            return await _context.Seances
+                .Include(s => s.Movie) // Include the related Movie entity
+                .ToListAsync();
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Seance>> GetSeance(int id)
         {
-            var seance = await _context.Seances.FindAsync(id);
+            var seance = await _context.Seances
+                .Include(s => s.Movie) // Include the related Movie entity
+                .FirstOrDefaultAsync(s => s.Id == id);
 
             if (seance == null)
             {

@@ -9,5 +9,12 @@ namespace CineControl.SeanceService.API.Data
 
         public DbSet<Seance> Seances { get; set; }
         public DbSet<Movie> Movies { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Seance>()
+                .HasOne(s => s.Movie)
+                .WithMany()
+                .HasForeignKey(s => s.MovieId);
+        }
     }
 }

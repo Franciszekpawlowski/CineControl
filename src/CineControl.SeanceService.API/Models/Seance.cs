@@ -6,5 +6,8 @@ namespace CineControl.SeanceService.API.Models
         public int MovieId { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
+
+        public Movie Movie { get; set; }
     }
+    
 }

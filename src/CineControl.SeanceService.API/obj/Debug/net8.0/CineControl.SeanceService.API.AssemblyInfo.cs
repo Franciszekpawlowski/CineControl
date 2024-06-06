@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CineControl.SeanceService.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7c75f0659182dd84c279ff2c489bbdf4f86f9029")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+41668704d96c358cd1a9ae3c934d6c92737ae6b9")]
 [assembly: System.Reflection.AssemblyProductAttribute("CineControl.SeanceService.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CineControl.SeanceService.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
