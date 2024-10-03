@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{253C2735-F514-4176-B53B-E2976768196A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CineControl.IdentityService.API", "src\CineControl.IdentityService.API\CineControl.IdentityService.API.csproj", "{D35E4555-9AEE-477B-8BDA-0C9FFB07B0D6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D35E4555-9AEE-477B-8BDA-0C9FFB07B0D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D35E4555-9AEE-477B-8BDA-0C9FFB07B0D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D35E4555-9AEE-477B-8BDA-0C9FFB07B0D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D35E4555-9AEE-477B-8BDA-0C9FFB07B0D6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EA997A1A-C23F-46CE-B2A7-3C2CEA3ADB41}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D35E4555-9AEE-477B-8BDA-0C9FFB07B0D6} = {253C2735-F514-4176-B53B-E2976768196A}
+	EndGlobalSection
+EndGlobal
