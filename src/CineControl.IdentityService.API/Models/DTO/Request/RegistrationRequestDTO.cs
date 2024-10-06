@@ -1,4 +1,4 @@
-namespace CineControl.IdentityService.API.Models.DTO
+namespace CineControl.IdentityService.API.Models.DTO.Request
 {
     public class RegisterRequestRequestDTO
     {

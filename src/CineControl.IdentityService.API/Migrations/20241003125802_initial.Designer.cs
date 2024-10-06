@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CineControl.IdentityService.API.Migrations
 {
     [DbContext(typeof(appdbContext))]
-    [Migration("20241001160926_initialMigration")]
-    partial class initialMigration
+    [Migration("20241003125802_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
