@@ -1,6 +1,6 @@
-namespace CineControl.IdentityService.API.Models.DTO.Request
+namespace CineControl.IdentityService.API.Models.Request.Auth
 {
-    public class RegisterRequestRequestDTO
+    public class RegisterRequest
     {
         public string Email { get; set; } = string.Empty;
         public string Username { get; set; } = string.Empty;

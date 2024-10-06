@@ -1,4 +1,5 @@
-using CineControl.IdentityService.API.Models.DTO;
+using CineControl.IdentityService.API.Models.Response;
+using CineControl.IdentityService.API.Models.Response.User;
 using CineControl.IdentityService.API.Service.IService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +9,7 @@ namespace CineControl.IdentityService.API.Controllers
     [Route("[controller]/[action]")]
     [ApiController]
     [Authorize]
-    public class UserController : ControllerBase
+    public class UserController : BaseController
     {
         private readonly IUserService _userService;
         public UserController(
@@ -19,14 +20,20 @@ namespace CineControl.IdentityService.API.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetUserResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorResponse))]
         public async Task<IActionResult> GetUser()
         {
-            UserDTO? userDTO = await _userService.GetUser(HttpContext);
-            if (userDTO is null)
+            var result = await _userService.GetUser(HttpContext);
+            if (!result.IsSuccess)
             {
-                return Unauthorized();
+                return Error(result);
             }
-            return Ok(userDTO);
+            var GetUserResponse = new GetUserResponse() {
+                Email = result.Data.User.Email,
+                Username = result.Data.User.UserName
+            };
+            return Ok(GetUserResponse);
         }
     }
 }

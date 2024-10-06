@@ -1,13 +1,13 @@
-using CineControl.IdentityService.API.Models.DTO;
-using CineControl.IdentityService.API.Models.DTO.Request;
-using CineControl.IdentityService.API.Models.DTO.Response;
+using CineControl.IdentityService.API.Models.Request.Auth;
+using CineControl.IdentityService.API.Models.Results;
+using CineControl.IdentityService.API.Models.Results.Auth;
 
 namespace CineControl.IdentityService.API.Service.IService
 {
     public interface IAuthService
     {
-        Task<LoginResponseDTO> LoginAsync(LoginRequestDTO loginRequest);
-        Task<string> RegisterAsync(RegisterRequestRequestDTO registerRequest);
-        Task<LoginResponseDTO> RefreshTokenAsync(RefreshTokenRequestDTO refreshTokenRequest);
+        Task<GenericResults<LoginResults>> LoginAsync(LoginRequest loginRequest);
+        Task<GenericResults<RegistationResults>> RegisterAsync(RegisterRequest registerRequest);
+        Task<GenericResults<RefreshTokenResult>> RefreshTokenAsync(RefreshTokenRequest refreshTokenRequest);
     }
 }

@@ -1,7 +1,9 @@
 using System.Security.Claims;
 using CineControl.IdentityService.API.Models;
-using CineControl.IdentityService.API.Models.DTO.Request;
-using CineControl.IdentityService.API.Models.DTO.Response;
+using CineControl.IdentityService.API.Models.Request.Auth;
+using CineControl.IdentityService.API.Models.Response.Auth;
+using CineControl.IdentityService.API.Models.Results;
+using CineControl.IdentityService.API.Models.Results.Auth;
 using CineControl.IdentityService.API.Service.IService;
 using Microsoft.AspNetCore.Identity;
 
@@ -27,42 +29,38 @@ namespace CineControl.IdentityService.API.Service
 
     
 
-        public async Task<LoginResponseDTO> LoginAsync(LoginRequestDTO loginRequestDTO)
+        public async Task<GenericResults<LoginResults>> LoginAsync(LoginRequest loginRequestDTO)
         {
+            var result = new GenericResults<LoginResults>();
             ApplicationUser? user = await _userManager.FindByNameAsync(loginRequestDTO.Username);
             if (user is null)
             {
-                return new LoginResponseDTO() {
-                    AccessToken = null,
-                    RefreshToken = null,
-                    Message = "User not found",
-                };
+                result.AddError("Invalid username");
+                return result;
             }
             bool isValid = await _userManager.CheckPasswordAsync(user, loginRequestDTO.Password );
 
             if (!isValid)
             {
-                return new LoginResponseDTO() {
-                    AccessToken = null,
-                    RefreshToken = null,
-                    Message = "Invalid password"
-                };
+                result.AddError("Invalid password");
+                return result;
             }
 
             var token = _jwtTokenGenerator.GenerateToken(user);
             var refreshToken = _jwtTokenGenerator.GenerateRefreshToken();
 
-            LoginResponseDTO loginResponse = new()
+            LoginResults loginResults = new()
             {
                 RefreshToken = refreshToken,
                 AccessToken = token
             };
-
-            return loginResponse;
+            result.SetData(loginResults);
+            return result;
         }
 
-        public async Task<string> RegisterAsync(RegisterRequestRequestDTO registerRequest)
+        public async Task<GenericResults<RegistationResults>> RegisterAsync(RegisterRequest registerRequest)
         {
+            var result = new GenericResults<RegistationResults>();
             ApplicationUser user = new()
             {
                 UserName = registerRequest.Username,
@@ -73,47 +71,55 @@ namespace CineControl.IdentityService.API.Service
             };
             try
             {
-                IdentityResult result = await _userManager.CreateAsync(user, registerRequest.Password);
-                if (result.Succeeded)
+                var createAsyncResult = await _userManager.CreateAsync(user, registerRequest.Password);
+                if (!createAsyncResult.Succeeded)
                 {
-                    return "";
+                    result.AddErrors(createAsyncResult.Errors.Select(error => error.Description));
                 }
-                return result.ToString();
             }
             catch (Exception ex)
             {
-                return $"Error creating user ${ex.Message}";   
+                result.AddError(ex.Message);   
             }
+            return result;
         }
 
-        public async Task<LoginResponseDTO> RefreshTokenAsync(RefreshTokenRequestDTO refreshTokenRequestDTO)
+        public async Task<GenericResults<RefreshTokenResult>> RefreshTokenAsync(RefreshTokenRequest refreshTokenRequestDTO)
         {
+            var result = new GenericResults<RefreshTokenResult>();
             ClaimsPrincipal? principal = _jwtTokenGenerator.GetTokenPrincipal(refreshTokenRequestDTO.Token);
-
-            LoginResponseDTO response = new();
-
 
             if (principal?.Identity?.Name is null)
             {
-                response.Message = "Invalid token";
-                return response;
+                result.AddError("Invalid token");
+                return result;
             }
 
             ApplicationUser? user = await _userManager.FindByNameAsync(principal.Identity.Name);
             if (user is null || user.RefreshToken != refreshTokenRequestDTO.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
             {
-                response.Message = "Invalid token";
-                return response;
+                result.AddError("Invalid token");
+                return result;
             }
+
+            var RefreshTokenResult = new RefreshTokenResult(){
+                AccessToken = _jwtTokenGenerator.GenerateToken(user),
+                RefreshToken = _jwtTokenGenerator.GenerateRefreshToken()
+            };
             
-            response.AccessToken = _jwtTokenGenerator.GenerateToken(user);
-            response.RefreshToken = _jwtTokenGenerator.GenerateRefreshToken();
+            result.SetData(RefreshTokenResult);
 
-            user.RefreshToken = response.RefreshToken;
+            user.RefreshToken = RefreshTokenResult.RefreshToken;
             user.RefreshTokenExpiryTime = DateTime.Now.AddHours(2);
-            await _userManager.UpdateAsync(user);
 
-            return response;
+            var UpdateAsync = await _userManager.UpdateAsync(user);
+
+            if(!UpdateAsync.Succeeded)
+            {
+                result.AddErrors(UpdateAsync.Errors.Select(error => error.Description));
+            }
+
+            return result;
         }
     }
 }

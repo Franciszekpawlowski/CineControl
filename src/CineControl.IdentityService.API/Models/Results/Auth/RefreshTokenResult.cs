@@ -1,8 +1,10 @@
-namespace CineControl.IdentityService.API.Models.DTO.Response
+namespace CineControl.IdentityService.API.Models.Results.Auth
 {
-    public class RefreshTokenResponseDTO : BaseResponseDTO
+
+    public class RefreshTokenResult
     {
         public string AccessToken { get; set; } = string.Empty;
         public string RefreshToken { get; set; } = string.Empty;
+
     }
 }

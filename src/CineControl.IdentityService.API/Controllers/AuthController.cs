@@ -1,5 +1,7 @@
-using CineControl.IdentityService.API.Models.DTO.Request;
-using CineControl.IdentityService.API.Models.DTO.Response;
+using CineControl.IdentityService.API.Models.Request.Auth;
+using CineControl.IdentityService.API.Models.Response;
+using CineControl.IdentityService.API.Models.Response.Auth;
+using CineControl.IdentityService.API.Models.Results.Auth;
 using CineControl.IdentityService.API.Service.IService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,62 +11,66 @@ namespace CineControl.IdentityService.API.Controllers
     [Route("[controller]/[action]")]
     [ApiController]
     [Authorize]
-    public class AuthController : ControllerBase
+    public class AuthController : BaseController
     {
         private readonly IAuthService _authService;
-        protected BaseResponseDTO _response;
         public AuthController(
             IAuthService authService
         )
         {
             _authService = authService;
-            _response = new();
+        }
+        
+        [HttpPost]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LoginResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorResponse))]
+        public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
+        {
+            var result = await _authService.LoginAsync(loginRequest);
+            if (!result.IsSuccess)
+            {
+                return Error(result);
+            }
+            LoginResponse loginResponse = new(){
+                AccessToken = result.Data.AccessToken,
+                RefreshToken = result.Data.RefreshToken
+            };
+            return Ok(loginResponse);
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Register([FromBody] RegisterRequestRequestDTO registerRequest)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorResponse))]
+        public async Task<IActionResult> Register([FromBody] RegisterRequest registerRequest)
         {
-            var errorMessage = await _authService.RegisterAsync(registerRequest);
-            if (string.IsNullOrEmpty(errorMessage))
+            var result = await _authService.RegisterAsync(registerRequest);
+            if (!result.IsSuccess)
             {
-                return Ok(_response);
+                return Error(result);
             }
-            _response.Message = errorMessage;
-            return BadRequest(_response);
+
+            return Ok(result.Data.Message);
         }
 
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody] LoginRequestDTO loginRequest)
-        {
-            var loginResponse = await _authService.LoginAsync(loginRequest);
-            if (loginResponse.AccessToken == null)
-            {
-                _response.Message = loginResponse.Message;
-                return BadRequest(_response);
-            }
-            LoginResponseDTO loginResponseDTO = new(){
-                AccessToken = loginResponse.AccessToken,
-                RefreshToken = loginResponse.RefreshToken
-            };
-            return Ok(loginResponseDTO);
-        }
+
 
         [HttpPost]
-        public async Task<IActionResult> RefreshToken(RefreshTokenRequestDTO refreshTokenRequestDTO)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RefreshTokenResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorResponse))]
+        public async Task<IActionResult> RefreshToken(RefreshTokenRequest refreshTokenRequestDTO)
         {
-            var loginresult = await _authService.RefreshTokenAsync(refreshTokenRequestDTO);
-            if (loginresult.AccessToken == null)
+            var result = await _authService.RefreshTokenAsync(refreshTokenRequestDTO);
+            if (!result.IsSuccess)
             {
-                _response.Message = loginresult.Message;
-                return BadRequest(_response);
+                return Error(result);
             }
-            LoginResponseDTO loginResponseDTO = new(){
-                AccessToken = loginresult.AccessToken,
-                RefreshToken = loginresult.RefreshToken
+            RefreshTokenResponse RefreshTokenResponse = new(){
+                AccessToken = result.Data.AccessToken,
+                RefreshToken = result.Data.RefreshToken
             };
-            return Ok(loginResponseDTO);
+            return Ok(RefreshTokenResponse);
         }
     }
 }

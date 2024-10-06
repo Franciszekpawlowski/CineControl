@@ -1,6 +1,6 @@
-namespace CineControl.IdentityService.API.Models.DTO
+namespace CineControl.IdentityService.API.Models.Response.User
 {
-    public class UserDTO
+    public class GetUserResponse
     {
         public string Username { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
