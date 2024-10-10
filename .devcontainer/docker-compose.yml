@@ -21,17 +21,39 @@ services:
     # Use "forwardPorts" in **devcontainer.json** to forward an app port locally. 
     # (Adding the "ports" property to this file will not forward from a Codespace.)
 
+  cinecontrol.seanceservice.api:
+    build:
+      context: ./CineControl.SeanceService.API
+      dockerfile: Dockerfile
+
+    volumes:
+      - ../..:/workspaces:cached
+
+    # Overrides default command so things don't shut down after the process ends.
+    command: sleep infinity
+
+    # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
+    network_mode: service:db
+    
+    # Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+    # user: root
+
+    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally. 
+    # (Adding the "ports" property to this file will not forward from a Codespace.)
+
   db:
     image: postgres:16.3
     restart: unless-stopped
     volumes:
       - postgres-data:/var/lib/postgresql/data
+      - ./postgress/create-multiple-postgresql-databases.sh:/docker-entrypoint-initdb.d/create-multiple-postgresql-databases.sh
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
-      POSTGRES_DB: AuthDB
+      POSTGRES_DB: postgres
+      POSTGRES_MULTIPLE_DATABASES: SeanceDB,AuthDB
       
-    # Add "forwardPorts": ["5432"] to **devcontainer.json** to forward PostgreSQL locally.
+    #"forwardPorts": ["5432"]
     # (Adding the "ports" property to this file will not forward from a Codespace.)
 
 volumes:

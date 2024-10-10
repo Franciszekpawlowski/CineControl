@@ -7,6 +7,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{253C2735-F51
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CineControl.IdentityService.API", "src\CineControl.IdentityService.API\CineControl.IdentityService.API.csproj", "{D35E4555-9AEE-477B-8BDA-0C9FFB07B0D6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CineControl.SeanceService.API", "src\CineControl.SeanceService.API\CineControl.SeanceService.API.csproj", "{3D945283-5D4C-4DED-9A19-56651307A31F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +19,10 @@ Global
 		{D35E4555-9AEE-477B-8BDA-0C9FFB07B0D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D35E4555-9AEE-477B-8BDA-0C9FFB07B0D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D35E4555-9AEE-477B-8BDA-0C9FFB07B0D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D945283-5D4C-4DED-9A19-56651307A31F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D945283-5D4C-4DED-9A19-56651307A31F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D945283-5D4C-4DED-9A19-56651307A31F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D945283-5D4C-4DED-9A19-56651307A31F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -26,5 +32,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{D35E4555-9AEE-477B-8BDA-0C9FFB07B0D6} = {253C2735-F514-4176-B53B-E2976768196A}
+		{3D945283-5D4C-4DED-9A19-56651307A31F} = {253C2735-F514-4176-B53B-E2976768196A}
 	EndGlobalSection
 EndGlobal
