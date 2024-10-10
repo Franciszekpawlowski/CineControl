@@ -1,9 +1,9 @@
 version: '3.8'
 
 services:
-  app:
+  cinecontrol.identityservice.api:
     build:
-      context: .
+      context: ./CineControl.IdentityService.API
       dockerfile: Dockerfile
 
     volumes:
