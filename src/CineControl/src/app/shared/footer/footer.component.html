@@ -1,0 +1,38 @@
+<!-- src/app/shared/footer/footer.component.html -->
+<mat-toolbar class="footer">
+  <div class="footer-links">
+    <a routerLink="/terms" aria-label="Regulamin">Regulamin</a>
+    <a routerLink="/privacy" aria-label="Polityka prywatności">Polityka prywatności</a>
+    <a routerLink="/booking-conditions" aria-label="Warunki rezerwacji">Warunki rezerwacji</a>
+    <a routerLink="/contact" aria-label="Kontakt">Kontakt</a>
+    <a routerLink="/help" aria-label="Pomoc/FAQ">Pomoc/FAQ</a>
+  </div>
+  
+  <div class="social-media">
+    <a href="https://www.facebook.com/TwojeKino" target="_blank" aria-label="Facebook">
+      <mat-icon>facebook</mat-icon>
+    </a>
+    <a href="https://www.instagram.com/TwojeKino" target="_blank" aria-label="Instagram">
+      <mat-icon>instagram</mat-icon>
+    </a>
+    <a href="https://twitter.com/TwojeKino" target="_blank" aria-label="Twitter">
+      <mat-icon>twitter</mat-icon>
+    </a>
+  </div>
+  
+  <div class="newsletter">
+    <mat-form-field appearance="outline">
+      <mat-label>Subskrybuj newsletter</mat-label>
+      <input matInput placeholder="Twój e-mail" [(ngModel)]="email" aria-label="Twój e-mail" />
+    </mat-form-field>
+    <button mat-button (click)="subscribeNewsletter()" aria-label="Subskrybuj">
+      Subskrybuj
+    </button>
+  </div>
+  
+  <div class="contact-info">
+    <p>Adres: ul. Kino 1, 00-000 Miasto</p>
+    <p>Telefon: 123 456 789</p>
+    <p>E-mail: kontakt&#64;twojekino.pl</p>
+  </div>
+</mat-toolbar>

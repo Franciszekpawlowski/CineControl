@@ -1,0 +1,21 @@
+<div class="current-movies-container">
+    <ng-container *ngIf="movies && movies.length > 0; else moviesPlaceholder">
+      <div class="movies-scroll">
+        <mat-card class="movie-card" *ngFor="let movie of movies">
+          <img mat-card-image [src]="movie.posterUrl" alt="{{ movie.title }}" loading="lazy" />
+          <mat-card-content>
+            <h3>{{ movie.title }}</h3>
+            <p>{{ movie.shortDescription }}</p>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-button [routerLink]="['/movie', movie.id]">Więcej</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </ng-container>
+    <ng-template #moviesPlaceholder>
+      <!-- Placeholdery dla kart filmów -->
+      <div class="placeholder-card" *ngFor="let i of [1, 2, 3, 4]"></div>
+    </ng-template>
+  </div>
+  

@@ -1,0 +1,206 @@
+/* src/app/shared/navbar/navbar.component.scss */
+
+$navbar-bg-color: #000000; // Czarny kolor tła
+$navbar-text-color: #b0b0b0; // Szary kolor tekstu
+$hover-gradient: linear-gradient(45deg, #9c27b0, #ce93d8); // Fioletowy gradient
+$search-bg-color: #000000; // Czarny kolor tła dla pola wyszukiwania
+$search-label-color: #b0b0b0; // Szary kolor etykiety
+$search-underline-color: #9c27b0; // Fioletowa linia pod polem
+$search-ripple-color: #9c27b0; // Fioletowy ripple
+
+.navbar {
+  display: flex;
+  align-items: center; // Vertically center all items
+  padding: 0 20px;
+  background-color: $navbar-bg-color;
+  color: $navbar-text-color;
+  position: relative;
+  height: 64px; // Standardowa wysokość mat-toolbar
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.logo img {
+  height: 50px;
+  transition: transform 0.3s ease;
+}
+
+.logo a:hover img {
+  transform: scale(1.05);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.nav-links.active {
+  transform: translateX(0);
+}
+
+.nav-links button {
+  display: flex;
+  align-items: center;
+  margin: 0 10px;
+  color: $navbar-text-color;
+  font-weight: 500;
+  background-color: transparent;
+  position: relative;
+  overflow: hidden;
+  transition: color 0.3s ease;
+
+  mat-icon {
+    margin-right: 5px;
+    color: inherit;
+    transition: color 0.3s ease;
+  }
+
+  span {
+    transition: color 0.3s ease;
+  }
+
+  &:hover mat-icon,
+  &:hover span {
+    background: $hover-gradient;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  &:hover mat-icon {
+    color: transparent;
+  }
+
+  &:hover span {
+    color: transparent;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    text-align: left;
+    margin: 5px 0;
+  }
+}
+
+.menu-button {
+  display: none;
+
+  @media (max-width: 768px) {
+    display: block;
+    color: $navbar-text-color;
+  }
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.search {
+  width: 300px;
+  display: flex;
+  align-items: center;
+  height: 100%; // Ensure it takes full height of navbar
+
+  @media (max-width: 600px) {
+    width: 200px;
+  }
+
+  mat-form-field {
+    width: 100%;
+    background-color: $search-bg-color;
+    border-radius: 4px;
+    margin: 0;
+    height: 40px; // Adjust height to align with navbar
+    display: flex;
+    align-items: center;
+    padding: 0;
+
+    input {
+      color: #ffffff; // White text in search field
+    }
+
+    mat-label {
+      color: $search-label-color;
+    }
+
+    .mat-form-field-underline {
+      background-color: $search-underline-color;
+    }
+
+    .mat-form-field-ripple {
+      background-color: $search-ripple-color;
+    }
+  }
+}
+
+.user-actions button {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+  color: $navbar-text-color;
+  font-weight: 500;
+  background-color: transparent;
+  position: relative;
+  overflow: hidden;
+  transition: color 0.3s ease;
+
+  mat-icon {
+    margin-right: 5px;
+    color: inherit;
+    transition: color 0.3s ease;
+  }
+
+  span {
+    transition: color 0.3s ease;
+  }
+
+  &:hover mat-icon,
+  &:hover span {
+    background: $hover-gradient;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  &:hover mat-icon {
+    color: transparent;
+  }
+
+  &:hover span {
+    color: transparent;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    text-align: left;
+    margin: 5px 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-links {
+    position: absolute;
+    top: 64px; // Height of mat-toolbar
+    left: 0;
+    right: 0;
+    background-color: $navbar-bg-color;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 20px;
+    transform: translateX(-100%);
+    opacity: 0;
+    z-index: 1000;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+
+    &.active {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  .search {
+    display: none; // Hide search on small screens
+  }
+
+  .user-actions {
+    display: none; // Optionally hide user actions on small screens
+  }
+}

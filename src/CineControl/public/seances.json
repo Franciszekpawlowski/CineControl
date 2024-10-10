@@ -1,0 +1,35 @@
+[
+    {
+      "id": 1,
+      "movieId": 101,
+      "movieTitle": "The Great Adventure",
+      "startTime": "2024-05-01T18:00:00",
+      "endTime": "2024-05-01T20:00:00",
+      "cinemaId": 1
+    },
+    {
+      "id": 2,
+      "movieId": 102,
+      "movieTitle": "Mystery Manor",
+      "startTime": "2024-05-01T19:00:00",
+      "endTime": "2024-05-01T21:00:00",
+      "cinemaId": 2
+    },
+    {
+      "id": 3,
+      "movieId": 101,
+      "movieTitle": "The Great Adventure",
+      "startTime": "2024-05-02T18:00:00",
+      "endTime": "2024-05-02T20:00:00",
+      "cinemaId": 1
+    },
+    {
+      "id": 4,
+      "movieId": 103,
+      "movieTitle": "Comedy Night",
+      "startTime": "2024-05-01T20:00:00",
+      "endTime": "2024-05-01T22:00:00",
+      "cinemaId": 1
+    }
+  ]
+  

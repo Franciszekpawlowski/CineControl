@@ -1,0 +1,65 @@
+<!-- src/app/shared/navbar/navbar.component.html -->
+<mat-toolbar class="navbar">
+  <div class="logo">
+    <a routerLink="/">
+      <img src="assets/logo.png" alt="Logo Kina" />
+    </a>
+  </div>
+  
+  <!-- Ikona menu dla ekranów mobilnych -->
+  <button
+    mat-icon-button
+    class="menu-button"
+    (click)="toggleMenu()"
+    *ngIf="isMobile"
+    aria-label="Otwórz menu nawigacyjne"
+  >
+    <mat-icon>menu</mat-icon>
+  </button>
+  
+  <div class="nav-links" [class.active]="isMenuOpen">
+    <button mat-button routerLink="/">
+      <mat-icon>home</mat-icon>
+      <span>Home</span>
+    </button>
+    <button mat-button routerLink="/repertoire">
+      <mat-icon>movie</mat-icon>
+      <span>Repertuar</span>
+    </button>
+    <button mat-button routerLink="/promotions">
+      <mat-icon>local_offer</mat-icon>
+      <span>Promocje</span>
+    </button>
+    <button mat-button routerLink="/contact">
+      <mat-icon>contact_mail</mat-icon>
+      <span>Kontakt</span>
+    </button>
+  </div>
+  
+  <span class="spacer"></span>
+  
+  <div class="search">
+    <mat-form-field appearance="outline">
+      <mat-label>Szukaj filmów</mat-label>
+      <input
+        matInput
+        placeholder="Tytuł, gatunek, aktor..."
+        [(ngModel)]="searchQuery"
+      />
+      <button mat-icon-button matSuffix (click)="onSearch()" aria-label="Szukaj">
+        <mat-icon>search</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+  
+  <div class="user-actions">
+    <button mat-button *ngIf="!isLoggedIn" routerLink="/login" aria-label="Logowanie/Rejestracja">
+      <mat-icon>login</mat-icon>
+      <span>Logowanie/Rejestracja</span>
+    </button>
+    <button mat-button *ngIf="isLoggedIn" routerLink="/user" aria-label="Moje konto">
+      <mat-icon>account_circle</mat-icon>
+      <span>Moje konto</span>
+    </button>
+  </div>
+</mat-toolbar>

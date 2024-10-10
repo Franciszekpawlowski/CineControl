@@ -1,0 +1,204 @@
+/* Definicja kolorów */
+$background-color: #121212;
+$text-color: #ffffff;
+$primary-color: #9c27b0; /* Fioletowy odcień */
+$secondary-color: #7b1fa2; /* Ciemniejszy fiolet */
+
+/* Stylowanie podstawowe */
+:host {
+  display: block;
+  background-color: $background-color;
+  color: $text-color;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+/* Nagłówki sekcji */
+.section h2 {
+  color: $primary-color;
+  margin-bottom: 20px;
+}
+
+/* Karty filmów i promocji */
+.movie-list,
+.promo-list,
+.movie-carousel {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.movie-card,
+.promo-card {
+  background-color: #1e1e1e;
+  width: 300px;
+  margin: 15px;
+  color: $text-color;
+}
+
+.movie-card h3,
+.promo-card h3 {
+  color: $primary-color;
+}
+
+.movie-card p,
+.promo-card p {
+  color: $text-color;
+}
+
+/* Obrazy */
+.movie-card img,
+.promo-card img {
+  height: 400px;
+  object-fit: cover;
+}
+
+/* Przyciski */
+mat-card-actions button {
+  color: $primary-color;
+}
+
+button[mat-button],
+button[mat-raised-button] {
+  background-color: $secondary-color;
+  color: $text-color;
+}
+
+button[mat-button]:hover,
+button[mat-raised-button]:hover {
+  background-color: darken($secondary-color, 10%);
+}
+
+/* Stylowanie karuzeli */
+.carousel-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.carousel-item {
+  width: 100%;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.carousel-control {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  padding: 10px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.carousel-control.prev {
+  left: 10px;
+}
+
+.carousel-control.next {
+  right: 10px;
+}
+
+.carousel-indicators {
+  position: absolute;
+  bottom: 15px;
+  width: 100%;
+  text-align: center;
+}
+
+.carousel-indicators span {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin: 0 5px;
+  background-color: #bbb;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.carousel-indicators .active {
+  background-color: #717171;
+}
+
+/* Stylowanie slajdów promocji */
+.promo-slide img {
+  width: 100%;
+  height: 250px; /* Zmniejszamy wysokość baneru */
+  object-fit: cover;
+}
+
+.promo-content {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  color: $text-color;
+}
+
+.promo-content h2 {
+  font-size: 2em;
+  color: $primary-color;
+}
+
+.promo-content p {
+  font-size: 1.2em;
+  max-width: 400px;
+}
+
+.promo-content button {
+  margin-top: 15px;
+}
+
+/* Stylowanie slajdów filmów */
+.movie-slide {
+  text-align: center;
+}
+
+.movie-slide img {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+}
+
+.movie-content h3 {
+  margin-top: 15px;
+  color: $primary-color;
+}
+
+.movie-content p {
+  color: $text-color;
+}
+
+/* Placeholdery */
+.placeholder-banner {
+  background-color: #2e2e2e;
+  height: 400px;
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.placeholder-card {
+  background-color: #2e2e2e;
+  height: 400px;
+  width: 300px;
+  margin: 15px;
+}
+
+.placeholder-banner::before,
+.placeholder-card::before {
+  content: '';
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #2e2e2e 25%, #3e3e3e 50%, #2e2e2e 75%);
+  background-size: 400% 100%;
+  animation: placeholderShimmer 1.2s infinite;
+}
+
+@keyframes placeholderShimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
