@@ -6,17 +6,17 @@ public static class CinemaFactory
 {
     private static int _globalSeatId = 1; // Global seat ID to ensure uniqueness
 
-    public static Cinema CreateCinema(string name, string address, string city, string state, string zipCode, List<TheaterConfig> theaterConfigs)
+    public static Cinema CreateCinema(Cinema cinema)
     {
         var cinema = new Cinema
         {
             Id = 1,
-            Name = name ?? "Cinema Complex",
-            Address = address ?? "123 Movie Street",
-            City = city ?? "Film City",
-            State = state ?? "FS",
-            ZipCode = zipCode ?? "12345",
-            Theaters = new List<Theater>()
+            Name = cinema.Name ?? "Cinema Complex",
+            Address = cinema.Address ?? "123 Movie Street",
+            City = cinema.City ?? "Film City",
+            State = cinema.State ?? "FS",
+            ZipCode = cinema.ZipCode ?? "12345",
+            Theaters = cinema.Theaters ?? new List<Theater>()
         };
 
         int theaterId = 1;
