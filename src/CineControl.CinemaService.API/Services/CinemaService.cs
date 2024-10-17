@@ -25,9 +25,9 @@ namespace CineControl.CinemaService.API.Services
             return await _context.Cinemas.Include(c => c.Theaters).ThenInclude(t => t.Seats).FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public async Task AddCinema(string name, string address, string city, string state, string zipCode, List<TheaterConfig> theaterConfigs)
+        public async Task AddCinema(Cinema cinema)
         {
-            var cinema = CinemaFactory.CreateCinema(name, address, city, state, zipCode, theaterConfigs);
+            var cinema = CinemaFactory.CreateCinema(cinema);
             await _context.Cinemas.AddAsync(cinema);
             await _context.SaveChangesAsync();
         }

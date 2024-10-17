@@ -3,8 +3,8 @@
 {
     "$schema": "https://raw.githubusercontent.com/devcontainers/spec/main/schemas/devContainer.schema.json",
     "name": "C# (.NET) and PostgreSQL",
-    "dockerComposeFile": "../docker-compose.yml",
-    "service": "cinecontrol.identityservice.api",
+    "dockerComposeFile": "./docker-compose.yml",
+    "service": "devcontainer",
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 	"features": {
 		"ghcr.io/devcontainers/features/github-cli:1": {}
