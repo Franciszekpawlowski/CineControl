@@ -1,0 +1,30 @@
+[
+    {
+      "id": 1,
+      "name": "Cinema One",
+      "address": "123 Main St",
+      "city": "Warsaw",
+      "state": "Mazowieckie",
+      "zipCode": "00-001",
+      "theaters": []
+    },
+    {
+      "id": 2,
+      "name": "Cinema Two",
+      "address": "456 Central Ave",
+      "city": "Krakow",
+      "state": "Malopolskie",
+      "zipCode": "30-001",
+      "theaters": []
+    },
+    {
+      "id": 3,
+      "name": "Cinema Three",
+      "address": "789 Broadway",
+      "city": "Warsaw",
+      "state": "Mazowieckie",
+      "zipCode": "00-002",
+      "theaters": []
+    }
+  ]
+  

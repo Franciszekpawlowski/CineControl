@@ -1,0 +1,69 @@
+<!-- src/app/pages/repertoire/repertoire.component.html -->
+<form [formGroup]="scheduleForm" class="schedule-form">
+    <!-- Pole miasta z podpowiedziami -->
+    <mat-form-field appearance="fill">
+      <mat-label>Wpisz miasto</mat-label>
+      <input
+        type="text"
+        matInput
+        formControlName="city"
+        [matAutocomplete]="auto"
+      />
+      <mat-autocomplete
+        #auto="matAutocomplete"
+        (optionSelected)="onCitySelected($event.option.value)"
+      >
+        <mat-option *ngFor="let city of filteredCities" [value]="city">
+          {{ city }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  
+    <!-- Lista rozwijana z kinami -->
+    <mat-form-field
+      appearance="fill"
+      *ngIf="cinemas && cinemas.length > 0"
+    >
+      <mat-label>Wybierz kino</mat-label>
+      <mat-select
+        formControlName="cinema"
+        (selectionChange)="onCinemaSelected()"
+      >
+        <mat-option *ngFor="let cinema of cinemas" [value]="cinema.id">
+          {{ cinema.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  
+    <!-- Kalendarz -->
+    <mat-form-field
+      appearance="fill"
+      *ngIf="scheduleForm.get('cinema')?.value"
+    >
+      <mat-label>Wybierz datę</mat-label>
+      <input
+        matInput
+        [matDatepicker]="picker"
+        formControlName="date"
+        (dateChange)="onDateSelected()"
+      />
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="picker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </form>
+  
+  <!-- Wyświetlanie seansów -->
+  <div *ngIf="seances && seances.length > 0" class="seances-list">
+    <h3>Seanse</h3>
+    <div *ngFor="let seance of seances" class="seance-item">
+      <div class="movie-title">{{ seance.movieTitle }}</div>
+      <div class="seance-time">
+        {{ seance.startTime | date: 'HH:mm' }} -
+        {{ seance.endTime | date: 'HH:mm' }}
+      </div>
+    </div>
+  </div>
+  

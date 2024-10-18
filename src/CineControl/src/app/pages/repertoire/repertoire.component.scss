@@ -1,0 +1,28 @@
+/* src/app/pages/repertoire/repertoire.component.scss */
+.schedule-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  .seances-list {
+    margin-top: 30px;
+  }
+  
+  .seance-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .movie-title {
+    font-weight: bold;
+  }
+  
+  .seance-time {
+    color: #666;
+  }
+  

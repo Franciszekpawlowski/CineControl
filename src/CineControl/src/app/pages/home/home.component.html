@@ -1,0 +1,73 @@
+<!-- Definicja szablonów dla karuzeli -->
+
+<!-- Szablon dla banerów reklamowych -->
+<ng-template #promoTemplate let-promo>
+  <div class="promo-slide">
+    <img [src]="promo.imageUrl" alt="{{ promo.title }}" />
+    <div class="promo-content">
+      <h2>{{ promo.title }}</h2>
+      <p>{{ promo.description }}</p>
+      <button mat-raised-button color="accent" [routerLink]="promo.link">
+        {{ promo.ctaText }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Szablon dla nadchodzących premier -->
+<ng-template #upcomingMovieTemplate let-movie>
+  <div class="movie-slide">
+    <img [src]="movie.posterUrl" alt="{{ movie.title }}" />
+    <div class="movie-content">
+      <h3>{{ movie.title }}</h3>
+      <p>Premiera: {{ movie.releaseDate | date }}</p>
+      <button mat-button [routerLink]="['/movie', movie.id]">Więcej</button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Szablon dla rekomendacji -->
+<ng-template #personalizedMovieTemplate let-movie>
+  <div class="movie-slide">
+    <img [src]="movie.posterUrl" alt="{{ movie.title }}" />
+    <div class="movie-content">
+      <h3>{{ movie.title }}</h3>
+      <p>{{ movie.shortDescription }}</p>
+      <button mat-button [routerLink]="['/movie', movie.id]">Więcej</button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Karuzela banerów reklamowych -->
+<app-carousel
+  [items]="promotions"
+  [itemTemplate]="promoTemplate"
+  [autoPlay]="true"
+  [autoPlayInterval]="5000"
+></app-carousel>
+
+<!-- Sekcja "Aktualnie w kinie" -->
+<div class="section">
+  <h2>Aktualnie w kinie</h2>
+  <app-movie-slider [movies]="currentMovies"></app-movie-slider>
+</div>
+
+<!-- Sekcja "Premiery wkrótce" -->
+<div class="section">
+  <h2>Premiery wkrótce</h2>
+  <app-carousel
+    [items]="upcomingMovies"
+    [itemTemplate]="upcomingMovieTemplate"
+    [autoPlay]="false"
+  ></app-carousel>
+</div>
+
+<!-- Sekcja z rekomendacjami -->
+<div class="section" *ngIf="personalizedMovies && personalizedMovies.length > 0">
+  <h2>Polecane dla Ciebie</h2>
+  <app-carousel
+    [items]="personalizedMovies"
+    [itemTemplate]="personalizedMovieTemplate"
+    [autoPlay]="false"
+  ></app-carousel>
+</div>

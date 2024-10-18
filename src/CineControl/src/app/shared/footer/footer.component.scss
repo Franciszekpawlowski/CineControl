@@ -1,0 +1,152 @@
+/* src/app/shared/footer/footer.component.scss */
+
+/* Zdefiniowane zmienne SCSS dla lepszej zarządzalności kolorów */
+$footer-bg-color: #000000; // Czarny kolor tła
+$footer-text-color: #b0b0b0; // Szary kolor tekstu
+$hover-gradient: linear-gradient(45deg, #9c27b0, #ce93d8); // Fioletowy gradient
+$newsletter-bg-color: #000000; // Czarny kolor tła dla pola wyszukiwania
+$newsletter-label-color: #b0b0b0; // Szary kolor etykiety
+$newsletter-underline-color: #9c27b0; // Fioletowa linia pod polem
+$newsletter-ripple-color: #9c27b0; // Fioletowy ripple
+$button-hover-color: #ffffff; // Biały tekst na hover
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start; // Align items to the top
+  padding: 20px;
+  background-color: $footer-bg-color;
+  color: $footer-text-color;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.5); // Shadow at the top of footer
+}
+
+.footer-links,
+.social-media,
+.newsletter,
+.contact-info {
+  flex: 1 1 200px;
+  margin: 10px;
+}
+
+/* Stylizacja linków w stopce */
+.footer-links a {
+  display: block;
+  margin: 5px 0;
+  color: $footer-text-color;
+  text-decoration: none;
+  transition: color 0.3s ease, background 0.3s ease;
+  
+  &:hover {
+    background: $hover-gradient;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+/* Stylizacja ikon mediów społecznościowych */
+.social-media a {
+  display: inline-block;
+  margin-right: 10px;
+  color: $footer-text-color;
+  transition: color 0.3s ease, background 0.3s ease;
+
+  mat-icon {
+    font-size: 30px;
+    transition: color 0.3s ease;
+  }
+
+  &:hover mat-icon {
+    background: $hover-gradient;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+/* Stylizacja sekcji newsletter */
+.newsletter {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  mat-form-field {
+    width: 100%;
+    max-width: 250px;
+    background-color: $newsletter-bg-color;
+    border-radius: 4px;
+    margin-right: 10px;
+    color: #ffffff; // White text in input
+    transition: background-color 0.3s ease;
+
+    input {
+      color: #ffffff; // White text in input
+    }
+
+    mat-label {
+      color: $newsletter-label-color;
+    }
+
+    .mat-form-field-underline {
+      background-color: $newsletter-underline-color;
+    }
+
+    .mat-form-field-ripple {
+      background-color: $newsletter-ripple-color;
+    }
+
+    &:hover {
+      background-color: darken($newsletter-bg-color, 5%);
+    }
+  }
+
+  button {
+    height: 40px; // Match input field height
+    color: $footer-text-color;
+    border: 1px solid $hover-gradient;
+    border-radius: 4px;
+    padding: 0 16px;
+    transition: background 0.3s ease, color 0.3s ease;
+
+    &:hover {
+      background: $hover-gradient;
+      color: $button-hover-color;
+    }
+  }
+}
+
+/* Stylizacja informacji kontaktowych */
+.contact-info p {
+  margin: 5px 0;
+  color: $footer-text-color;
+}
+
+/* Responsywność dla małych ekranów */
+@media (max-width: 768px) {
+  .footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .footer-links,
+  .social-media,
+  .newsletter,
+  .contact-info {
+    flex: 1 1 100%;
+    margin: 10px 0;
+  }
+
+  .newsletter {
+    flex-direction: column;
+    align-items: flex-start;
+
+    mat-form-field {
+      max-width: 100%;
+      margin-right: 0;
+      margin-bottom: 10px;
+    }
+
+    button {
+      width: 100%;
+    }
+  }
+}
