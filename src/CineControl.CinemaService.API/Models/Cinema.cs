@@ -1,3 +1,4 @@
+
 namespace CineControl.CinemaService.API.Models
 {
     public class Cinema

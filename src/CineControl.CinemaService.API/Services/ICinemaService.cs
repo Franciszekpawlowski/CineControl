@@ -8,7 +8,7 @@ namespace CineControl.CinemaService.API.Services
     {
         Task<IEnumerable<Cinema>> GetAllCinemas();
         Task<Cinema> GetCinemaById(int id);
-        Task AddCinema(Cinema cinema);
+        Task AddCinema(CreateCinemaRequest request);
         Task UpdateCinema(Cinema cinema);
         Task DeleteCinema(int id);
 

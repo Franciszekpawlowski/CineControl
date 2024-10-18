@@ -37,14 +37,7 @@ namespace CineControl.CinemaService.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Cinema>> AddCinema(CreateCinemaRequest request)
         {
-            await _cinemaService.AddCinema(
-                request.Name,
-                request.Address,
-                request.City,
-                request.State,
-                request.ZipCode,
-                request.TheaterConfigs
-            );
+            await _cinemaService.AddCinema(request);
 
             return CreatedAtAction(nameof(GetCinema), new { id = 1 }, null); // Assuming the first cinema is created
         }
