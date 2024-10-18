@@ -1,5 +1,7 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/dotnet-postgres
+// https://code.visualstudio.com/remote/advancedcontainers/configure-separate-containers
+// https://code.visualstudio.com/remote/advancedcontainers/connect-multiple-containers
 {
     "$schema": "https://raw.githubusercontent.com/devcontainers/spec/main/schemas/devContainer.schema.json",
     "name": "C# (.NET) and PostgreSQL",
@@ -7,7 +9,8 @@
     "service": "devcontainer",
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 	"features": {
-		"ghcr.io/devcontainers/features/github-cli:1": {}
+		"ghcr.io/devcontainers/features/github-cli:1": {},
+        "ghcr.io/prulloac/devcontainer-features/bun:1.1.2": {}
     },
     "customizations": {
         "vscode": {
@@ -21,7 +24,11 @@
                 "ms-dotnettools.csdevkit",
                 "ms-dotnettools.vscodeintellicode-csharp",
                 "ms-azuretools.vscode-docker",
-                "humao.rest-client"
+                "humao.rest-client",
+                "Angular.ng-template",
+                "johnpapa.Angular2",
+                "dbaeumer.vscode-eslint",
+                "christian-kohler.path-intellisense"
             ]
         }
     }
