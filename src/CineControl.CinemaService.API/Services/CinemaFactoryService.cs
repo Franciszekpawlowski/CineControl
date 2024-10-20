@@ -1,10 +1,11 @@
 using CineControl.CinemaService.API.Models;
+using CineControl.CinemaService.API.Models.Request.Cinemas;
 
 public static class CinemaFactory
 {
     private static int _globalSeatId = 1; // Global seat ID to ensure uniqueness
 
-    public static Cinema CreateCinema(CreateCinemaRequest CreateCinemaRequest)
+    public static Cinema CreateCinema(AddCinemaRequest CreateCinemaRequest)
     {
         var cinema = new Cinema
         {

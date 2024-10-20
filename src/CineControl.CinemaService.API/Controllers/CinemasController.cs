@@ -1,8 +1,7 @@
 using CineControl.CinemaService.API.Models;
+using CineControl.CinemaService.API.Models.Request.Cinemas;
 using CineControl.CinemaService.API.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace CineControl.CinemaService.API.Controllers
 {
@@ -35,7 +34,7 @@ namespace CineControl.CinemaService.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Cinema>> AddCinema(CreateCinemaRequest request)
+        public async Task<ActionResult<Cinema>> AddCinema(AddCinemaRequest request)
         {
             await _cinemaService.AddCinema(request);
 
@@ -73,14 +72,4 @@ namespace CineControl.CinemaService.API.Controllers
             return NoContent();
         }
     }
-}
-
-public class CreateCinemaRequest
-{
-    public string Name { get; set; }
-    public string Address { get; set; }
-    public string City { get; set; }
-    public string State { get; set; }
-    public string ZipCode { get; set; }
-    public List<TheaterConfig> TheaterConfigs { get; set; }
 }
