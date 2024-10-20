@@ -1,8 +1,6 @@
 using CineControl.CinemaService.API.Models;
+using CineControl.CinemaService.API.Models.Request.Cinemas;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CineControl.CinemaService.API.Services
 {
@@ -20,12 +18,12 @@ namespace CineControl.CinemaService.API.Services
             return await _context.Cinemas.Include(c => c.Theaters).ThenInclude(t => t.Seats).ToListAsync();
         }
 
-        public async Task<Cinema> GetCinemaById(int id)
+        public async Task<Cinema?> GetCinemaById(int id)
         {
             return await _context.Cinemas.Include(c => c.Theaters).ThenInclude(t => t.Seats).FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public async Task AddCinema(CreateCinemaRequest cinema)
+        public async Task AddCinema(AddCinemaRequest cinema)
         {
             var cinemadto = CinemaFactory.CreateCinema(cinema);
             await _context.Cinemas.AddAsync(cinemadto);
