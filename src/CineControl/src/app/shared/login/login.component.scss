@@ -1,0 +1,105 @@
+/* src/app/shared/login/login.component.scss */
+
+$primary-color: #000000; // Czarny kolor tła
+$accent-color: #9c27b0; // Fioletowy kolor akcentów
+$text-color: #b0b0b0; // Szary kolor tekstu
+$error-color: #ff1744; // Czerwony kolor błędów
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+
+  .login-header {
+    width: 100%;
+    background-color: $primary-color;
+    color: #ffffff;
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .login-form {
+    width: 100%;
+    max-width: 400px;
+    background-color: $primary-color;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+    .full-width {
+      width: 100%;
+      margin-bottom: 20px;
+
+      mat-form-field {
+        width: 100%;
+        color: #ffffff;
+
+        .mat-form-field-label {
+          color: $text-color;
+        }
+
+        input {
+          color: #ffffff;
+        }
+
+        mat-icon {
+          color: $text-color;
+        }
+
+        &:focus-within .mat-form-field-label,
+        &:hover .mat-form-field-label {
+          color: $accent-color;
+        }
+      }
+    }
+
+    .submit-button {
+      width: 100%;
+      padding: 10px;
+      background: $accent-color;
+      color: #ffffff;
+      font-weight: bold;
+
+      &:hover {
+        background: darken($accent-color, 10%);
+      }
+    }
+
+    .error-message {
+      color: $error-color;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .register-link {
+      margin-top: 15px;
+      text-align: center;
+      color: $text-color;
+
+      a {
+        color: $accent-color;
+        text-decoration: none;
+        transition: color 0.3s ease;
+
+        &:hover {
+          color: lighten($accent-color, 20%);
+        }
+      }
+    }
+  }
+}
+
+/* Responsywność */
+@media (max-width: 600px) {
+  .login-container {
+    .login-form {
+      padding: 15px;
+    }
+
+    .login-header {
+      font-size: 20px;
+    }
+  }
+}

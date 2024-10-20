@@ -21,13 +21,13 @@
   </div>
   
   <div class="newsletter">
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" class="email-field">
       <mat-label>Subskrybuj newsletter</mat-label>
       <input matInput placeholder="Twój e-mail" [(ngModel)]="email" aria-label="Twój e-mail" />
+      <button mat-icon-button matSuffix (click)="subscribeNewsletter()" aria-label="Subskrybuj">
+        <mat-icon>send</mat-icon>
+      </button>
     </mat-form-field>
-    <button mat-button (click)="subscribeNewsletter()" aria-label="Subskrybuj">
-      Subskrybuj
-    </button>
   </div>
   
   <div class="contact-info">

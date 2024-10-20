@@ -3,14 +3,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs';
-
+import { environment } from '../../environments/environment.prod';
 import { Seance } from '../models/seance.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SeanceService {
-  private apiUrl = 'https://twoje-api.com/api/seances';
+  private apiUrl = environment.seanceApiUrl;
   private seancesUrl = 'seances.json';
 
   constructor(private http: HttpClient) {}

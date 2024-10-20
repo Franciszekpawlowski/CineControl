@@ -1,21 +1,21 @@
-/* src/app/shared/navbar/navbar.component.scss */
 
-$navbar-bg-color: #000000; // Czarny kolor tła
-$navbar-text-color: #b0b0b0; // Szary kolor tekstu
-$hover-gradient: linear-gradient(45deg, #9c27b0, #ce93d8); // Fioletowy gradient
-$search-bg-color: #000000; // Czarny kolor tła dla pola wyszukiwania
-$search-label-color: #b0b0b0; // Szary kolor etykiety
-$search-underline-color: #9c27b0; // Fioletowa linia pod polem
-$search-ripple-color: #9c27b0; // Fioletowy ripple
+
+$navbar-bg-color: #000000; 
+$navbar-text-color: #b0b0b0; 
+$hover-gradient: linear-gradient(45deg, #9c27b0, #ce93d8); 
+$search-bg-color: #000000; 
+$search-label-color: #b0b0b0; 
+$search-underline-color: #9c27b0; 
+$search-ripple-color: #9c27b0; 
 
 .navbar {
   display: flex;
-  align-items: center; // Vertically center all items
+  align-items: center; 
   padding: 0 20px;
   background-color: $navbar-bg-color;
   color: $navbar-text-color;
   position: relative;
-  height: 64px; // Standardowa wysokość mat-toolbar
+  height: 64px; 
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
@@ -98,7 +98,7 @@ $search-ripple-color: #9c27b0; // Fioletowy ripple
   width: 300px;
   display: flex;
   align-items: center;
-  height: 100%; // Ensure it takes full height of navbar
+  height: 100%; 
 
   @media (max-width: 600px) {
     width: 200px;
@@ -109,13 +109,13 @@ $search-ripple-color: #9c27b0; // Fioletowy ripple
     background-color: $search-bg-color;
     border-radius: 4px;
     margin: 0;
-    height: 40px; // Adjust height to align with navbar
+    height: 60px; 
     display: flex;
     align-items: center;
     padding: 0;
 
     input {
-      color: #ffffff; // White text in search field
+      color: #ffffff; 
     }
 
     mat-label {
@@ -172,35 +172,5 @@ $search-ripple-color: #9c27b0; // Fioletowy ripple
     width: 100%;
     text-align: left;
     margin: 5px 0;
-  }
-}
-
-@media (max-width: 768px) {
-  .nav-links {
-    position: absolute;
-    top: 64px; // Height of mat-toolbar
-    left: 0;
-    right: 0;
-    background-color: $navbar-bg-color;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 10px 20px;
-    transform: translateX(-100%);
-    opacity: 0;
-    z-index: 1000;
-    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-
-    &.active {
-      transform: translateX(0);
-      opacity: 1;
-    }
-  }
-
-  .search {
-    display: none; // Hide search on small screens
-  }
-
-  .user-actions {
-    display: none; // Optionally hide user actions on small screens
   }
 }
