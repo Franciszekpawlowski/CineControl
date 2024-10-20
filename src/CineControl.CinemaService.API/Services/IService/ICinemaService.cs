@@ -1,14 +1,13 @@
 using CineControl.CinemaService.API.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using CineControl.CinemaService.API.Models.Request.Cinemas;
 
 namespace CineControl.CinemaService.API.Services
 {
     public interface ICinemaService
     {
         Task<IEnumerable<Cinema>> GetAllCinemas();
-        Task<Cinema> GetCinemaById(int id);
-        Task AddCinema(Cinema cinema);
+        Task<Cinema?> GetCinemaById(int id);
+        Task AddCinema(AddCinemaRequest request);
         Task UpdateCinema(Cinema cinema);
         Task DeleteCinema(int id);
 

@@ -1,26 +1,24 @@
 using CineControl.CinemaService.API.Models;
-using System;
-using System.Collections.Generic;
+using CineControl.CinemaService.API.Models.Request.Cinemas;
 
 public static class CinemaFactory
 {
     private static int _globalSeatId = 1; // Global seat ID to ensure uniqueness
 
-    public static Cinema CreateCinema(Cinema cinema)
+    public static Cinema CreateCinema(AddCinemaRequest CreateCinemaRequest)
     {
         var cinema = new Cinema
         {
             Id = 1,
-            Name = cinema.Name ?? "Cinema Complex",
-            Address = cinema.Address ?? "123 Movie Street",
-            City = cinema.City ?? "Film City",
-            State = cinema.State ?? "FS",
-            ZipCode = cinema.ZipCode ?? "12345",
-            Theaters = cinema.Theaters ?? new List<Theater>()
+            Name = CreateCinemaRequest.Name ?? "Cinema Complex",
+            Address = CreateCinemaRequest.Address ?? "123 Movie Street",
+            City = CreateCinemaRequest.City ?? "Film City",
+            State = CreateCinemaRequest.State ?? "FS",
+            ZipCode = CreateCinemaRequest.ZipCode ?? "12345",
         };
 
         int theaterId = 1;
-        foreach (var config in theaterConfigs)
+        foreach (var config in CreateCinemaRequest.TheaterConfigs)
         {
             var theater = new Theater
             {
@@ -55,6 +53,16 @@ public static class CinemaFactory
         }
         return seats;
     }
+}
+
+public class CinemaDTO
+{
+    public string Name { get; set; }
+    public string Address { get; set; }
+    public string City { get; set; }
+    public string State { get; set; }
+    public string ZipCode { get; set; }
+    public List<TheaterConfig> Theaters { get; set; }
 }
 
 public class TheaterConfig
