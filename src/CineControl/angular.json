@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "cinema-control": {
+    "cinecontrol": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/cinema-control",
+            "outputPath": "dist/cinecontrol",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -79,10 +79,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "cinema-control:build:production"
+              "buildTarget": "cinecontrol:build:production"
             },
             "development": {
-              "buildTarget": "cinema-control:build:development"
+              "buildTarget": "cinecontrol:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -115,5 +115,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }
