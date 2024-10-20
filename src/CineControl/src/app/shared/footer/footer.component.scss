@@ -1,14 +1,12 @@
-/* src/app/shared/footer/footer.component.scss */
 
-/* Zdefiniowane zmienne SCSS dla lepszej zarządzalności kolorów */
-$footer-bg-color: #000000; // Czarny kolor tła
-$footer-text-color: #b0b0b0; // Szary kolor tekstu
-$hover-gradient: linear-gradient(45deg, #9c27b0, #ce93d8); // Fioletowy gradient
-$newsletter-bg-color: #1a1a1a; // Ciemne tło dla pola newslettera
-$newsletter-label-color: #b0b0b0; // Szary kolor etykiety
-$newsletter-underline-color: #9c27b0; // Fioletowa linia pod polem
-$newsletter-ripple-color: #9c27b0; // Fioletowy ripple
-$button-hover-color: #ffffff; // Biały tekst na hover
+$footer-bg-color: #000000; 
+$footer-text-color: #b0b0b0; 
+$hover-gradient: linear-gradient(45deg, #9c27b0, #ce93d8); 
+$newsletter-bg-color: #1a1a1a; 
+$newsletter-label-color: #b0b0b0; 
+$newsletter-underline-color: #9c27b0; 
+$newsletter-ripple-color: #9c27b0; 
+$button-hover-color: #ffffff; 
 
 .footer {
   display: flex;
@@ -18,7 +16,8 @@ $button-hover-color: #ffffff; // Biały tekst na hover
   padding: 20px;
   background-color: $footer-bg-color;
   color: $footer-text-color;
-  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.5); // Shadow at the top of footer
+  height: auto;
+  //box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.5); // Shadow at the top of footer
 }
 
 .footer-links,
