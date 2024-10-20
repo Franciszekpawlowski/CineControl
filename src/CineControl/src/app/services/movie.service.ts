@@ -3,12 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Promotion } from '../models/promotion.model';
 import { Movie } from '../models/movie.model';
-
+import { environment } from '../../environments/environment.prod';
 @Injectable({
   providedIn: 'root',
 })
 export class MovieService {
-  private apiUrl = 'https://api.twojekino.pl/movies';
+  private apiUrl = environment.seanceApiUrl;
 
   constructor(private http: HttpClient) {}
 

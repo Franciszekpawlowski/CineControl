@@ -1,0 +1,43 @@
+<!-- src/app/shared/registration/registration.component.html -->
+<div class="registration-container">
+    <mat-toolbar color="primary" class="registration-header">
+      <span>Rejestracja</span>
+    </mat-toolbar>
+  
+    <form (ngSubmit)="register()" class="registration-form">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Imię i Nazwisko</mat-label>
+        <input matInput type="text" [(ngModel)]="name" name="name" required aria-label="Imię i Nazwisko" />
+        <mat-icon matSuffix>person</mat-icon>
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" [(ngModel)]="email" name="email" required aria-label="Email" />
+        <mat-icon matSuffix>email</mat-icon>
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Hasło</mat-label>
+        <input matInput type="password" [(ngModel)]="password" name="password" required aria-label="Hasło" />
+        <mat-icon matSuffix>lock</mat-icon>
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Potwierdź Hasło</mat-label>
+        <input matInput type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required aria-label="Potwierdź Hasło" />
+        <mat-icon matSuffix>lock</mat-icon>
+      </mat-form-field>
+  
+      <button mat-raised-button color="accent" type="submit" class="submit-button">
+        Zarejestruj się
+      </button>
+  
+      <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+  
+      <p class="login-link">
+        Masz już konto? <a routerLink="/login">Zaloguj się tutaj</a>.
+      </p>
+    </form>
+  </div>
+  

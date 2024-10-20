@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment } from '../../environments/environment.prod';
 
 
 import { Cinema } from '../models/cinema.model';
@@ -11,7 +12,7 @@ import { Cinema } from '../models/cinema.model';
   providedIn: 'root',
 })
 export class CinemaService {
-  private apiUrl = 'https://twoje-api.com/api/cinemas';
+  private apiUrl = environment.cinemasApiUrl;
   private cinemasUrl = 'cinemas.json';
 
   constructor(private http: HttpClient) {}

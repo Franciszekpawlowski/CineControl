@@ -59,4 +59,10 @@ export class NavbarComponent {
     // Przykładowa nawigacja:
     // this.router.navigate(['/search'], { queryParams: { q: this.searchQuery } });
   }
+  logout() {
+    this.authService.logout();
+    this.isLoggedIn = false;
+    // Opcjonalnie, przekierowanie po wylogowaniu
+    // this.router.navigate(['/']);
+  }
 }

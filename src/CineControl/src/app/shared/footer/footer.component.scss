@@ -4,7 +4,7 @@
 $footer-bg-color: #000000; // Czarny kolor tła
 $footer-text-color: #b0b0b0; // Szary kolor tekstu
 $hover-gradient: linear-gradient(45deg, #9c27b0, #ce93d8); // Fioletowy gradient
-$newsletter-bg-color: #000000; // Czarny kolor tła dla pola wyszukiwania
+$newsletter-bg-color: #1a1a1a; // Ciemne tło dla pola newslettera
 $newsletter-label-color: #b0b0b0; // Szary kolor etykiety
 $newsletter-underline-color: #9c27b0; // Fioletowa linia pod polem
 $newsletter-ripple-color: #9c27b0; // Fioletowy ripple
@@ -69,47 +69,51 @@ $button-hover-color: #ffffff; // Biały tekst na hover
   align-items: center;
   flex-wrap: wrap;
 
-  mat-form-field {
+  .email-field {
     width: 100%;
-    max-width: 250px;
+    max-width: 300px;
     background-color: $newsletter-bg-color;
     border-radius: 4px;
     margin-right: 10px;
     color: #ffffff; // White text in input
     transition: background-color 0.3s ease;
 
-    input {
-      color: #ffffff; // White text in input
+    mat-form-field {
+      width: 100%;
+      color: #ffffff;
+
+      .mat-form-field-label {
+        color: $newsletter-label-color;
+      }
+
+      input {
+        color: #ffffff;
+      }
+
+      mat-icon {
+        color: $newsletter-label-color;
+      }
+
+      &:focus-within .mat-form-field-label,
+      &:hover .mat-form-field-label {
+        color: $hover-gradient;
+      }
     }
 
-    mat-label {
-      color: $newsletter-label-color;
-    }
+    button {
+      color: #ffffff;
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: color 0.3s ease;
 
-    .mat-form-field-underline {
-      background-color: $newsletter-underline-color;
-    }
+      mat-icon {
+        font-size: 24px;
+      }
 
-    .mat-form-field-ripple {
-      background-color: $newsletter-ripple-color;
-    }
-
-    &:hover {
-      background-color: darken($newsletter-bg-color, 5%);
-    }
-  }
-
-  button {
-    height: 40px; // Match input field height
-    color: $footer-text-color;
-    border: 1px solid $hover-gradient;
-    border-radius: 4px;
-    padding: 0 16px;
-    transition: background 0.3s ease, color 0.3s ease;
-
-    &:hover {
-      background: $hover-gradient;
-      color: $button-hover-color;
+      &:hover {
+        color: $hover-gradient;
+      }
     }
   }
 }
@@ -139,7 +143,7 @@ $button-hover-color: #ffffff; // Biały tekst na hover
     flex-direction: column;
     align-items: flex-start;
 
-    mat-form-field {
+    .email-field {
       max-width: 100%;
       margin-right: 0;
       margin-bottom: 10px;
@@ -147,6 +151,7 @@ $button-hover-color: #ffffff; // Biały tekst na hover
 
     button {
       width: 100%;
+      text-align: center;
     }
   }
 }
