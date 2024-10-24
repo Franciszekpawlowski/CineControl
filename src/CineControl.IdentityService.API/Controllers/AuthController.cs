@@ -1,7 +1,6 @@
 using CineControl.IdentityService.API.Models.Request.Auth;
 using CineControl.IdentityService.API.Models.Response;
 using CineControl.IdentityService.API.Models.Response.Auth;
-using CineControl.IdentityService.API.Models.Results.Auth;
 using CineControl.IdentityService.API.Service.IService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
