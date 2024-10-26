@@ -1,3 +1,5 @@
+using CineControl.CinemaService.API.Models;
+
 namespace CineControl.CinemaService.API.Models.Request.Cinemas
 {
     public class AddCinemaRequest
