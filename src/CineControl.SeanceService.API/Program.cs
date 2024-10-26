@@ -1,5 +1,6 @@
 using CineControl.SeanceService.API.Data;
 using Microsoft.EntityFrameworkCore;
+using CineControl.SeanceService.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,10 @@ builder.Services.AddSwaggerGen();
 
 // Configure DbContext with PostgreSQL
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddHttpClient<ITheaterService, TheaterService>(client =>
+{
+    client.BaseAddress = new Uri("http://localhost:5112/");
+});
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
 
