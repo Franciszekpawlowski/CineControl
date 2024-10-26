@@ -1,3 +1,4 @@
+using CineControl.CinemaService.API.Data;
 using CineControl.CinemaService.API.Models;
 using CineControl.CinemaService.API.Models.Request.Cinemas;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ namespace CineControl.CinemaService.API.Services
         {
             _context = context;
         }
+        
 
         public async Task<IEnumerable<Cinema>> GetAllCinemas()
         {
@@ -23,13 +25,13 @@ namespace CineControl.CinemaService.API.Services
             return await _context.Cinemas.Include(c => c.Theaters).ThenInclude(t => t.Seats).FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public async Task AddCinema(AddCinemaRequest cinema)
+        public async Task<Cinema> AddCinema(AddCinemaRequest request)
         {
-            var cinemadto = CinemaFactory.CreateCinema(cinema);
-            await _context.Cinemas.AddAsync(cinemadto);
+            var cinema = CinemaFactory.CreateCinema(request);
+            await _context.Cinemas.AddAsync(cinema);
             await _context.SaveChangesAsync();
+            return cinema;
         }
-
         public async Task UpdateCinema(Cinema cinema)
         {
             _context.Cinemas.Update(cinema);
@@ -45,6 +47,13 @@ namespace CineControl.CinemaService.API.Services
                 await _context.SaveChangesAsync();
             }
         }
+        public async Task<Theater?> GetTheaterById(int theaterId)
+        {
+            return await _context.Theaters
+                .Include(t => t.Seats)
+                .FirstOrDefaultAsync(t => t.Id == theaterId);
+        }
+
 
         public async Task<IEnumerable<Theater>> GetTheatersByCinemaId(int cinemaId)
         {
