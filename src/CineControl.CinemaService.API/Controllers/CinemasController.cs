@@ -36,9 +36,8 @@ namespace CineControl.CinemaService.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Cinema>> AddCinema(AddCinemaRequest request)
         {
-            await _cinemaService.AddCinema(request);
-
-            return CreatedAtAction(nameof(GetCinema), new { id = 1 }, null); // Assuming the first cinema is created
+            var cinema = await _cinemaService.AddCinema(request);
+            return CreatedAtAction(nameof(GetCinema), new { id = cinema.Id }, cinema);
         }
 
         [HttpPut("{id}")]

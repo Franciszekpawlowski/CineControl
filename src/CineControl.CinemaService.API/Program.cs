@@ -1,6 +1,7 @@
 using CineControl.CinemaService.API.Models;
 using CineControl.CinemaService.API.Services;
 using Microsoft.EntityFrameworkCore;
+using CineControl.CinemaService.API.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

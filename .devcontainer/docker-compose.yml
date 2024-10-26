@@ -5,21 +5,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-
     volumes:
       - ../..:/workspaces:cached
-
-    # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
-
-    # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
-    network_mode: service:db
-    
-    # Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-    # user: root
-
-    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally. 
-    # (Adding the "ports" property to this file will not forward from a Codespace.)
+    networks:
+      - dev-network
 
   db:
     image: postgres:16.3
@@ -31,10 +21,12 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
       POSTGRES_DB: postgres
-      POSTGRES_MULTIPLE_DATABASES: CinemaDB,SeanceDB,AuthDB 
-      
-    #"forwardPorts": ["5432"]
-    # (Adding the "ports" property to this file will not forward from a Codespace.)
+      POSTGRES_MULTIPLE_DATABASES: CinemaDB,SeanceDB,AuthDB
+    networks:
+      - dev-network
 
 volumes:
   postgres-data:
+
+networks:
+  dev-network:

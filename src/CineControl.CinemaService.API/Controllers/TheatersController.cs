@@ -22,6 +22,17 @@ namespace CineControl.CinemaService.API.Controllers
         {
             return Ok(await _cinemaService.GetTheatersByCinemaId(cinemaId));
         }
+        [HttpGet("~/api/theaters/{theaterId}")]
+        public async Task<ActionResult<Theater>> GetTheaterById(int theaterId)
+        {
+            var theater = await _cinemaService.GetTheaterById(theaterId);
+            if (theater == null)
+            {
+                return NotFound();
+            }
+            return Ok(theater);
+        }
+
 
         [HttpPost]
         public async Task<ActionResult<Theater>> AddTheater(int cinemaId, Theater theater)
