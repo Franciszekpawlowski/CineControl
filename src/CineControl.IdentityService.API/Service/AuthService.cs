@@ -1,7 +1,6 @@
 using System.Security.Claims;
 using CineControl.IdentityService.API.Models;
 using CineControl.IdentityService.API.Models.Request.Auth;
-using CineControl.IdentityService.API.Models.Response.Auth;
 using CineControl.IdentityService.API.Models.Results;
 using CineControl.IdentityService.API.Models.Results.Auth;
 using CineControl.IdentityService.API.Service.IService;

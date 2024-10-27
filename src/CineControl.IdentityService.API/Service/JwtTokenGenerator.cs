@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using CineControl.Common.JWT.Models;
 using CineControl.IdentityService.API.Models;
 using CineControl.IdentityService.API.Service.IService;
 using Microsoft.Extensions.Options;
