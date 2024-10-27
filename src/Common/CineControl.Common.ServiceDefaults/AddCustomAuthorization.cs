@@ -1,4 +1,3 @@
-using System;
 using CineControl.Common.Enums;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

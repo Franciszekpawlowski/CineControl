@@ -47,7 +47,7 @@ namespace CineControl.IdentityService.API.Service
                 return result;
             }
 
-            var token = _jwtTokenGenerator.GenerateToken(user);
+            var token = await _jwtTokenGenerator.GenerateTokenAsync(user);
             var refreshToken = _jwtTokenGenerator.GenerateRefreshToken();
 
             LoginResults loginResults = new()
@@ -90,6 +90,10 @@ namespace CineControl.IdentityService.API.Service
                     result.AddErrors(addClaimResult.Errors.Select(error => error.Description));
                 }
             }
+            catch (Exception ex)
+            {
+                result.AddError(ex.Message);   
+            }
             return result;
         }
 
@@ -112,7 +116,7 @@ namespace CineControl.IdentityService.API.Service
             }
 
             var RefreshTokenResult = new RefreshTokenResult(){
-                AccessToken = _jwtTokenGenerator.GenerateToken(user),
+                AccessToken = await _jwtTokenGenerator.GenerateTokenAsync(user),
                 RefreshToken = _jwtTokenGenerator.GenerateRefreshToken()
             };
             

@@ -2,9 +2,11 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using CineControl.Common;
 using CineControl.Common.JWT.Models;
 using CineControl.IdentityService.API.Models;
 using CineControl.IdentityService.API.Service.IService;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -13,17 +15,22 @@ namespace CineControl.IdentityService.API.Service
     public class JwtTokenGenerator : IJwtTokenGenerator
     {
         private readonly JwtOptions _jwtOptions;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public JwtTokenGenerator(IOptions<JwtOptions> jwtOptions)
+        public JwtTokenGenerator(IOptions<JwtOptions> jwtOptions, UserManager<ApplicationUser> userManager)
         {
             _jwtOptions = jwtOptions.Value;
+            _userManager = userManager;
         }
 
-        public string GenerateToken(ApplicationUser applicationUser)
+        public async Task<string> GenerateTokenAsync(ApplicationUser applicationUser)
         {
             var tokenhandler = new JwtSecurityTokenHandler();
 
             SymmetricSecurityKey key = new(Encoding.ASCII.GetBytes(_jwtOptions.Secret));
+
+            var claimsList = await _userManager.GetClaimsAsync(applicationUser);
+            var claim = claimsList.FirstOrDefault(claim => claim.Type == CustomClaims.Role);
 
             var claimList = new List<Claim>
             {
@@ -31,6 +38,11 @@ namespace CineControl.IdentityService.API.Service
                 new Claim(JwtRegisteredClaimNames.Sub,applicationUser.Id),
                 new Claim(JwtRegisteredClaimNames.Name,applicationUser.UserName)
             };
+
+            if (claim is not null)
+            {
+                claimList.Add(claim);
+            }
 
             // claimList.AddRange(roles.Select(role => new Claim(ClaimTypes.Role,role)));
 
