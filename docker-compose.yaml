@@ -1,0 +1,62 @@
+services:
+  cinemaservice:
+    build:
+      context: .
+      dockerfile: src/CineControl.CinemaService.API/Dockerfile
+    ports:
+      - "8083:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  identityservice:
+    build:
+      context: .
+      dockerfile: src/CineControl.IdentityService.API/Dockerfile
+    ports:
+      - "8082:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  seanceservice:
+    build:
+      context: .
+      dockerfile: src/CineControl.SeanceService.API/Dockerfile
+    ports:
+      - "8081:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  cinecontrol:
+    build:
+      context: .
+      dockerfile: src/CineControl/Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - cinemaservice
+      - identityservice
+      - seanceservice
+
+  db:
+    image: postgres:16.3
+    # restart: unless-stopped
+    volumes:
+      - postgres-data-prod:/var/lib/postgresql/data
+      - ./src/postgress/create-multiple-postgresql-databases.sh:/docker-entrypoint-initdb.d/create-multiple-postgresql-databases.sh
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_MULTIPLE_DATABASES: CinemaDB,SeanceDB,AuthDB
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      # start_period: 5s
+
+volumes:
+  postgres-data-prod:
