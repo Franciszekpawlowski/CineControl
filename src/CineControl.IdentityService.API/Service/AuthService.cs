@@ -1,4 +1,6 @@
 using System.Security.Claims;
+using CineControl.Common;
+using CineControl.Common.Enums;
 using CineControl.IdentityService.API.Models;
 using CineControl.IdentityService.API.Models.Request.Auth;
 using CineControl.IdentityService.API.Models.Results;
@@ -79,6 +81,14 @@ namespace CineControl.IdentityService.API.Service
             catch (Exception ex)
             {
                 result.AddError(ex.Message);   
+            }
+            try
+            {
+                var addClaimResult = await _userManager.AddClaimAsync(user, new Claim(CustomClaims.Role, Roles.User.ToString()));
+                if (!addClaimResult.Succeeded)
+                {
+                    result.AddErrors(addClaimResult.Errors.Select(error => error.Description));
+                }
             }
             return result;
         }
