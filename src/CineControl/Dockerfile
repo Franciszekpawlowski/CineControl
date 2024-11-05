@@ -13,6 +13,8 @@ RUN yarn ng build
 
 FROM nginx:latest
 
-COPY --from=build /app/dist/cinecontrol /usr/share/nginx/html
+COPY src/CineControl/nginx.conf /etc/nginx/conf.d/default.conf
+
+COPY --from=build /app/dist/cinecontrol/browser /usr/share/nginx/html
 
 EXPOSE 80
