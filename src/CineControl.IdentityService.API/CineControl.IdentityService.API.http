@@ -1,6 +1,7 @@
 @CineControl.IdentityService.API_HostAddress = http://localhost:5093
+#@CineControl.IdentityService.API_HostAddress = http://identityservice.cinecontrol.local
 
-POST {{CineControl.IdentityService.API_HostAddress}}/Auth/Register
+POST {{CineControl.IdentityService.API_HostAddress}}/api/v1/Auth/Register
 Content-Type: application/json
 
 {
@@ -11,7 +12,7 @@ Content-Type: application/json
 
 ###
 # @name Login
-POST {{CineControl.IdentityService.API_HostAddress}}/Auth/Login
+POST {{CineControl.IdentityService.API_HostAddress}}/api/v1/Auth/Login
 Content-Type: application/json
 
 {
@@ -22,12 +23,12 @@ Content-Type: application/json
 ###
 # @name GetUser
 @authToken = {{Login.response.body.accessToken}}
-GET {{CineControl.IdentityService.API_HostAddress}}/User/GetUser
+GET {{CineControl.IdentityService.API_HostAddress}}/api/v1/User/GetUser
 Authorization: Bearer {{authToken}}
 
 ###
 
-PUT {{CineControl.IdentityService.API_HostAddress}}/Roles/AddRole
+PUT {{CineControl.IdentityService.API_HostAddress}}/api/v1/Roles/AddRole
 Authorization: Bearer {{authToken}}
 
 Content-Type: application/json

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CineControl.IdentityService.API.Controllers
 {
-    [Route("[controller]/[action]")]
+    [Route("api/v1/[controller]/[action]")]
     [ApiController]
     [Authorize]
     public class UserController : BaseController
@@ -29,7 +29,8 @@ namespace CineControl.IdentityService.API.Controllers
             {
                 return Error(result);
             }
-            var GetUserResponse = new GetUserResponse() {
+            var GetUserResponse = new GetUserResponse()
+            {
                 UserId = result.Data.User.Id,
                 Email = result.Data.User.Email,
                 Username = result.Data.User.UserName,

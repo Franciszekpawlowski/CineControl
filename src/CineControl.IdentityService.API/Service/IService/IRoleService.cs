@@ -4,7 +4,7 @@ using CineControl.IdentityService.API.Models.Results.Roles;
 
 namespace CineControl.IdentityService.API.Service.IService
 {
-    public interface IRoleService 
+    public interface IRoleService
     {
         Task<GenericResults<AddRoleResult>> AddRoleAsync(AddRoleRequest request);
     }

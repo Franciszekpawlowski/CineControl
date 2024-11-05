@@ -8,10 +8,11 @@ using CineControl.Common.ServiceDefaults;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<appdbContext>(options => {
+builder.Services.AddDbContext<appdbContext>(options =>
+{
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
-builder.Services.AddIdentity<ApplicationUser,IdentityRole>().AddEntityFrameworkStores<appdbContext>();
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<appdbContext>();
 
 builder.AddServiceDefaults();
 
@@ -21,20 +22,22 @@ builder.Logging.AddConsole();
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.AddScoped<IJwtTokenGenerator,JwtTokenGenerator>();
-builder.Services.AddScoped<IAuthService,AuthService>();
-builder.Services.AddScoped<IUserService,UserService>();
+builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddEndpointsApiExplorer();
 
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+// if (app.Environment.IsDevelopment())
+// {
+//     app.UseSwagger();
+//     app.UseSwaggerUI();
+// }
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
@@ -49,7 +52,7 @@ app.Run();
 
 void ApplyMigrations()
 {
-    using(var scope = app.Services.CreateScope())
+    using (var scope = app.Services.CreateScope())
     {
         var _db = scope.ServiceProvider.GetRequiredService<appdbContext>();
         if (_db.Database.GetPendingMigrations().Count() > 0)

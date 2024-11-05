@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CineControl.IdentityService.API.Controllers
 {
     [ApiController]
-    [Route("[controller]/[action]")]
+    [Route("api/v1/[controller]/[action]")]
     [Authorize(Policy = nameof(CustomPolicies.Admin))]
     public class RolesController : BaseController
     {

@@ -19,6 +19,6 @@ namespace CineControl.CinemaService.API.Services
         Task AddSeat(int theaterId, Seat seat);
         Task RemoveSeat(int theaterId, int seatId);
 
-        Task<Theater?> GetTheaterById(int theaterId); 
+        Task<Theater?> GetTheaterById(int theaterId);
     }
 }

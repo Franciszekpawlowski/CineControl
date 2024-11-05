@@ -14,7 +14,8 @@ namespace CineControl.IdentityService.API.Controllers
 
         protected IActionResult Error<T>(GenericResults<T> error)
         {
-            var respone = new ErrorResponse() {
+            var respone = new ErrorResponse()
+            {
                 Errors = error.Errors
             };
             return BadRequest(respone);

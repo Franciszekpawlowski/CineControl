@@ -13,7 +13,7 @@ namespace CineControl.CinemaService.API.Services
         {
             _context = context;
         }
-        
+
 
         public async Task<IEnumerable<Cinema>> GetAllCinemas()
         {

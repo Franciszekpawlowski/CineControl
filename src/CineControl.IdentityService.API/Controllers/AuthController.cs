@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CineControl.IdentityService.API.Controllers
 {
-    [Route("[controller]/[action]")]
+    [Route("api/v1/[controller]/[action]")]
     [ApiController]
     [Authorize]
     public class AuthController : BaseController
@@ -19,7 +19,7 @@ namespace CineControl.IdentityService.API.Controllers
         {
             _authService = authService;
         }
-        
+
         [HttpPost]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LoginResponse))]
@@ -31,7 +31,8 @@ namespace CineControl.IdentityService.API.Controllers
             {
                 return Error(result);
             }
-            LoginResponse loginResponse = new(){
+            LoginResponse loginResponse = new()
+            {
                 AccessToken = result.Data.AccessToken,
                 RefreshToken = result.Data.RefreshToken
             };
@@ -40,7 +41,7 @@ namespace CineControl.IdentityService.API.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorResponse))]
         public async Task<IActionResult> Register([FromBody] RegisterRequest registerRequest)
         {
@@ -65,7 +66,8 @@ namespace CineControl.IdentityService.API.Controllers
             {
                 return Error(result);
             }
-            RefreshTokenResponse RefreshTokenResponse = new(){
+            RefreshTokenResponse RefreshTokenResponse = new()
+            {
                 AccessToken = result.Data.AccessToken,
                 RefreshToken = result.Data.RefreshToken
             };
