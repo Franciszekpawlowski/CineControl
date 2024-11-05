@@ -1,11 +1,13 @@
 using CineControl.CinemaService.API.Models;
 using CineControl.CinemaService.API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CineControl.CinemaService.API.Controllers
 {
     [Route("api/v1/cinemas/{cinemaId}/theaters")]
     [ApiController]
+    [Authorize]
     public class TheatersController : ControllerBase
     {
         private readonly ICinemaService _cinemaService;
