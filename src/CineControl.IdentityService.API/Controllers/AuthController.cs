@@ -50,7 +50,7 @@ namespace CineControl.IdentityService.API.Controllers
                 return Error(result);
             }
 
-            return Ok(result.Data.Message);
+            return Created();
         }
 
 

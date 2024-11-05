@@ -70,30 +70,19 @@ namespace CineControl.IdentityService.API.Service
                 NormalizedEmail = registerRequest.Email.ToUpper(),
                 EmailConfirmed = true
             };
-            try
+            var createAsyncResult = await _userManager.CreateAsync(user, registerRequest.Password);
+            if (!createAsyncResult.Succeeded)
             {
-                var createAsyncResult = await _userManager.CreateAsync(user, registerRequest.Password);
-                if (!createAsyncResult.Succeeded)
-                {
-                    result.AddErrors(createAsyncResult.Errors.Select(error => error.Description));
-                }
+                result.AddErrors(createAsyncResult.Errors.Select(error => error.Description));
+                return result;
             }
-            catch (Exception ex)
+            user = await _userManager.FindByEmailAsync(user.Email);
+            var claim = new Claim(CustomClaims.Role.ToString(), Roles.User.ToString());
+            var addClaimResult = await _userManager.AddClaimAsync(user, claim);
+            if (!addClaimResult.Succeeded)
             {
-                result.AddError(ex.Message);   
-            }
-            try
-            {
-                var addClaimResult = await _userManager.AddClaimAsync(user, new Claim(CustomClaims.Role, Roles.User.ToString()));
-                if (!addClaimResult.Succeeded)
-                {
-                    result.AddErrors(addClaimResult.Errors.Select(error => error.Description));
-                }
-            }
-            catch (Exception ex)
-            {
-                result.AddError(ex.Message);   
-            }
+                result.AddErrors(addClaimResult.Errors.Select(error => error.Description));
+            }              
             return result;
         }
 

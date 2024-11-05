@@ -35,8 +35,8 @@ namespace CineControl.IdentityService.API.Service
             var claimList = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Email,applicationUser.Email),
-                new Claim(JwtRegisteredClaimNames.Sub,applicationUser.Id),
-                new Claim(JwtRegisteredClaimNames.Name,applicationUser.UserName)
+                new Claim(JwtRegisteredClaimNames.Sub,applicationUser.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Name,applicationUser.UserName),
             };
 
             if (claim is not null)
@@ -48,6 +48,8 @@ namespace CineControl.IdentityService.API.Service
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
+                Issuer = _jwtOptions.Issuer,
+                Audience = _jwtOptions.Audience,
                 Subject = new ClaimsIdentity(claimList),
                 Expires = DateTime.UtcNow.AddHours(2),
                 SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature)
