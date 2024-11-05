@@ -34,9 +34,7 @@ namespace CineControl.IdentityService.API.Controllers
                 UserId = result.Data.User.Id,
                 Email = result.Data.User.Email,
                 Username = result.Data.User.UserName,
-                Role = result.Data.Role.ToString(),
-                Username = result.Data.User.UserName,
-                Role = result.Data.Role.ToString(),
+                Role = result.Data.Role.ToString()
             };
             return Ok(GetUserResponse);
         }
