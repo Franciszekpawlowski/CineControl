@@ -1,4 +1,4 @@
-namespace CineControl.IdentityService.API.Models
+namespace CineControl.Common.JWT.Models
 {
     public class JwtOptions
     {

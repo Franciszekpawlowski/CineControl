@@ -1,13 +1,14 @@
+using CineControl.Common.ServiceDefaults;
 using CineControl.SeanceService.API.Data;
 using Microsoft.EntityFrameworkCore;
 using CineControl.SeanceService.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddServiceDefaults();
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 // Configure DbContext with PostgreSQL
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");

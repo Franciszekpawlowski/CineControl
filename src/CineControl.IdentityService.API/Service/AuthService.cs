@@ -1,7 +1,8 @@
 using System.Security.Claims;
+using CineControl.Common;
+using CineControl.Common.Enums;
 using CineControl.IdentityService.API.Models;
 using CineControl.IdentityService.API.Models.Request.Auth;
-using CineControl.IdentityService.API.Models.Response.Auth;
 using CineControl.IdentityService.API.Models.Results;
 using CineControl.IdentityService.API.Models.Results.Auth;
 using CineControl.IdentityService.API.Service.IService;
@@ -46,7 +47,7 @@ namespace CineControl.IdentityService.API.Service
                 return result;
             }
 
-            var token = _jwtTokenGenerator.GenerateToken(user);
+            var token = await _jwtTokenGenerator.GenerateTokenAsync(user);
             var refreshToken = _jwtTokenGenerator.GenerateRefreshToken();
 
             LoginResults loginResults = new()
@@ -69,18 +70,19 @@ namespace CineControl.IdentityService.API.Service
                 NormalizedEmail = registerRequest.Email.ToUpper(),
                 EmailConfirmed = true
             };
-            try
+            var createAsyncResult = await _userManager.CreateAsync(user, registerRequest.Password);
+            if (!createAsyncResult.Succeeded)
             {
-                var createAsyncResult = await _userManager.CreateAsync(user, registerRequest.Password);
-                if (!createAsyncResult.Succeeded)
-                {
-                    result.AddErrors(createAsyncResult.Errors.Select(error => error.Description));
-                }
+                result.AddErrors(createAsyncResult.Errors.Select(error => error.Description));
+                return result;
             }
-            catch (Exception ex)
+            user = await _userManager.FindByEmailAsync(user.Email);
+            var claim = new Claim(CustomClaims.Role.ToString(), Roles.User.ToString());
+            var addClaimResult = await _userManager.AddClaimAsync(user, claim);
+            if (!addClaimResult.Succeeded)
             {
-                result.AddError(ex.Message);   
-            }
+                result.AddErrors(addClaimResult.Errors.Select(error => error.Description));
+            }              
             return result;
         }
 
@@ -103,7 +105,7 @@ namespace CineControl.IdentityService.API.Service
             }
 
             var RefreshTokenResult = new RefreshTokenResult(){
-                AccessToken = _jwtTokenGenerator.GenerateToken(user),
+                AccessToken = await _jwtTokenGenerator.GenerateTokenAsync(user),
                 RefreshToken = _jwtTokenGenerator.GenerateRefreshToken()
             };
             

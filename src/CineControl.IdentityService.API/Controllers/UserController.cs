@@ -30,8 +30,10 @@ namespace CineControl.IdentityService.API.Controllers
                 return Error(result);
             }
             var GetUserResponse = new GetUserResponse() {
+                UserId = result.Data.User.Id,
                 Email = result.Data.User.Email,
-                Username = result.Data.User.UserName
+                Username = result.Data.User.UserName,
+                Role = result.Data.Role.ToString(),
             };
             return Ok(GetUserResponse);
         }

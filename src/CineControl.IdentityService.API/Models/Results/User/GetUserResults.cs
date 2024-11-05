@@ -3,10 +3,12 @@ namespace CineControl.IdentityService.API.Models.Results.User
     public class GetUserResults
     {
         public ApplicationUser User { get; } 
+        public Common.Enums.Roles Role { get; }
         public GetUserResults() {}
-        public GetUserResults(ApplicationUser user)
+        public GetUserResults(ApplicationUser User,Common.Enums.Roles Role)
         {
-            User = user;
+            this.User = User;
+            this.Role = Role;
         }
     }
 }

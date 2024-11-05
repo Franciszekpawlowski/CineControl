@@ -1,6 +1,38 @@
 @CineControl.IdentityService.API_HostAddress = http://localhost:5093
 
-GET {{CineControl.IdentityService.API_HostAddress}}/weatherforecast/
-Accept: application/json
+POST {{CineControl.IdentityService.API_HostAddress}}/Auth/Register
+Content-Type: application/json
+
+{
+    "Username": "Testowy",
+    "Email": "Testowy@test.com",
+    "Password":"T3st@wy"
+}
 
 ###
+# @name Login
+POST {{CineControl.IdentityService.API_HostAddress}}/Auth/Login
+Content-Type: application/json
+
+{
+    "Username": "Testowy",
+    "Password":"T3st@wy"
+}
+
+###
+# @name GetUser
+@authToken = {{Login.response.body.accessToken}}
+GET {{CineControl.IdentityService.API_HostAddress}}/User/GetUser
+Authorization: Bearer {{authToken}}
+
+###
+
+PUT {{CineControl.IdentityService.API_HostAddress}}/Roles/AddRole
+Authorization: Bearer {{authToken}}
+
+Content-Type: application/json
+
+{
+    "Username": "{{GetUser.response.body.username}}",
+    "Role": "Operator"
+}
