@@ -1,4 +1,4 @@
-// src/app/shared/login/login.component.ts
+
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -34,19 +34,19 @@ export class LoginComponent {
 
   login() {
     if (!this.email || !this.password) {
-      this.errorMessage = 'Proszę wypełnić wszystkie pola.';
+      this.errorMessage = 'Please fill in all fields.';
       return;
     }
 
-    this.authService.login({ email: this.email, password: this.password }).subscribe({
-      next: (response) => {
-        console.log('Zalogowano pomyślnie:', response);
-        this.router.navigate(['/']); // Przekierowanie po zalogowaniu
-      },
-      error: (error) => {
-        console.error('Błąd logowania:', error);
-        this.errorMessage = 'Nieprawidłowe dane logowania.';
-      },
-    });
+    this.authService
+      .login({ email: this.email, password: this.password })
+      .subscribe({
+        next: () => {
+          this.router.navigate(['/']);
+        },
+        error: () => {
+          this.errorMessage = 'Invalid login credentials.';
+        },
+      });
   }
 }
