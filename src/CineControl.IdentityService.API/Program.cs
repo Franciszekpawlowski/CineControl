@@ -14,7 +14,7 @@ builder.Services.AddDbContext<appdbContext>(options =>
 });
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<appdbContext>();
 
-builder.AddServiceDefaults();
+builder.AddServiceDefaults("CineControl.IdentityService.API");
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
@@ -45,19 +45,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-ApplyMigrations();
+app.applyMigrations();
 
 app.Run();
-
-
-void ApplyMigrations()
-{
-    using (var scope = app.Services.CreateScope())
-    {
-        var _db = scope.ServiceProvider.GetRequiredService<appdbContext>();
-        if (_db.Database.GetPendingMigrations().Count() > 0)
-        {
-            _db.Database.Migrate();
-        }
-    }
-}
