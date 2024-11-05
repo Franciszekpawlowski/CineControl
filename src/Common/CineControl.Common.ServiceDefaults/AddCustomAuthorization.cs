@@ -10,12 +10,12 @@ public static class AddCustomAuthorization
     {
         builder.Services.AddAuthorization(options =>
         {
-            options.AddPolicy(CustomPolicies.Admin.ToString(), policy => 
+            options.AddPolicy(CustomPolicies.Admin.ToString(), policy =>
                 policy.RequireClaim(CustomClaims.Role, Roles.Admin.ToString())
-                    
+
                 );
 
-            options.AddPolicy(CustomPolicies.Operator.ToString(), policy => 
+            options.AddPolicy(CustomPolicies.Operator.ToString(), policy =>
                 policy.RequireClaim(CustomClaims.Role, Roles.Operator.ToString()));
         }
         );

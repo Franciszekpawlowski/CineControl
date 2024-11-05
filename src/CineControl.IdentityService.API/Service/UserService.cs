@@ -25,7 +25,7 @@ namespace CineControl.IdentityService.API.Service
             _jwtTokenGenerator = jwtTokenGenerator;
         }
 
-    
+
 
         public async Task<GenericResults<GetUserResults>> GetUser(HttpContext httpContext)
         {
@@ -46,7 +46,7 @@ namespace CineControl.IdentityService.API.Service
             List<Claim> claims = new(await _userManager.GetClaimsAsync(user));
             var role = claims.FirstOrDefault(c => c.Type == CustomClaims.Role);
             var test = Enum.TryParse(role?.Value, out Roles roleEnum);
-            var getUserResults = new GetUserResults(user,roleEnum);
+            var getUserResults = new GetUserResults(user, roleEnum);
             result.SetData(getUserResults);
             return result;
         }

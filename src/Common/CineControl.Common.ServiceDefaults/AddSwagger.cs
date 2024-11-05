@@ -1,16 +1,21 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Swagger;
 namespace CineControl.Common.ServiceDefaults;
 
 public static class AddSwagger
 {
-    public static IServiceCollection AddSwaggers(this IServiceCollection services)
+    public static IServiceCollection AddSwaggers(this IServiceCollection services, string SwaggerAppName)
     {
-        services.AddSwaggerGen(c => {
-            c.SwaggerDoc("v1", new() {
-                Title = "CineControl.IdentityService.API", 
-                Version = "v1" });
-            c.AddSecurityDefinition("Bearer", new() {
+        services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1", new()
+            {
+                Title = SwaggerAppName,
+                Version = "v1"
+            });
+            c.AddSecurityDefinition("Bearer", new()
+            {
                 Name = "Authorization",
                 Type = SecuritySchemeType.ApiKey,
                 Scheme = "Bearer",

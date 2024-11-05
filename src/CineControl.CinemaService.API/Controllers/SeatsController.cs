@@ -1,13 +1,13 @@
 using CineControl.CinemaService.API.Models;
 using CineControl.CinemaService.API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace CineControl.CinemaService.API.Controllers
 {
-    [Route("api/theaters/{theaterId}/seats")]
+    [Route("api/v1/theaters/{theaterId}/seats")]
     [ApiController]
+    [Authorize]
     public class SeatsController : ControllerBase
     {
         private readonly ICinemaService _cinemaService;
