@@ -1,3 +1,4 @@
+using CineControl.IdentityService.API.Controllers;
 using CineControl.IdentityService.API.Models.Request.Auth;
 using CineControl.IdentityService.API.Models.Results;
 using CineControl.IdentityService.API.Models.Results.Auth;

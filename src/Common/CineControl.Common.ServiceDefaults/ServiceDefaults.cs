@@ -7,6 +7,8 @@ public static class Extensions
     public static IHostApplicationBuilder AddServiceDefaults(this IHostApplicationBuilder builder)
     {
         builder.AddJwtAuth();
+        builder.AddAuthorization();
+        builder.AddLogger();
         builder.Services.AddSwaggers();
         return builder;
     }

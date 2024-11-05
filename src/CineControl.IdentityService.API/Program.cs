@@ -11,9 +11,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<appdbContext>(options => {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
-builder.AddServiceDefaults();
+builder.Services.AddIdentity<ApplicationUser,IdentityRole>().AddEntityFrameworkStores<appdbContext>();
 
-builder.Services.AddIdentity<ApplicationUser,IdentityRole>().AddEntityFrameworkStores<appdbContext>().AddDefaultTokenProviders();
+builder.AddServiceDefaults();
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();

@@ -15,12 +15,12 @@ namespace CineControl.Common.ServiceDefaults
             builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("JwtConfig"));
 
             var _options = builder.GetJwtOptions();
-
-            builder.Services.AddAuthentication(Options =>
-                {
-                    Options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    Options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
+            builder.Services.AddAuthentication(o =>
+            {
+                o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
                 .AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
