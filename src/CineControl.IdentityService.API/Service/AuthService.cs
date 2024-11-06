@@ -18,8 +18,8 @@ namespace CineControl.IdentityService.API.Service
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
 
         public AuthService(
-            UserManager<ApplicationUser> userManager, 
-            RoleManager<IdentityRole> roleManager, 
+            UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager,
             IJwtTokenGenerator jwtTokenGenerator
         )
         {
@@ -28,7 +28,7 @@ namespace CineControl.IdentityService.API.Service
             _jwtTokenGenerator = jwtTokenGenerator;
         }
 
-    
+
 
         public async Task<GenericResults<LoginResults>> LoginAsync(LoginRequest loginRequestDTO)
         {
@@ -39,7 +39,7 @@ namespace CineControl.IdentityService.API.Service
                 result.AddError("Invalid username");
                 return result;
             }
-            bool isValid = await _userManager.CheckPasswordAsync(user, loginRequestDTO.Password );
+            bool isValid = await _userManager.CheckPasswordAsync(user, loginRequestDTO.Password);
 
             if (!isValid)
             {
@@ -82,7 +82,7 @@ namespace CineControl.IdentityService.API.Service
             if (!addClaimResult.Succeeded)
             {
                 result.AddErrors(addClaimResult.Errors.Select(error => error.Description));
-            }              
+            }
             return result;
         }
 
@@ -104,11 +104,12 @@ namespace CineControl.IdentityService.API.Service
                 return result;
             }
 
-            var RefreshTokenResult = new RefreshTokenResult(){
+            var RefreshTokenResult = new RefreshTokenResult()
+            {
                 AccessToken = await _jwtTokenGenerator.GenerateTokenAsync(user),
                 RefreshToken = _jwtTokenGenerator.GenerateRefreshToken()
             };
-            
+
             result.SetData(RefreshTokenResult);
 
             user.RefreshToken = RefreshTokenResult.RefreshToken;
@@ -116,7 +117,7 @@ namespace CineControl.IdentityService.API.Service
 
             var UpdateAsync = await _userManager.UpdateAsync(user);
 
-            if(!UpdateAsync.Succeeded)
+            if (!UpdateAsync.Succeeded)
             {
                 result.AddErrors(UpdateAsync.Errors.Select(error => error.Description));
             }

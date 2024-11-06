@@ -1,14 +1,14 @@
 using CineControl.SeanceService.API.Data;
 using CineControl.SeanceService.API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace CineControl.SeanceService.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class MoviesController : ControllerBase
     {
         private readonly AppDbContext _context;

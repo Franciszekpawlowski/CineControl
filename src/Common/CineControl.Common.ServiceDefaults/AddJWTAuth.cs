@@ -37,7 +37,7 @@ namespace CineControl.Common.ServiceDefaults
             return builder;
         }
 
-        internal static JwtOptions GetJwtOptions(this IHostApplicationBuilder builder) => 
+        internal static JwtOptions GetJwtOptions(this IHostApplicationBuilder builder) =>
             builder.Configuration.GetSection("JwtConfig").Get<JwtOptions>() ?? throw new KeyNotFoundException("JwtConfig");
     }
 }

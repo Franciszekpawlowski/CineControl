@@ -6,7 +6,7 @@ namespace CineControl.IdentityService.API.Data
 {
     public class appdbContext : IdentityDbContext<ApplicationUser>
     {
-        public appdbContext(DbContextOptions<appdbContext> options) : base(options){}
+        public appdbContext(DbContextOptions<appdbContext> options) : base(options) { }
 
         public DbSet<ApplicationUser> applicationUsers { get; set; }
 
