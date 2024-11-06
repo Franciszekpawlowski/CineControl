@@ -1,4 +1,4 @@
-// src/app/pages/repertoire/repertoire.component.ts
+
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
@@ -24,8 +24,8 @@ import { MatCardModule } from '@angular/material/card';
 @Component({
   selector: 'app-repertoire',
   templateUrl: './repertoire.component.html',
-  styleUrls: ['./repertoire.component.scss'], // Poprawiona literówka
-  standalone: true, // Dodane
+  styleUrls: ['./repertoire.component.scss'], 
+  standalone: true, 
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -62,12 +62,10 @@ export class RepertoireComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Pobieranie listy miast
     this.cinemaService.getCities().subscribe((cities) => {
       this.cities = cities;
     });
 
-    // Filtracja miast na podstawie wpisywanego tekstu
     this.scheduleForm.get('city')?.valueChanges.subscribe((value) => {
       this.filterCities(value);
     });
@@ -105,18 +103,26 @@ export class RepertoireComponent implements OnInit {
   onDateSelected() {
     const cinemaId = this.scheduleForm.get('cinema')?.value;
     const date = this.scheduleForm.get('date')?.value;
-
+  
+    console.log("Wybrana wartość daty z formularza:", date);
+  
     if (cinemaId && date) {
       this.loadSeances(cinemaId, date);
     }
-  }
+  }  
 
   loadSeances(cinemaId: number, date: Date) {
-    const formattedDate = date.toISOString().split('T')[0];
-    this.seanceService
-      .getSeances(cinemaId, formattedDate)
-      .subscribe((seances) => {
+    const utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+    const formattedDate = utcDate.toISOString().split('T')[0];
+    console.log("Wybrana data jako UTC:", formattedDate);
+  
+    this.seanceService.getSeances(cinemaId, formattedDate).subscribe(
+      (seances) => {
+        console.log("Otrzymane seanse:", seances);
         this.seances = seances;
-      });
+      },
+      (error) => console.error("Błąd przy pobieraniu seansów:", error)
+    );
   }
+
 }

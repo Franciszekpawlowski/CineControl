@@ -32,6 +32,19 @@ namespace CineControl.CinemaService.API.Controllers
             }
             return Ok(cinema);
         }
+        [HttpGet("cities")]
+        public async Task<ActionResult<IEnumerable<string>>> GetCities()
+        {
+            var cities = await _cinemaService.GetAllCities();
+            return Ok(cities);
+        }
+        
+        [HttpGet("ByCity/{city}")]
+        public async Task<ActionResult<IEnumerable<Cinema>>> GetCinemasByCity(string city)
+        {
+            var cinemas = await _cinemaService.GetCinemasByCity(city);
+            return Ok(cinemas);
+        }
 
         [HttpPost]
         public async Task<ActionResult<Cinema>> AddCinema(AddCinemaRequest request)

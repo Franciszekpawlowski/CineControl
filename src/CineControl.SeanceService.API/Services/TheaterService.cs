@@ -25,5 +25,17 @@ namespace CineControl.SeanceService.API.Services
             }
             return null;
         }
+        public async Task<IEnumerable<TheaterDto>> GetTheatersByCinemaIdAsync(int cinemaId)
+        {
+            var response = await _httpClient.GetAsync($"api/cinemas/{cinemaId}/theaters");
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var theaters = JsonSerializer.Deserialize<IEnumerable<TheaterDto>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                return theaters;
+            }
+            return null;
+        }
+
     }
 }
