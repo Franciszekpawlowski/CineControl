@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
@@ -20,6 +19,12 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+
+interface GroupedSeances {
+  movieTitle: string;
+  posterUrl: string;
+  times: string[];
+}
 
 @Component({
   selector: 'app-repertoire',
@@ -47,7 +52,7 @@ export class RepertoireComponent implements OnInit {
   cities: string[] = [];
   filteredCities: string[] = [];
   cinemas: Cinema[] = [];
-  seances: Seance[] = [];
+  groupedSeances: GroupedSeances[] = []; 
 
   constructor(
     private fb: FormBuilder,
@@ -97,14 +102,12 @@ export class RepertoireComponent implements OnInit {
 
   onCinemaSelected() {
     this.scheduleForm.get('date')?.setValue(null);
-    this.seances = [];
+    this.groupedSeances = [];
   }
 
   onDateSelected() {
     const cinemaId = this.scheduleForm.get('cinema')?.value;
     const date = this.scheduleForm.get('date')?.value;
-  
-    console.log("Wybrana wartość daty z formularza:", date);
   
     if (cinemaId && date) {
       this.loadSeances(cinemaId, date);
@@ -114,15 +117,28 @@ export class RepertoireComponent implements OnInit {
   loadSeances(cinemaId: number, date: Date) {
     const utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
     const formattedDate = utcDate.toISOString().split('T')[0];
-    console.log("Wybrana data jako UTC:", formattedDate);
   
     this.seanceService.getSeances(cinemaId, formattedDate).subscribe(
       (seances) => {
-        console.log("Otrzymane seanse:", seances);
-        this.seances = seances;
+        this.groupSeancesByMovie(seances);
       },
       (error) => console.error("Błąd przy pobieraniu seansów:", error)
     );
   }
 
+  groupSeancesByMovie(seances: Seance[]) {
+    const grouped = seances.reduce((acc: GroupedSeances[], seance) => {
+      const movie = acc.find(g => g.movieTitle === seance.movieTitle);
+      const time = new Date(seance.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      if (movie) {
+        movie.times.push(time);
+      } else {
+        acc.push({ movieTitle: seance.movieTitle, posterUrl: seance.posterUrl, times: [time] });
+      }
+
+      return acc;
+    }, []);
+    this.groupedSeances = grouped;
+  }
 }

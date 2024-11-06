@@ -41,6 +41,7 @@ namespace CineControl.SeanceService.API.Controllers
                     MovieTitle = seance.Movie.Title,
                     TheaterId = seance.TheaterId,
                     TheaterName = theater?.Name,
+                    PosterUrl = seance.Movie.PosterUrl,
                     StartTime = seance.StartTime,
                     EndTime = seance.EndTime
                 });
@@ -70,6 +71,7 @@ namespace CineControl.SeanceService.API.Controllers
                 MovieTitle = seance.Movie.Title,
                 TheaterId = seance.TheaterId,
                 TheaterName = theater?.Name,
+                PosterUrl = seance.Movie.PosterUrl,
                 StartTime = seance.StartTime,
                 EndTime = seance.EndTime
             };
@@ -103,6 +105,7 @@ namespace CineControl.SeanceService.API.Controllers
                     MovieTitle = seance.Movie.Title,
                     TheaterId = seance.TheaterId,
                     TheaterName = theater?.Name,
+                    PosterUrl = seance.Movie.PosterUrl,
                     StartTime = seance.StartTime,
                     EndTime = seance.EndTime
                 };
@@ -136,7 +139,6 @@ namespace CineControl.SeanceService.API.Controllers
                 EndTime = seanceDto.StartTime.AddMinutes(movie.Duration)
             };
 
-            // Check for overlapping seances in the same theater
             var overlappingSeance = await _context.Seances
                 .Where(s => s.TheaterId == seance.TheaterId)
                 .Where(s => s.StartTime < seance.EndTime && s.EndTime > seance.StartTime)
