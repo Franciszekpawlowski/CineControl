@@ -16,7 +16,7 @@
 
 <!-- Szablon dla nadchodzących premier -->
 <ng-template #upcomingMovieTemplate let-movie>
-  <div class="movie-slide">
+  <div class="movie-slide" *ngIf="movie">
     <img [src]="movie.posterUrl" alt="{{ movie.title }}" />
     <div class="movie-content">
       <h3>{{ movie.title }}</h3>
@@ -28,8 +28,8 @@
 
 <!-- Szablon dla rekomendacji -->
 <ng-template #personalizedMovieTemplate let-movie>
-  <div class="movie-slide">
-    <img [src]="movie.posterUrl" alt="{{ movie.title }}" />
+  <div class="movie-slide" *ngIf="movie">
+    <img [src]="movie.panoramicPosterUrl" alt="{{ movie.title }}" />
     <div class="movie-content">
       <h3>{{ movie.title }}</h3>
       <p>{{ movie.shortDescription }}</p>
@@ -37,6 +37,7 @@
     </div>
   </div>
 </ng-template>
+
 
 <!-- Karuzela banerów reklamowych -->
 <app-carousel

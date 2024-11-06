@@ -37,6 +37,47 @@ namespace CineControl.SeanceService.API.Controllers
             return movie;
         }
 
+        [HttpGet("current")]
+        public async Task<ActionResult<IEnumerable<Movie>>> GetCurrentMovies()
+        {
+            var currentMovies = await _context.Movies
+                .Where(m => m.ReleaseDate <= DateTime.UtcNow) 
+                .ToListAsync();
+            return Ok(currentMovies);
+        }
+
+        [HttpGet("upcoming")]
+        public async Task<ActionResult<IEnumerable<Movie>>> GetUpcomingMovies()
+        {
+            var upcomingMovies = await _context.Movies
+                .Where(m => m.ReleaseDate > DateTime.UtcNow) 
+                .ToListAsync();
+            return Ok(upcomingMovies);
+        }
+
+
+        [HttpGet("top-rated")]
+        public async Task<ActionResult<IEnumerable<Movie>>> GetTopRatedMovies()
+        {
+            var topRatedMovies = await _context.Movies
+                .OrderByDescending(m => m.Rating)
+                .Take(10)
+                .ToListAsync();
+            return Ok(topRatedMovies);
+        }
+
+        [HttpGet("recommendations/{userId}")]
+        public async Task<ActionResult<IEnumerable<Movie>>> GetPersonalizedRecommendations(int userId)
+        {
+            // Implementacja logiki rekomendacji według potrzeb
+            // Na potrzeby przykładu zwróćmy top 5 najlepiej ocenianych filmów
+            var recommendedMovies = await _context.Movies
+                .OrderByDescending(m => m.Rating)
+                .Take(5)
+                .ToListAsync();
+            return Ok(recommendedMovies);
+        }
+
         [HttpPost]
         public async Task<ActionResult<Movie>> PostMovie(Movie movie)
         {

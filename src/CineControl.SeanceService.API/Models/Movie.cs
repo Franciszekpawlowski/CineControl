@@ -9,6 +9,7 @@ namespace CineControl.SeanceService.API.Models
         public DateTime ReleaseDate { get; set; }
         public int Duration { get; set; } 
         public string PosterUrl { get; set; }
+        public string PanoramicPosterUrl { get; set; }
         public int TenantID { get; set; }
         public string Genre { get; set; } 
         public double Rating { get; set; } 
