@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace CineControl.SeanceService.API.Controllers
 {
-    [Route("api/v1/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     [Authorize]
     public class SeancesController : ControllerBase
@@ -22,6 +22,7 @@ namespace CineControl.SeanceService.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<SeanceDto>>> GetSeances()
         {
             var seances = await _context.Seances
@@ -50,6 +51,7 @@ namespace CineControl.SeanceService.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<SeanceDto>> GetSeance(int id)
         {
             var seance = await _context.Seances
@@ -78,6 +80,7 @@ namespace CineControl.SeanceService.API.Controllers
             return seanceDto;
         }
         [HttpGet("bycinema/{cinemaId}/date/{date}")]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<SeanceDto>>> GetSeancesByCinemaAndDate(int cinemaId, DateTime date)
         {
             var utcDate = DateTime.SpecifyKind(date, DateTimeKind.Utc);

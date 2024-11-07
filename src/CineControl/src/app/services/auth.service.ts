@@ -44,6 +44,7 @@ export class AuthService {
   }
 
   getToken(): string | null {
+    //console.log(sessionStorage.getItem('authToken'));
     return sessionStorage.getItem('authToken');
   }
 }

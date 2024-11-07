@@ -19,12 +19,14 @@ namespace CineControl.SeanceService.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Movie>>> GetMovies()
         {
             return await _context.Movies.ToListAsync();
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<Movie>> GetMovie(int id)
         {
             var movie = await _context.Movies.FindAsync(id);
@@ -38,6 +40,7 @@ namespace CineControl.SeanceService.API.Controllers
         }
 
         [HttpGet("current")]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Movie>>> GetCurrentMovies()
         {
             var currentMovies = await _context.Movies
@@ -47,6 +50,7 @@ namespace CineControl.SeanceService.API.Controllers
         }
 
         [HttpGet("upcoming")]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Movie>>> GetUpcomingMovies()
         {
             var upcomingMovies = await _context.Movies
@@ -55,8 +59,8 @@ namespace CineControl.SeanceService.API.Controllers
             return Ok(upcomingMovies);
         }
 
-
         [HttpGet("top-rated")]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Movie>>> GetTopRatedMovies()
         {
             var topRatedMovies = await _context.Movies
@@ -67,10 +71,10 @@ namespace CineControl.SeanceService.API.Controllers
         }
 
         [HttpGet("recommendations/{userId}")]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Movie>>> GetPersonalizedRecommendations(int userId)
         {
-            // Implementacja logiki rekomendacji według potrzeb
-            // Na potrzeby przykładu zwróćmy top 5 najlepiej ocenianych filmów
+            //To Do dodac implementacje
             var recommendedMovies = await _context.Movies
                 .OrderByDescending(m => m.Rating)
                 .Take(5)

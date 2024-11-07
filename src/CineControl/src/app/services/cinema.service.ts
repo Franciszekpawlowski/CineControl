@@ -8,7 +8,7 @@ import { Cinema } from '../models/cinema.model';
   providedIn: 'root',
 })
 export class CinemaService {
-  private apiUrl = '/api/Cinemas'; 
+  private apiUrl = '/Cinemas'; 
 
   constructor(private http: HttpClient) {}
 

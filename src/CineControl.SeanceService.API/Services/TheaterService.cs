@@ -27,7 +27,7 @@ namespace CineControl.SeanceService.API.Services
         }
         public async Task<IEnumerable<TheaterDto>> GetTheatersByCinemaIdAsync(int cinemaId)
         {
-            var response = await _httpClient.GetAsync($"api/cinemas/{cinemaId}/theaters");
+            var response = await _httpClient.GetAsync($"api/v1/cinemas/{cinemaId}/theaters");
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();

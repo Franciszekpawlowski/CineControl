@@ -19,12 +19,14 @@ namespace CineControl.CinemaService.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Cinema>>> GetCinemas()
         {
             return Ok(await _cinemaService.GetAllCinemas());
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<Cinema>> GetCinema(int id)
         {
             var cinema = await _cinemaService.GetCinemaById(id);
@@ -35,6 +37,7 @@ namespace CineControl.CinemaService.API.Controllers
             return Ok(cinema);
         }
         [HttpGet("cities")]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<string>>> GetCities()
         {
             var cities = await _cinemaService.GetAllCities();
@@ -42,6 +45,7 @@ namespace CineControl.CinemaService.API.Controllers
         }
         
         [HttpGet("ByCity/{city}")]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Cinema>>> GetCinemasByCity(string city)
         {
             var cinemas = await _cinemaService.GetCinemasByCity(city);
