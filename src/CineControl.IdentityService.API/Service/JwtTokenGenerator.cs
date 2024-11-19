@@ -3,7 +3,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using CineControl.Common;
-using CineControl.Common.JWT.Models;
+using CineControl.Common.Options;
 using CineControl.IdentityService.API.Models;
 using CineControl.IdentityService.API.Service.IService;
 using Microsoft.AspNetCore.Identity;
