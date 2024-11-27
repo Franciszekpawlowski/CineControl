@@ -21,7 +21,9 @@ namespace CineControl.SeanceService.API.Controllers
             _theaterService = theaterService;
         }
 
+
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<SeanceDto>>> GetSeances()
         {
             var seances = await _context.Seances
@@ -49,6 +51,7 @@ namespace CineControl.SeanceService.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<SeanceDto>> GetSeance(int id)
         {
             var seance = await _context.Seances

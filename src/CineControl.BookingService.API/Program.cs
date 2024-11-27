@@ -1,5 +1,6 @@
 using BookingService.API.Data;
 using CineControl.Common.ServiceDefaults;
+using BookingService.API.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.AddServiceDefaults("CineControl.BookingService.API");
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<IExternalApiService, ExternalApiService>();
+builder.Services.AddScoped<IReservationService, ReservationService>();
 
 var app = builder.Build();
 

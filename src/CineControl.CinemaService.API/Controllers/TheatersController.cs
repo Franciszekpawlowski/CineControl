@@ -23,6 +23,7 @@ namespace CineControl.CinemaService.API.Controllers
             return Ok(await _cinemaService.GetTheatersByCinemaId(cinemaId));
         }
         [HttpGet("~/api/theaters/{theaterId}")]
+        [AllowAnonymous]
         public async Task<ActionResult<Theater>> GetTheaterById(int theaterId)
         {
             var theater = await _cinemaService.GetTheaterById(theaterId);

@@ -11,5 +11,21 @@ namespace BookingService.API.Data
 
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Reservation>()
+                .HasMany(r => r.Tickets)
+                .WithOne(t => t.Reservation)
+                .HasForeignKey(t => t.ReservationId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Ticket>()
+                .HasIndex(t => new { t.SeanceId, t.SeatId })
+                .IsUnique()
+                .HasDatabaseName("IX_Ticket_SeanceId_SeatId");
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }
