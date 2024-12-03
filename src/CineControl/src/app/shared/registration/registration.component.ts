@@ -36,24 +36,24 @@ export class RegistrationComponent {
 
   register() {
     if (!this.name || !this.email || !this.password || !this.confirmPassword) {
-      this.errorMessage = 'Proszę wypełnić wszystkie pola.';
+      this.errorMessage = 'Please fill in all fields.';
       return;
     }
 
     if (this.password !== this.confirmPassword) {
-      this.errorMessage = 'Hasła się nie zgadzają.';
+      this.errorMessage = 'Passwords do not match.';
       return;
     }
 
-    this.authService.register({ name: this.name, email: this.email, password: this.password }).subscribe({
-      next: (response) => {
-        console.log('Rejestracja pomyślna:', response);
-        this.router.navigate(['/']); 
-      },
-      error: (error) => {
-        console.error('Błąd rejestracji:', error);
-        this.errorMessage = 'Rejestracja nie powiodła się. Spróbuj ponownie.';
-      },
-    });
+    this.authService
+      .register({ name: this.name, email: this.email, password: this.password })
+      .subscribe({
+        next: () => {
+          this.router.navigate(['/login']);
+        },
+        error: () => {
+          this.errorMessage = 'Registration failed. Please try again.';
+        },
+      });
   }
 }

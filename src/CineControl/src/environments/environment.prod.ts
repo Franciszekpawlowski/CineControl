@@ -4,6 +4,6 @@ export const environment = {
     cinemasApiUrl: '', 
     bookingApiUrl:'',
     seanceApiUrl:'',
-    authApiUrl:'',
+    authApiUrl: 'https://localhost:5093',
   };
   

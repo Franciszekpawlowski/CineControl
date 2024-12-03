@@ -19,12 +19,14 @@ namespace CineControl.SeanceService.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Movie>>> GetMovies()
         {
             return await _context.Movies.ToListAsync();
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<Movie>> GetMovie(int id)
         {
             var movie = await _context.Movies.FindAsync(id);
@@ -35,6 +37,49 @@ namespace CineControl.SeanceService.API.Controllers
             }
 
             return movie;
+        }
+
+        [HttpGet("current")]
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<Movie>>> GetCurrentMovies()
+        {
+            var currentMovies = await _context.Movies
+                .Where(m => m.ReleaseDate <= DateTime.UtcNow) 
+                .ToListAsync();
+            return Ok(currentMovies);
+        }
+
+        [HttpGet("upcoming")]
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<Movie>>> GetUpcomingMovies()
+        {
+            var upcomingMovies = await _context.Movies
+                .Where(m => m.ReleaseDate > DateTime.UtcNow) 
+                .ToListAsync();
+            return Ok(upcomingMovies);
+        }
+
+        [HttpGet("top-rated")]
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<Movie>>> GetTopRatedMovies()
+        {
+            var topRatedMovies = await _context.Movies
+                .OrderByDescending(m => m.Rating)
+                .Take(10)
+                .ToListAsync();
+            return Ok(topRatedMovies);
+        }
+
+        [HttpGet("recommendations/{userId}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<Movie>>> GetPersonalizedRecommendations(int userId)
+        {
+            //To Do dodac implementacje
+            var recommendedMovies = await _context.Movies
+                .OrderByDescending(m => m.Rating)
+                .Take(5)
+                .ToListAsync();
+            return Ok(recommendedMovies);
         }
 
         [HttpPost]

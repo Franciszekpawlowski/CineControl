@@ -6,5 +6,6 @@ namespace CineControl.SeanceService.API.Services
     public interface ITheaterService
     {
         Task<TheaterDto> GetTheaterByIdAsync(int theaterId);
+        Task<IEnumerable<TheaterDto>> GetTheatersByCinemaIdAsync(int cinemaId);
     }
 }

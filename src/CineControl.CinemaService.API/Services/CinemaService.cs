@@ -24,6 +24,20 @@ namespace CineControl.CinemaService.API.Services
         {
             return await _context.Cinemas.Include(c => c.Theaters).ThenInclude(t => t.Seats).FirstOrDefaultAsync(c => c.Id == id);
         }
+        public async Task<IEnumerable<string>> GetAllCities()
+        {
+            return await _context.Cinemas
+                .Select(c => c.City)
+                .Distinct()
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Cinema>> GetCinemasByCity(string city)
+        {
+            return await _context.Cinemas
+                .Where(c => c.City.ToLower() == city.ToLower())
+                .ToListAsync();
+        }
 
         public async Task<Cinema> AddCinema(AddCinemaRequest request)
         {
