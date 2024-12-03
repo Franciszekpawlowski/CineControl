@@ -34,6 +34,7 @@ export class NavbarComponent {
 
   constructor(private authService: AuthService) {
     this.isLoggedIn = this.authService.isAuthenticated();
+    console.log(this.isLoggedIn);
     this.checkScreenWidth();
   }
 

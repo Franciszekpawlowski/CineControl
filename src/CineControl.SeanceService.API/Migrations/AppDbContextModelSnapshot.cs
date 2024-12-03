@@ -17,7 +17,7 @@ namespace CineControl.SeanceService.API.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.6")
+                .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -38,6 +38,10 @@ namespace CineControl.SeanceService.API.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Genre")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PanoramicPosterUrl")
                         .IsRequired()
                         .HasColumnType("text");
 

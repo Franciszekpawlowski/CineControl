@@ -1,10 +1,10 @@
-// src/app/models/seance.model.ts
 export interface Seance {
     id: number;
     cinemaId: number;
     movieId: number;
+    posterUrl: string;
     movieTitle: string;
-    startTime: string; // lub Date, jeśli wolisz
+    startTime: string; 
     endTime: string;
   }
   

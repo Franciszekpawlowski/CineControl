@@ -1,0 +1,21 @@
+<div class="section" *ngIf="personalizedMovies && personalizedMovies.length > 0">
+    <h2>Polecane dla Ciebie</h2>
+    <app-carousel
+      [items]="personalizedMovies"
+      [itemTemplate]="personalizedMovieTemplate"
+      [autoPlay]="false"
+    ></app-carousel>
+  </div>
+  
+  <!-- Szablon dla rekomendacji -->
+  <ng-template #personalizedMovieTemplate let-movie>
+    <div class="movie-slide" *ngIf="movie">
+      <img [src]="movie.panoramicPosterUrl" alt="{{ movie.title }}" />
+      <div class="movie-content">
+        <h3>{{ movie.title }}</h3>
+        <p>{{ movie.shortDescription }}</p>
+        <button mat-button [routerLink]="['/movie', movie.id]">Więcej</button>
+      </div>
+    </div>
+  </ng-template>
+  

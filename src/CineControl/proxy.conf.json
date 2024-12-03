@@ -1,0 +1,32 @@
+{
+  "/Auth": {
+    "target": "http://127.0.0.1:5093/api/v1",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/User": {
+    "target": "http://127.0.0.1:5093",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/Cinemas": {
+    "target": "http://127.0.0.1:5112/api/v1",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/api/Movies": {
+    "target": "http://127.0.0.1:5222",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/api/Seances": {
+    "target": "http://127.0.0.1:5222",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}
