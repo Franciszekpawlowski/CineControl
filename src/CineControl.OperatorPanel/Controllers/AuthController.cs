@@ -32,5 +32,11 @@ namespace CineControl.OperatorPanel.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+
+        public async Task<ActionResult> Logout()
+        {
+            await _authService.LogoutAsync(HttpContext);
+            return RedirectToAction("Login", "Auth");
+        }
     }
 }

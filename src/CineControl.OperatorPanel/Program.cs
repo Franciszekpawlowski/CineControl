@@ -1,5 +1,5 @@
-using CineControl.Common.Clients.AuthService;
-using CineControl.Common.Clients.AuthService.IClients;
+using CineControl.Common.Clients.IdentityService;
+using CineControl.Common.Clients.IdentityService.IClients;
 using CineControl.Common.ServiceDefaults;
 using CineControl.OperatorPanel.Service;
 using CineControl.OperatorPanel.Service.IService;

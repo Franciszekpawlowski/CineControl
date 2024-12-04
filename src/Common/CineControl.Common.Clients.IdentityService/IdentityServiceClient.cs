@@ -1,12 +1,12 @@
-using CineControl.Common.Clients.AuthService.Errors;
-using CineControl.Common.Clients.AuthService.IClients;
-using CineControl.Common.Clients.AuthService.Models.GetUser;
-using CineControl.Common.Clients.AuthService.Models.Login;
+using CineControl.Common.Clients.IdentityService.Errors;
+using CineControl.Common.Clients.IdentityService.IClients;
+using CineControl.Common.Clients.IdentityService.Models.GetUser;
+using CineControl.Common.Clients.IdentityService.Models.Login;
 using CineControl.Common.Results;
 using RestSharp;
 using RestSharp.Authenticators;
 
-namespace CineControl.Common.Clients.AuthService;
+namespace CineControl.Common.Clients.IdentityService;
 
 public partial class IdentityServiceClient : IIdentityServiceClient, IDisposable
 {
@@ -24,7 +24,7 @@ public partial class IdentityServiceClient : IIdentityServiceClient, IDisposable
         var request = new RestRequest("/Auth/Login");
         request.AddJsonBody(loginRequestModel);
         var responseModel = await _client.PostAsync<LoginResponseModel>(request);
-        
+
         if (responseModel == null)
         {
             return ClientErrors.Failure;

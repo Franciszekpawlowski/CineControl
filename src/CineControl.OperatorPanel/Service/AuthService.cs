@@ -1,7 +1,8 @@
+using System.Net;
 using System.Security.Claims;
-using CineControl.Common.Clients.AuthService.Errors;
-using CineControl.Common.Clients.AuthService.IClients;
-using CineControl.Common.Clients.AuthService.Models.Login;
+using CineControl.Common.Clients.IdentityService.Errors;
+using CineControl.Common.Clients.IdentityService.IClients;
+using CineControl.Common.Clients.IdentityService.Models.Login;
 using CineControl.Common.Results;
 using CineControl.OperatorPanel.Errors;
 using CineControl.OperatorPanel.Extensions;
@@ -76,5 +77,17 @@ public class AuthService(IIdentityServiceClient authServiceClient) : IAuthServic
             Role = result.Value.Role
         };
         return getUserResult;
+    }
+
+    public async Task<Result> LogoutAsync(HttpContext context)
+    {
+        await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        context.Session.Clear();
+        context.Request.Cookies.Select(x => x.Key).ToList().ForEach(x => {
+            context.Response.Cookies.Append(x,string.Empty,new CookieOptions {
+                Expires = DateTime.Now.AddDays(-1)
+            });
+        });
+        return Result.Success;
     }
 }

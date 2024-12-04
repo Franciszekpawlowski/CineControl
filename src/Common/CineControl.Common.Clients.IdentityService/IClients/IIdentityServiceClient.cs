@@ -1,7 +1,7 @@
-using CineControl.Common.Clients.AuthService.Models.GetUser;
-using CineControl.Common.Clients.AuthService.Models.Login;
+using CineControl.Common.Clients.IdentityService.Models.GetUser;
+using CineControl.Common.Clients.IdentityService.Models.Login;
 using CineControl.Common.Results;
-namespace CineControl.Common.Clients.AuthService.IClients;
+namespace CineControl.Common.Clients.IdentityService.IClients;
 
 public interface IIdentityServiceClient
 {

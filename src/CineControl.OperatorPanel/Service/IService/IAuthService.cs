@@ -8,4 +8,5 @@ public interface IAuthService
 {
     Task<Result> LoginAsync(UserLoginRequest userRequest, HttpContext context);
     Task<ResultT<GetUserResult>> GetUserAsync(HttpContext context);
+    Task<Result> LogoutAsync(HttpContext context);
 }

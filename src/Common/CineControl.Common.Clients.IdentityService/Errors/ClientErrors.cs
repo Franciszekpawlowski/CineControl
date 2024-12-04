@@ -1,6 +1,6 @@
 using CineControl.Common.Results;
 
-namespace CineControl.Common.Clients.AuthService.Errors;
+namespace CineControl.Common.Clients.IdentityService.Errors;
 
 public class ClientErrors
 {
