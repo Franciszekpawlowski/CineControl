@@ -1,0 +1,23 @@
+namespace CineControl.Common.Results
+{
+    public class Error
+    {
+        private Error(string description,ErrorType errorType)
+        {
+            Description = description;
+            ErrorType = errorType;
+        }
+
+        public string Description { get; }
+        public ErrorType ErrorType { get; }
+
+        public static Error Failure(string description) => 
+            new(description, ErrorType.Failure);
+
+        public static Error NotFound(string description) => 
+            new(description, ErrorType.NotFound);
+
+        public static Error AccessUnauthorized(string description) => 
+            new(description, ErrorType.AccessUnauthorized);
+    }
+}
