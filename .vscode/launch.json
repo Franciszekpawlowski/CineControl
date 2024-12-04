@@ -9,8 +9,10 @@
             "configurations": [
                 "C#: CineControl.CinemaService.API Debug",
                 "C#: CineControl.IdentityService.API Debug",
-                "C#: CineControl.SeanceService.API Debug"
-            ]
+                "C#: CineControl.SeanceService.API Debug",
+                "C#: CineControl.OperatorPanel Debug"
+            ],
+            "stopAll": true
         }
     ],
     "configurations": [
@@ -38,6 +40,12 @@
             "type": "dotnet",
             "request": "launch",
             "projectPath": "${workspaceFolder}/src/CineControl.SeanceService.API/CineControl.SeanceService.API.csproj"
+        },
+        {
+            "name": "C#: CineControl.OperatorPanel Debug",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/src/CineControl.OperatorPanel/CineControl.OperatorPanel.csproj"
         },
         {
             "name": ".NET Core Launch (web)",

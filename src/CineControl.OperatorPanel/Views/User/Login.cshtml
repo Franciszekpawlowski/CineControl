@@ -1,0 +1,18 @@
+@using CineControl.OperatorPanel.Models.UserLogin;
+@model UserLoginRequest
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Login into OperatorPanel.</p>
+    <form asp-action="Login" asp-controller="User" method="post">
+        @Html.AntiForgeryToken()
+        <label asp-for="Username"></label>
+        <input asp-for="Username"><br>
+        <label asp-for="Password"></label>
+        <input asp-for="Password"><br>
+        <button type="submit">Login in s</button>
+    </form>
+</div>

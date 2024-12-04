@@ -1,4 +1,4 @@
-namespace CineControl.Common.JWT.Models
+namespace CineControl.Common.Options
 {
     public class JwtOptions
     {
