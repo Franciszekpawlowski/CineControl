@@ -1,12 +1,22 @@
+using CineControl.Common.Clients.AuthService;
+using CineControl.Common.Clients.AuthService.IClients;
 using CineControl.Common.ServiceDefaults;
-using CineControl.OperatorPanel.Extensions;
+using CineControl.OperatorPanel.Service;
+using CineControl.OperatorPanel.Service.IService;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddSingleton<IIdentityServiceClient, IdentityServiceClient>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.AddLogger();
-builder.AddJwtAuthExtension();
+builder.Services.AddAuthentication()
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Auth/Login";
+    });
+// builder.AddJwtAuthExtension();
 
 var app = builder.Build();
 
@@ -28,6 +38,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=User}/{action=Login}");
 
 app.Run();

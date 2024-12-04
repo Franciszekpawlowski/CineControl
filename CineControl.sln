@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CineControl.Common", "src\C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CineControl.OperatorPanel", "src\CineControl.OperatorPanel\CineControl.OperatorPanel.csproj", "{A2BF9F96-AB3A-43EC-A8AE-ABBBD10C61C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CineControl.Common.Clients", "src\Common\CineControl.Common.Clients\CineControl.Common.Clients.csproj", "{F0FDD771-FFC4-4AF0-8C14-28834DEE1501}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CineControl.Common.Clients.IdentityService", "src\Common\CineControl.Common.Clients.IdentityService\CineControl.Common.Clients.IdentityService.csproj", "{2EDB51E6-7409-40EF-901A-41519DACF61E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,10 +51,10 @@ Global
 		{A2BF9F96-AB3A-43EC-A8AE-ABBBD10C61C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2BF9F96-AB3A-43EC-A8AE-ABBBD10C61C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A2BF9F96-AB3A-43EC-A8AE-ABBBD10C61C5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F0FDD771-FFC4-4AF0-8C14-28834DEE1501}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F0FDD771-FFC4-4AF0-8C14-28834DEE1501}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F0FDD771-FFC4-4AF0-8C14-28834DEE1501}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F0FDD771-FFC4-4AF0-8C14-28834DEE1501}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EDB51E6-7409-40EF-901A-41519DACF61E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EDB51E6-7409-40EF-901A-41519DACF61E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EDB51E6-7409-40EF-901A-41519DACF61E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EDB51E6-7409-40EF-901A-41519DACF61E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,7 +67,7 @@ Global
 		{79EEA66B-A40D-4B7E-9E9A-B27259583C43} = {D361E00D-8A30-47EE-A2B4-F4A745C90D5D}
 		{54E662A5-E97F-4CE5-BE0A-80C52AF06BAC} = {D361E00D-8A30-47EE-A2B4-F4A745C90D5D}
 		{A2BF9F96-AB3A-43EC-A8AE-ABBBD10C61C5} = {253C2735-F514-4176-B53B-E2976768196A}
-		{F0FDD771-FFC4-4AF0-8C14-28834DEE1501} = {D361E00D-8A30-47EE-A2B4-F4A745C90D5D}
+		{2EDB51E6-7409-40EF-901A-41519DACF61E} = {D361E00D-8A30-47EE-A2B4-F4A745C90D5D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EA997A1A-C23F-46CE-B2A7-3C2CEA3ADB41}

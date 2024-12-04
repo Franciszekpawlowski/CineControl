@@ -1,9 +1,11 @@
-using CineControl.OperatorPanel.Models;
-using CineControl.OperatorPanel.Models.Result;
+using CineControl.Common.Results;
+using CineControl.OperatorPanel.Models.GetUser;
+using CineControl.OperatorPanel.Models.UserLogin;
 
 namespace CineControl.OperatorPanel.Service.IService;
 
 public interface IAuthService
 {
-    Task<LoginResult> LoginAsync(UserForLoginDTO UserForLoginDTO);
+    Task<Result> LoginAsync(UserLoginRequest userRequest, HttpContext context);
+    Task<ResultT<GetUserResult>> GetUserAsync(HttpContext context);
 }
