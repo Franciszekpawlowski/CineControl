@@ -21,6 +21,7 @@ namespace CineControl.SeanceService.API.Controllers
             _theaterService = theaterService;
         }
 
+
         [HttpGet]
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<SeanceDto>>> GetSeances()
