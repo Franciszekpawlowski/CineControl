@@ -19,7 +19,7 @@ namespace CineControl.Common.Results
 
         public static implicit operator Result(Error error) => new(error);
 
-        public static Result Success => new();
+        public static Result Success() => new();
 
         public static Result Failure(Error error) => new(error);
     }

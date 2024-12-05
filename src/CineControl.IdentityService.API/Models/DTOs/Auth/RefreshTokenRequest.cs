@@ -1,4 +1,4 @@
-namespace CineControl.IdentityService.API.Models.Request.Auth
+namespace CineControl.IdentityService.API.Models.DTOs.Auth
 {
     public class RefreshTokenRequest
     {

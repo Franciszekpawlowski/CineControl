@@ -6,7 +6,8 @@ namespace CineControl.IdentityService.API.Service.IService
     public interface IJwtTokenGenerator
     {
         Task<string> GenerateTokenAsync(ApplicationUser applicationUser);
-        ClaimsPrincipal? GetTokenPrincipal(string token);
+        ClaimsPrincipal? GetPrincipalFromExpiredToken(string? token);
+        ClaimsPrincipal? GetPrincipalFromToken(string? token);
         string GenerateRefreshToken();
     }
 }
