@@ -1,5 +1,4 @@
-using CineControl.IdentityService.API.Models.Response;
-using CineControl.IdentityService.API.Models.Results;
+using CineControl.Common.Results;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CineControl.IdentityService.API.Controllers
@@ -12,13 +11,21 @@ namespace CineControl.IdentityService.API.Controllers
 
         }
 
-        protected IActionResult Error<T>(GenericResults<T> error)
+        protected IActionResult Problem(Error error)
         {
-            var respone = new ErrorResponse()
+            var statusCode = error.ErrorType switch
             {
-                Errors = error.Errors
+                ErrorType.Failure => StatusCodes.Status500InternalServerError,
+                ErrorType.NotFound => StatusCodes.Status404NotFound,
+                ErrorType.AccessUnauthorized => StatusCodes.Status403Forbidden,
+                ErrorType.Conflict => StatusCodes.Status409Conflict,
+                ErrorType.UnprocessableEntity => StatusCodes.Status422UnprocessableEntity,
+                _ => StatusCodes.Status500InternalServerError
             };
-            return BadRequest(respone);
+            return Problem(
+                statusCode: statusCode,
+                detail: error.Description
+            );
         }
     }
 }

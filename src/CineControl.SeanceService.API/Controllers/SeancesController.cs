@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace CineControl.SeanceService.API.Controllers
 {
-    [Route("api/v1/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     [Authorize]
     public class SeancesController : ControllerBase
@@ -42,6 +42,7 @@ namespace CineControl.SeanceService.API.Controllers
                     MovieTitle = seance.Movie.Title,
                     TheaterId = seance.TheaterId,
                     TheaterName = theater?.Name,
+                    PosterUrl = seance.Movie.PosterUrl,
                     StartTime = seance.StartTime,
                     EndTime = seance.EndTime
                 });
@@ -72,12 +73,51 @@ namespace CineControl.SeanceService.API.Controllers
                 MovieTitle = seance.Movie.Title,
                 TheaterId = seance.TheaterId,
                 TheaterName = theater?.Name,
+                PosterUrl = seance.Movie.PosterUrl,
                 StartTime = seance.StartTime,
                 EndTime = seance.EndTime
             };
 
             return seanceDto;
         }
+        [HttpGet("bycinema/{cinemaId}/date/{date}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<SeanceDto>>> GetSeancesByCinemaAndDate(int cinemaId, DateTime date)
+        {
+            var utcDate = DateTime.SpecifyKind(date, DateTimeKind.Utc);
+
+            var theaters = await _theaterService.GetTheatersByCinemaIdAsync(cinemaId);
+            if (theaters == null || !theaters.Any())
+            {
+                return NotFound("Brak sal kinowych dla podanego kina.");
+            }
+            var theaterIds = theaters.Select(t => t.Id).ToList();
+
+            var seances = await _context.Seances
+                .Include(s => s.Movie)
+                .Where(s => theaterIds.Contains(s.TheaterId) && s.StartTime.Date == utcDate.Date)
+                .ToListAsync();
+
+            var seanceDtos = seances.Select(seance =>
+            {
+                var theater = theaters.FirstOrDefault(t => t.Id == seance.TheaterId);
+                return new SeanceDto
+                {
+                    Id = seance.Id,
+                    MovieId = seance.MovieId,
+                    MovieTitle = seance.Movie.Title,
+                    TheaterId = seance.TheaterId,
+                    TheaterName = theater?.Name,
+                    PosterUrl = seance.Movie.PosterUrl,
+                    StartTime = seance.StartTime,
+                    EndTime = seance.EndTime
+                };
+            }).ToList();
+
+            return Ok(seanceDtos);
+        }
+
+
 
         [HttpPost]
         public async Task<ActionResult<SeanceDto>> PostSeance(SeanceCreateDto seanceDto)
@@ -102,7 +142,6 @@ namespace CineControl.SeanceService.API.Controllers
                 EndTime = seanceDto.StartTime.AddMinutes(movie.Duration)
             };
 
-            // Check for overlapping seances in the same theater
             var overlappingSeance = await _context.Seances
                 .Where(s => s.TheaterId == seance.TheaterId)
                 .Where(s => s.StartTime < seance.EndTime && s.EndTime > seance.StartTime)

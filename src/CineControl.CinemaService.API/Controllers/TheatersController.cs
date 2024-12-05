@@ -16,7 +16,7 @@ namespace CineControl.CinemaService.API.Controllers
         {
             _cinemaService = cinemaService;
         }
-
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Theater>>> GetTheaters(int cinemaId)
         {

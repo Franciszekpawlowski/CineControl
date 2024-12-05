@@ -1,9 +1,10 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using CineControl.Common;
-using CineControl.Common.JWT.Models;
+using CineControl.Common.Options;
 using CineControl.IdentityService.API.Models;
 using CineControl.IdentityService.API.Service.IService;
 using Microsoft.AspNetCore.Identity;
@@ -69,19 +70,47 @@ namespace CineControl.IdentityService.API.Service
             return Convert.ToBase64String(randomNumber);
         }
 
-        public ClaimsPrincipal? GetTokenPrincipal(string token)
+        public ClaimsPrincipal? GetPrincipalFromExpiredToken(string? token)
         {
-            var key = Encoding.ASCII.GetBytes(_jwtOptions.Secret);
-
             var tokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(key),
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Secret)),
                 ValidateIssuer = false,
                 ValidateAudience = false,
+                ValidateLifetime = false
+            };
+            var tokenhandler = new JwtSecurityTokenHandler();
+            var principal = tokenhandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
+            if (securityToken is not JwtSecurityToken jwtSecurityToken || 
+                !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase)
+                )
+            {
+                return null;
+            }
+            return principal;
+        }
+
+
+        public ClaimsPrincipal? GetPrincipalFromToken(string? token)
+        {
+            var TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Secret)),
+                ValidateIssuer = true,
+                ValidateAudience = true,
                 ValidateLifetime = true
             };
-            return new JwtSecurityTokenHandler().ValidateToken(token, tokenValidationParameters, out _);
+            var tokenhandler = new JwtSecurityTokenHandler();
+            var principal = tokenhandler.ValidateToken(token, TokenValidationParameters, out SecurityToken securityToken);
+            if (securityToken is not JwtSecurityToken jwtSecurityToken || 
+                !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase)
+                )
+            {
+                return null;
+            }
+            return principal;
         }
     }
 }

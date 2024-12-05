@@ -6,6 +6,7 @@ export interface Movie {
     duration: number;
     genre: string;
     posterUrl: string;
+    panoramicPosterUrl: string;
     releaseDate: string;
     rating: number;
   }

@@ -1,5 +1,5 @@
 using System.Text;
-using CineControl.Common.JWT.Models;
+using CineControl.Common.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
