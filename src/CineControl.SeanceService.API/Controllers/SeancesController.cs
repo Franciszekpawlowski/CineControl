@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace CineControl.SeanceService.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     [Authorize]
     public class SeancesController : ControllerBase
