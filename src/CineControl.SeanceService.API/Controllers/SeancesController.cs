@@ -2,8 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CineControl.SeanceService.API.Data;
 using CineControl.SeanceService.API.Models;
-using CineControl.SeanceService.API.Services;
 using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System;
 
 namespace CineControl.SeanceService.API.Controllers
 {
@@ -13,14 +16,11 @@ namespace CineControl.SeanceService.API.Controllers
     public class SeancesController : ControllerBase
     {
         private readonly AppDbContext _context;
-        private readonly ITheaterService _theaterService;
 
-        public SeancesController(AppDbContext context, ITheaterService theaterService)
+        public SeancesController(AppDbContext context)
         {
             _context = context;
-            _theaterService = theaterService;
         }
-
 
         [HttpGet]
         [AllowAnonymous]
@@ -30,23 +30,17 @@ namespace CineControl.SeanceService.API.Controllers
                 .Include(s => s.Movie)
                 .ToListAsync();
 
-            var seanceDtos = new List<SeanceDto>();
-
-            foreach (var seance in seances)
+            var seanceDtos = seances.Select(seance => new SeanceDto
             {
-                var theater = await _theaterService.GetTheaterByIdAsync(seance.TheaterId);
-                seanceDtos.Add(new SeanceDto
-                {
-                    Id = seance.Id,
-                    MovieId = seance.MovieId,
-                    MovieTitle = seance.Movie.Title,
-                    TheaterId = seance.TheaterId,
-                    TheaterName = theater?.Name,
-                    PosterUrl = seance.Movie.PosterUrl,
-                    StartTime = seance.StartTime,
-                    EndTime = seance.EndTime
-                });
-            }
+                Id = seance.Id,
+                MovieId = seance.MovieId,
+                MovieTitle = seance.Movie.Title,
+                TheaterId = seance.TheaterId,
+                CinemaId = seance.CinemaId,
+                PosterUrl = seance.Movie.PosterUrl,
+                StartTime = seance.StartTime,
+                EndTime = seance.EndTime
+            }).ToList();
 
             return seanceDtos;
         }
@@ -64,15 +58,13 @@ namespace CineControl.SeanceService.API.Controllers
                 return NotFound();
             }
 
-            var theater = await _theaterService.GetTheaterByIdAsync(seance.TheaterId);
-
             var seanceDto = new SeanceDto
             {
                 Id = seance.Id,
                 MovieId = seance.MovieId,
                 MovieTitle = seance.Movie.Title,
                 TheaterId = seance.TheaterId,
-                TheaterName = theater?.Name,
+                CinemaId = seance.CinemaId,
                 PosterUrl = seance.Movie.PosterUrl,
                 StartTime = seance.StartTime,
                 EndTime = seance.EndTime
@@ -80,44 +72,32 @@ namespace CineControl.SeanceService.API.Controllers
 
             return seanceDto;
         }
+
         [HttpGet("bycinema/{cinemaId}/date/{date}")]
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<SeanceDto>>> GetSeancesByCinemaAndDate(int cinemaId, DateTime date)
         {
             var utcDate = DateTime.SpecifyKind(date, DateTimeKind.Utc);
 
-            var theaters = await _theaterService.GetTheatersByCinemaIdAsync(cinemaId);
-            if (theaters == null || !theaters.Any())
-            {
-                return NotFound("Brak sal kinowych dla podanego kina.");
-            }
-            var theaterIds = theaters.Select(t => t.Id).ToList();
-
             var seances = await _context.Seances
                 .Include(s => s.Movie)
-                .Where(s => theaterIds.Contains(s.TheaterId) && s.StartTime.Date == utcDate.Date)
+                .Where(s => s.CinemaId == cinemaId && s.StartTime.Date == utcDate.Date)
                 .ToListAsync();
 
-            var seanceDtos = seances.Select(seance =>
+            var seanceDtos = seances.Select(seance => new SeanceDto
             {
-                var theater = theaters.FirstOrDefault(t => t.Id == seance.TheaterId);
-                return new SeanceDto
-                {
-                    Id = seance.Id,
-                    MovieId = seance.MovieId,
-                    MovieTitle = seance.Movie.Title,
-                    TheaterId = seance.TheaterId,
-                    TheaterName = theater?.Name,
-                    PosterUrl = seance.Movie.PosterUrl,
-                    StartTime = seance.StartTime,
-                    EndTime = seance.EndTime
-                };
+                Id = seance.Id,
+                MovieId = seance.MovieId,
+                MovieTitle = seance.Movie.Title,
+                TheaterId = seance.TheaterId,
+                CinemaId = seance.CinemaId,
+                PosterUrl = seance.Movie.PosterUrl,
+                StartTime = seance.StartTime,
+                EndTime = seance.EndTime
             }).ToList();
 
             return Ok(seanceDtos);
         }
-
-
 
         [HttpPost]
         public async Task<ActionResult<SeanceDto>> PostSeance(SeanceCreateDto seanceDto)
@@ -128,16 +108,11 @@ namespace CineControl.SeanceService.API.Controllers
                 return BadRequest("Movie not found.");
             }
 
-            var theater = await _theaterService.GetTheaterByIdAsync(seanceDto.TheaterId);
-            if (theater == null)
-            {
-                return BadRequest("Theater not found.");
-            }
-
             var seance = new Seance
             {
                 MovieId = seanceDto.MovieId,
                 TheaterId = seanceDto.TheaterId,
+                CinemaId = seanceDto.CinemaId, // Ustawiamy CinemaId
                 StartTime = seanceDto.StartTime,
                 EndTime = seanceDto.StartTime.AddMinutes(movie.Duration)
             };
@@ -161,14 +136,14 @@ namespace CineControl.SeanceService.API.Controllers
                 MovieId = seance.MovieId,
                 MovieTitle = movie.Title,
                 TheaterId = seance.TheaterId,
-                TheaterName = theater.Name,
+                CinemaId = seance.CinemaId,
+                PosterUrl = movie.PosterUrl,
                 StartTime = seance.StartTime,
                 EndTime = seance.EndTime
             };
 
             return CreatedAtAction(nameof(GetSeance), new { id = seance.Id }, resultDto);
         }
-
 
         [HttpPut("{id}")]
         public async Task<IActionResult> PutSeance(int id, Seance seance)
@@ -182,12 +157,6 @@ namespace CineControl.SeanceService.API.Controllers
             if (movie == null)
             {
                 return BadRequest("Movie not found.");
-            }
-
-            var theater = await _theaterService.GetTheaterByIdAsync(seance.TheaterId);
-            if (theater == null)
-            {
-                return BadRequest("Theater not found.");
             }
 
             seance.EndTime = seance.StartTime.AddMinutes(movie.Duration);
