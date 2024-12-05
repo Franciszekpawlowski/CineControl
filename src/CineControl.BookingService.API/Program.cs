@@ -17,7 +17,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.AddServiceDefaults("CineControl.BookingService.API");
 builder.Services.AddHttpClient();
-builder.Services.AddScoped<IExternalApiService, ExternalApiService>();
 builder.Services.AddScoped<IReservationService, ReservationService>();
 
 var app = builder.Build();

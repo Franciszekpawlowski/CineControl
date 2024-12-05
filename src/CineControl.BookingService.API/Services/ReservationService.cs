@@ -15,16 +15,14 @@ namespace BookingService.API.Services
     public class ReservationService : IReservationService
     {
         private readonly AppDbContext _context;
-        private readonly IExternalApiService _externalApiService;
         private readonly ILogger<ReservationService> _logger;
 
         public ReservationService(
             AppDbContext context,
-            IExternalApiService externalApiService,
             ILogger<ReservationService> logger)
         {
             _context = context;
-            _externalApiService = externalApiService;
+
             _logger = logger;
         }
 
@@ -55,13 +53,6 @@ namespace BookingService.API.Services
 
             try
             {
-                // Sprawdzenie istnienia seansu
-                var seance = await _externalApiService.GetSeanceAsync(request.SeanceId);
-                if (seance == null)
-                {
-                    result.AddError("Seans nie istnieje.");
-                    return result;
-                }
 
                 // Sprawdzenie dostępności siedzeń
                 var areAvailable = await AreSeatsAvailableAsync(request.SeanceId, request.SeatIds);
