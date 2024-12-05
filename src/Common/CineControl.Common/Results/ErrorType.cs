@@ -4,6 +4,8 @@ namespace CineControl.Common.Results
     {
         Failure,
         NotFound,
-        AccessUnauthorized
+        AccessUnauthorized,
+        Conflict,
+        UnprocessableEntity
     }
 }

@@ -1,10 +1,10 @@
-using CineControl.IdentityService.API.Models.Results;
-using CineControl.IdentityService.API.Models.Results.User;
+using CineControl.Common.Results;
+using CineControl.IdentityService.API.Models.DTOs.User;
 
 namespace CineControl.IdentityService.API.Service.IService
 {
     public interface IUserService
     {
-        public Task<GenericResults<GetUserResults>> GetUser(HttpContext httpContext);
+        public Task<ResultT<GetUserResponse>> GetUser(HttpContext httpContext);
     }
 }

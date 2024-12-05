@@ -1,4 +1,4 @@
-namespace CineControl.IdentityService.API.Models.Response.User
+namespace CineControl.IdentityService.API.Models.DTOs.User
 {
     public class GetUserResponse
     {

@@ -19,5 +19,11 @@ namespace CineControl.Common.Results
 
         public static Error AccessUnauthorized(string description) => 
             new(description, ErrorType.AccessUnauthorized);
+
+        public static Error Conflict(string description) => 
+            new(description, ErrorType.Conflict);
+
+        public static Error UnprocessableEntity(string description) => 
+            new(description, ErrorType.UnprocessableEntity);
     }
 }

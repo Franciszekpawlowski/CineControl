@@ -1,54 +1,42 @@
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using CineControl.Common;
 using CineControl.Common.Enums;
+using CineControl.Common.Results;
+using CineControl.IdentityService.API.Errors;
 using CineControl.IdentityService.API.Models;
-using CineControl.IdentityService.API.Models.Results;
-using CineControl.IdentityService.API.Models.Results.User;
+using CineControl.IdentityService.API.Models.DTOs.User;
 using CineControl.IdentityService.API.Service.IService;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 
 namespace CineControl.IdentityService.API.Service
 {
-    public class UserService : IUserService
+    public class UserService(
+        UserManager<ApplicationUser> userManager,
+        IJwtTokenGenerator jwtTokenGenerator
+        ) : IUserService
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IJwtTokenGenerator _jwtTokenGenerator;
-        public UserService(
-            UserManager<ApplicationUser> userManager,
-            IJwtTokenGenerator jwtTokenGenerator
-        )
+        private readonly UserManager<ApplicationUser> _userManager = userManager;
+        private readonly IJwtTokenGenerator _jwtTokenGenerator = jwtTokenGenerator;
+
+        public async Task<ResultT<GetUserResponse>> GetUser(HttpContext httpContext)
         {
-            _userManager = userManager;
-            _jwtTokenGenerator = jwtTokenGenerator;
-        }
-
-
-
-        public async Task<GenericResults<GetUserResults>> GetUser(HttpContext httpContext)
-        {
-            var result = new GenericResults<GetUserResults>();
             var identity = httpContext.User;
             if (identity == null)
             {
-                result.AddError("Invalid token");
-                return result;
+                return AuthErrors.AccessUnauthorized();
             }
-            var username = identity.FindFirstValue(JwtRegisteredClaimNames.Name);
-            ApplicationUser user = await _userManager.FindByNameAsync(username);
+            ApplicationUser? user = await _userManager.FindByNameAsync(identity.Identity.Name);
             if (user is null)
             {
-                result.AddError("Invalid token");
-                return result;
+                return AuthErrors.NotFound();
             }
-            List<Claim> claims = new(await _userManager.GetClaimsAsync(user));
+            List<Claim> claims = [.. await _userManager.GetClaimsAsync(user)];
             var role = claims.FirstOrDefault(c => c.Type == CustomClaims.Role);
-            var test = Enum.TryParse(role?.Value, out Roles roleEnum);
-            var getUserResults = new GetUserResults(user, roleEnum);
-            result.SetData(getUserResults);
-            return result;
+            if (!Enum.TryParse(role?.Value, out Roles roleEnum))
+            {
+                return AuthErrors.UnprocessableEntity();
+            }
+            return user.ToResponse(roleEnum);
         }
 
     }
