@@ -29,3 +29,10 @@ $RECYCLE.BIN/
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# Node
+node_modules
+npm-debug.log
+yarn-error.log
+.yarn
+.angular
