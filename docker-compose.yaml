@@ -52,6 +52,20 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.cinecontrol.rule=Host(`cinecontrol.local`)"
 
+  bookingservice:
+    build:
+      context: .
+      dockerfile: src/CineControl.BookingService.API/Dockerfile
+    ports:
+      - "8085:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.bookingservice.rule=Host(`bookingservice.cinecontrol.local`)"
+
+
   websitegateway:
     build: 
       context: .
@@ -69,7 +83,6 @@ services:
     # restart: unless-stopped
     volumes:
       - postgres-data-prod:/var/lib/postgresql/data
-      # - ./src/postgress/create-multiple-postgresql-databases.sh:/docker-entrypoint-initdb.d/create-multiple-postgresql-databases.sh
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
