@@ -1,1 +1,36 @@
-<p>booking works!</p>
+<div class="booking-container">
+    <div class="screen">EKRAN</div>
+  
+    <div class="seating-container" *ngIf="seatRows.length > 0">
+      <div class="row" *ngFor="let rowSeats of seatRows; let i = index">
+        <div class="row-label">{{ getRowLabel(i+1) }}</div>
+        <div class="seat-row">
+          <div 
+            class="seat"
+            *ngFor="let seat of rowSeats"
+            [class.reserved]="seat.isReserved"
+            [class.selected]="!seat.isReserved && isSelected(seat)"
+            [class.free]="!seat.isReserved && !isSelected(seat)"
+            (click)="toggleSeat(seat)"
+            [attr.title]="'Rząd ' + getRowLabel(i+1) + ', Miejsce ' + seat.number"
+          >
+            <div class="seat-icon"></div>
+          </div>
+        </div>
+        <div class="row-label">{{ getRowLabel(i+1) }}</div>
+      </div>
+    </div>
+  
+    <div class="legend">
+      <div class="legend-item">
+        <div class="seat-icon example free"></div> <span>Wolne</span>
+      </div>
+      <div class="legend-item">
+        <div class="seat-icon example selected"></div> <span>Wybrane</span>
+      </div>
+      <div class="legend-item">
+        <div class="seat-icon example reserved"></div> <span>Zajęte</span>
+      </div>
+    </div>
+  </div>
+  

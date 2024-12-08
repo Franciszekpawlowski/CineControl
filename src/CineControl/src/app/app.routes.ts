@@ -4,6 +4,7 @@ import { MovieDetailsComponent } from './pages/movie-details/movie-details.compo
 import { RepertoireComponent } from './pages/repertoire/repertoire.component';
 import { LoginComponent } from './shared/login/login.component';
 import { RegistrationComponent } from './shared/registration/registration.component';
+import { BookingComponent } from './pages/booking/booking.component';
 
 
 export const routes: Routes = [
@@ -12,4 +13,5 @@ export const routes: Routes = [
   {path:'repertoire', component: RepertoireComponent},
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegistrationComponent },
+  { path: 'booking/:id', component: BookingComponent },
 ];

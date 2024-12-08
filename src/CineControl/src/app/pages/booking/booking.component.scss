@@ -1,0 +1,129 @@
+
+.booking-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background: #121212;
+    color: #fff;
+    font-family: sans-serif;
+  }
+  
+  .screen {
+    background: #444;
+    color: #fff;
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .seating-container {
+    display: inline-block;
+    max-width: 90vw;
+    background: #1e1e1e;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+  
+    .row-label {
+      color: #ddd;
+      margin: 0 10px;
+      font-size: 16px;
+      min-width: 20px; 
+      text-align: center;
+    }
+  
+    .seat-row {
+      display: flex;
+      justify-content: center;
+    }
+  }
+  
+  .seat {
+    position: relative;
+    width: 30px;
+    height: 30px;
+    margin: 5px;
+    cursor: pointer;
+    user-select: none;
+  
+    &.reserved {
+      cursor: not-allowed;
+    }
+  
+    &:hover:not(.reserved) {
+      filter: brightness(1.2);
+    }
+  }
+  
+  .seat-icon {
+    width: 100%;
+    height: 100%;
+    border-radius: 4px 4px 0 0;
+    background: #0055aa; 
+    box-shadow: inset 0 -4px 0 rgba(0,0,0,0.2);
+  }
+  
+
+  .seat.free .seat-icon {
+    background: #0055aa; 
+  }
+  
+  .seat.selected .seat-icon {
+    background: #800080; 
+  }
+  
+  .seat.reserved .seat-icon {
+    background: #333; 
+  }
+  
+
+  .legend {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+  
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+    color: #fff;
+  }
+  
+  .legend-item .seat-icon.example {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px 4px 0 0;
+    box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2);
+  }
+  
+  .legend-item .seat-icon.free {
+    background: #0055aa;
+  }
+  
+  .legend-item .seat-icon.selected {
+    background: #800080;
+  }
+  
+  .legend-item .seat-icon.reserved {
+    background: #333;
+  }
+  
+  @media (max-width: 600px) {
+    .seat {
+      width: 20px;
+      height: 20px;
+      margin: 3px;
+    }
+  }
+  

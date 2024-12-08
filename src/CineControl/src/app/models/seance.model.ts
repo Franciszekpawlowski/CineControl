@@ -6,5 +6,6 @@ export interface Seance {
     movieTitle: string;
     startTime: string; 
     endTime: string;
+    theaterId: number;
   }
   

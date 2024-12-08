@@ -15,4 +15,7 @@ export class SeanceService {
   getSeances(cinemaId: number, date: string): Observable<Seance[]> {
     return this.http.get<Seance[]>(`${this.apiUrl}/bycinema/${cinemaId}/date/${date}`);
   }
+  getSeanceById(seanceId:number): Observable<Seance>{
+    return this.http.get<Seance>(`${this.apiUrl}/${seanceId}`);
+  }
 }
