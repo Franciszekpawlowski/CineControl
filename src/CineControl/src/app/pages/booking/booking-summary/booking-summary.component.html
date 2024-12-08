@@ -7,9 +7,11 @@
     </div>
   
     <button 
-      class="order-button" 
+      mat-raised-button 
+      color="accent" 
       (click)="makeReservation()" 
-      [disabled]="isReservationInProgress || selectedSeatIds.length === 0">
+      [disabled]="isReservationInProgress || selectedSeatIds.length === 0"
+      class="order-button">
       Złóż zamówienie
     </button>
   

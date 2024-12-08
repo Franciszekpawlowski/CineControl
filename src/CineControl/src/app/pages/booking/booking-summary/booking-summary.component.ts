@@ -2,6 +2,11 @@ import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BookingService } from '../../../services/booking.service';
 import { Seat } from '../../../models/seat.model';
+import { AuthService } from '../../../services/auth.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AuthDialogComponent } from '../../../shared/auth-dialog/auth-dialog.component';
+import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 
 interface ApiResponse<T> {
   data: T;
@@ -23,7 +28,12 @@ type ReservationResponse = ApiResponse<ReservationData>;
   templateUrl: './booking-summary.component.html',
   styleUrls: ['./booking-summary.component.scss'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatButtonModule,
+    AuthDialogComponent
+  ]
 })
 export class BookingSummaryComponent implements OnChanges {
   @Input() selectedSeatIds: number[] = [];
@@ -35,7 +45,11 @@ export class BookingSummaryComponent implements OnChanges {
   reservationSuccess: boolean = false;
   reservationError: string | null = null;
 
-  constructor(private bookingService: BookingService) {}
+  constructor(
+    private bookingService: BookingService,
+    private authService: AuthService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     this.calculateTotalPrice();
@@ -49,6 +63,15 @@ export class BookingSummaryComponent implements OnChanges {
   makeReservation() {
     if (!this.seanceId || this.selectedSeatIds.length === 0) return;
 
+    if (!this.authService.isAuthenticated()) {
+      this.openAuthDialog().afterClosed().subscribe((result) => {
+        if (this.authService.isAuthenticated()) {
+          this.makeReservation();
+        }
+      });
+      return;
+    }
+
     this.isReservationInProgress = true;
     this.reservationSuccess = false;
     this.reservationError = null;
@@ -58,7 +81,6 @@ export class BookingSummaryComponent implements OnChanges {
         this.isReservationInProgress = false;
         if (response.isSuccess) {
           this.reservationSuccess = true;
-          // Opcjonalnie: możesz emitować zdarzenie lub odświeżyć listę siedzeń
         } else {
           this.reservationError = response.errors && response.errors.length > 0 
             ? response.errors[0].message 
@@ -69,6 +91,13 @@ export class BookingSummaryComponent implements OnChanges {
         this.isReservationInProgress = false;
         this.reservationError = 'Wystąpił błąd po stronie serwera.';
       }
+    });
+  }
+
+  openAuthDialog() {
+    return this.dialog.open(AuthDialogComponent, {
+      width: '400px',
+      disableClose: true
     });
   }
 }

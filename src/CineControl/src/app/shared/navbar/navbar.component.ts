@@ -1,5 +1,4 @@
-// src/app/shared/navbar/navbar.component.ts
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { RouterModule } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -9,6 +8,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { AuthDialogComponent } from '../auth-dialog/auth-dialog.component'; 
 
 @Component({
   selector: 'app-navbar',
@@ -24,18 +25,29 @@ import { MatButtonModule } from '@angular/material/button';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatDialogModule, 
+    AuthDialogComponent 
   ],
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {
   searchQuery: string = '';
   isLoggedIn: boolean = false;
   isMobile: boolean = false;
   isMenuOpen: boolean = false;
 
-  constructor(private authService: AuthService) {
+  constructor(
+    private authService: AuthService,
+    private dialog: MatDialog
+  ) {}
+
+  ngOnInit(): void {
     this.isLoggedIn = this.authService.isAuthenticated();
-    console.log(this.isLoggedIn);
+    console.log('Is Logged In:', this.isLoggedIn);
     this.checkScreenWidth();
+
+    this.authService.getAuthStatus().subscribe((status) => {
+      this.isLoggedIn = status;
+    });
   }
 
   @HostListener('window:resize', ['$event'])
@@ -46,7 +58,7 @@ export class NavbarComponent {
   checkScreenWidth() {
     this.isMobile = window.innerWidth <= 768;
     if (!this.isMobile) {
-      this.isMenuOpen = false; // Zamknij menu, gdy ekran jest większy
+      this.isMenuOpen = false; 
     }
   }
 
@@ -57,13 +69,20 @@ export class NavbarComponent {
   onSearch() {
     // Implementacja logiki wyszukiwania filmów
     console.log('Search Query:', this.searchQuery);
-    // Przykładowa nawigacja:
-    // this.router.navigate(['/search'], { queryParams: { q: this.searchQuery } });
   }
+
   logout() {
     this.authService.logout();
     this.isLoggedIn = false;
-    // Opcjonalnie, przekierowanie po wylogowaniu
-    // this.router.navigate(['/']);
+  }
+
+  openAuthDialog() {
+    const dialogRef = this.dialog.open(AuthDialogComponent, {
+      width: '400px',
+      disableClose: false, 
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+    });
   }
 }

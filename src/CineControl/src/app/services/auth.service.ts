@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { Observable, tap, BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  private authStatus = new BehaviorSubject<boolean>(this.isAuthenticated());
+
   constructor(private http: HttpClient) {}
 
   login(credentials: { email: string; password: string }): Observable<any> {
@@ -17,6 +19,7 @@ export class AuthService {
       tap((response) => {
         if (response.accessToken) {
           sessionStorage.setItem('authToken', response.accessToken);
+          this.authStatus.next(true);
         }
       })
     );
@@ -33,10 +36,10 @@ export class AuthService {
       })
     );
   }
-  
 
   logout(): void {
     sessionStorage.removeItem('authToken');
+    this.authStatus.next(false);
   }
 
   isAuthenticated(): boolean {
@@ -44,7 +47,10 @@ export class AuthService {
   }
 
   getToken(): string | null {
-    //console.log(sessionStorage.getItem('authToken'));
     return sessionStorage.getItem('authToken');
+  }
+
+  getAuthStatus(): Observable<boolean> {
+    return this.authStatus.asObservable();
   }
 }
