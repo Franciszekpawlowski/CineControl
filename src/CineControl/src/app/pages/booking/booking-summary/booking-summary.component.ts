@@ -31,8 +31,7 @@ type ReservationResponse = ApiResponse<ReservationData>;
   imports: [
     CommonModule,
     FormsModule,
-    MatButtonModule,
-    AuthDialogComponent
+    MatButtonModule
   ]
 })
 export class BookingSummaryComponent implements OnChanges {

@@ -25,8 +25,7 @@ import { AuthDialogComponent } from '../auth-dialog/auth-dialog.component';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatDialogModule, 
-    AuthDialogComponent 
+    MatDialogModule 
   ],
 })
 export class NavbarComponent implements OnInit {
