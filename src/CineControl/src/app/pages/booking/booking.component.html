@@ -32,5 +32,13 @@
         <div class="seat-icon example reserved"></div> <span>Zajęte</span>
       </div>
     </div>
-  </div>
+    <app-booking-summary 
+        *ngIf="seance && seats.length > 0"
+        [selectedSeatIds]="selectedSeatIds" 
+        [seats]="seats" 
+        [seanceId]="seance.id">
+    </app-booking-summary>
+</div>
+  
+
   

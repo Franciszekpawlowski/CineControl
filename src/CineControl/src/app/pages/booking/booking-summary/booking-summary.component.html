@@ -1,0 +1,20 @@
+<div class="summary-container">
+    <h3>Podsumowanie rezerwacji</h3>
+  
+    <div class="info">
+      <p>Wybrane miejsca: {{ selectedSeatIds.length }}</p>
+      <p>Suma do zapłaty: {{ totalPrice }} zł</p>
+    </div>
+  
+    <button 
+      class="order-button" 
+      (click)="makeReservation()" 
+      [disabled]="isReservationInProgress || selectedSeatIds.length === 0">
+      Złóż zamówienie
+    </button>
+  
+    <div class="status-message" *ngIf="isReservationInProgress">Trwa składanie zamówienia...</div>
+    <div class="status-message success" *ngIf="reservationSuccess">Rezerwacja zakończona sukcesem!</div>
+    <div class="status-message error" *ngIf="reservationError">{{ reservationError }}</div>
+  </div>
+  

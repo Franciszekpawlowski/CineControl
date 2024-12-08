@@ -5,17 +5,18 @@ import { BookingService } from '../../services/booking.service';
 import { Seance } from '../../models/seance.model';
 import { Seat } from '../../models/seat.model';
 import { CommonModule } from '@angular/common';
+import { BookingSummaryComponent } from './booking-summary/booking-summary.component';
 
 @Component({
   selector: 'app-booking',
   templateUrl: './booking.component.html',
   styleUrls: ['./booking.component.scss'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule, BookingSummaryComponent]
 })
 export class BookingComponent implements OnInit {
   seance: Seance | null = null;
-  seats: Seat[] | null = null;
+  seats: Seat[] = []; 
   seatRows: Seat[][] = [];
   selectedSeatIds: number[] = [];
 
@@ -31,7 +32,6 @@ export class BookingComponent implements OnInit {
     this.seanceService.getSeanceById(id).subscribe({
       next: (data) => {
         this.seance = data;
-        // Po pobraniu seansu pobieramy miejsca
         this.bookingService.getAgrigatedSeats(this.seance.id, this.seance.theaterId).subscribe({
           next: (seatsData) => {
             this.seats = seatsData;
@@ -64,24 +64,26 @@ export class BookingComponent implements OnInit {
   }
 
   toggleSeat(seat: Seat) {
-    if (seat.isReserved) return; // Miejsca zarezerwowane są nieklikalne
-
+    if (seat.isReserved) return;
+  
     const index = this.selectedSeatIds.indexOf(seat.id);
     if (index > -1) {
-      // Jeśli było wybrane, odznaczamy
-      this.selectedSeatIds.splice(index, 1);
+      this.selectedSeatIds = [
+        ...this.selectedSeatIds.slice(0, index),
+        ...this.selectedSeatIds.slice(index + 1)
+      ];
     } else {
-      // Jeśli było wolne, wybieramy
-      this.selectedSeatIds.push(seat.id);
+      this.selectedSeatIds = [...this.selectedSeatIds, seat.id];
     }
   }
+  
 
   isSelected(seat: Seat): boolean {
     return this.selectedSeatIds.includes(seat.id);
   }
 
   getRowLabel(rowNumber: number): string {
-    // Konwertujemy numer rzędu (1-based) na literę: 1->A, 2->B...
+    // Konwertowanie numer rzędu (1-based) na literę: 1->A, 2->B...
     const charCode = 'A'.charCodeAt(0) + (rowNumber - 1);
     return String.fromCharCode(charCode);
   }
