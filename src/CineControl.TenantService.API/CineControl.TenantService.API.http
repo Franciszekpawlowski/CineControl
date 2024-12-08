@@ -1,0 +1,6 @@
+@CineControl.TenantService.API_HostAddress = http://localhost:5188
+
+GET {{CineControl.TenantService.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
