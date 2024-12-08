@@ -52,6 +52,18 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.cinecontrol.rule=Host(`cinecontrol.local`)"
 
+  websitegateway:
+    build: 
+      context: .
+      dockerfile: src/CineControl.WebsiteGateway/Dockerfile
+    ports:
+      - "8084:8080"
+    depends_on:
+      - cinecontrol
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.gateway.rule=Host(`gateway.cinecontrol.local`)"
+
   db:
     image: postgres:16.3
     # restart: unless-stopped
