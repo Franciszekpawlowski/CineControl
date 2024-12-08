@@ -1,5 +1,4 @@
-// src/app/shared/registration/registration.component.ts
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-registration',
@@ -32,7 +32,13 @@ export class RegistrationComponent {
   confirmPassword: string = '';
   errorMessage: string = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  @Output() registrationSuccess = new EventEmitter<void>();
+
+  constructor(
+    private authService: AuthService, 
+    private router: Router,
+    private dialogRef: MatDialogRef<any>
+  ) {}
 
   register() {
     if (!this.name || !this.email || !this.password || !this.confirmPassword) {
@@ -49,7 +55,10 @@ export class RegistrationComponent {
       .register({ name: this.name, email: this.email, password: this.password })
       .subscribe({
         next: () => {
-          this.router.navigate(['/login']);
+          this.errorMessage = '';
+          this.registrationSuccess.emit();
+          this.dialogRef.close(); 
+          // this.router.navigate(['/login']);
         },
         error: () => {
           this.errorMessage = 'Registration failed. Please try again.';

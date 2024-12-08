@@ -1,5 +1,4 @@
-
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-login',
@@ -30,7 +30,13 @@ export class LoginComponent {
   password: string = '';
   errorMessage: string = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  @Output() loginSuccess = new EventEmitter<void>();
+
+  constructor(
+    private authService: AuthService, 
+    private router: Router,
+    private dialogRef: MatDialogRef<any>
+  ) {}
 
   login() {
     if (!this.email || !this.password) {
@@ -42,7 +48,10 @@ export class LoginComponent {
       .login({ email: this.email, password: this.password })
       .subscribe({
         next: () => {
-          this.router.navigate(['/']);
+          this.errorMessage = '';
+          this.loginSuccess.emit();
+          this.dialogRef.close(); 
+          // this.router.navigate(['/']);
         },
         error: () => {
           this.errorMessage = 'Invalid login credentials.';

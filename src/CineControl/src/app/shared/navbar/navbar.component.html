@@ -1,4 +1,4 @@
-<!-- src/app/shared/navbar/navbar.component.html -->
+
 <mat-toolbar class="navbar">
   <div class="logo">
     <a routerLink="/">
@@ -45,6 +45,7 @@
         matInput
         placeholder="Tytuł, gatunek, aktor..."
         [(ngModel)]="searchQuery"
+        (keydown.enter)="onSearch()"
       />
       <button mat-icon-button matSuffix (click)="onSearch()" aria-label="Szukaj">
         <mat-icon>search</mat-icon>
@@ -53,15 +54,19 @@
   </div>
   
   <div class="user-actions">
-    <button mat-button *ngIf="!isLoggedIn" routerLink="/login" aria-label="Logowanie">
+    <button 
+      mat-button 
+      *ngIf="!isLoggedIn" 
+      (click)="openAuthDialog()" 
+      aria-label="Logowanie/Rejestracja">
       <mat-icon>login</mat-icon>
-      <span>Logowanie</span>
+      <span>Logowanie/Rejestracja</span>
     </button>
-    <button mat-button *ngIf="!isLoggedIn" routerLink="/register" aria-label="Rejestracja">
-      <mat-icon>person_add</mat-icon>
-      <span>Rejestracja</span>
-    </button>
-    <button mat-button *ngIf="isLoggedIn" (click)="logout()" aria-label="Wyloguj">
+    <button 
+      mat-button 
+      *ngIf="isLoggedIn" 
+      (click)="logout()" 
+      aria-label="Wyloguj">
       <mat-icon>logout</mat-icon>
       <span>Wyloguj</span>
     </button>

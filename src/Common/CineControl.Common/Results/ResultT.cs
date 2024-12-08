@@ -12,6 +12,7 @@ namespace CineControl.Common.Results
         {
             _value = default;
         }
+
         public TValue Value => 
             IsSuccess ? _value! : throw new InvalidOperationException("Result is not successful");
 

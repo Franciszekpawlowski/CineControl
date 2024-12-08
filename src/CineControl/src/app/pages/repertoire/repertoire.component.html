@@ -57,18 +57,23 @@
 <!-- Wyświetlanie seansów -->
 <div *ngIf="groupedSeances.length > 0" class="grouped-seances">
   <div *ngFor="let group of groupedSeances; let last = last" class="movie-row">
-    <!-- Plakat filmu po lewej -->
     <div class="poster">
       <img [src]="group.posterUrl" alt="{{ group.movieTitle }}" class="movie-poster" />
     </div>
-    <!-- Szczegóły filmu po prawej -->
     <div class="movie-details">
       <h3 class="movie-title">{{ group.movieTitle }}</h3>
       <div class="showtimes">
-        <button mat-button *ngFor="let time of group.times" class="time-button">{{ time }}</button>
+        <button mat-button 
+                *ngFor="let show of group.shows" 
+                class="time-button"
+                (click)="goToBooking(show.seanceId)">
+          {{ show.time }}
+        </button>
       </div>
     </div>
   </div>
+  <hr class="separator" />
+  
   <!-- Separator pod każdym filmem oprócz ostatniego -->
   <hr class="separator" />
 </div>

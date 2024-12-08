@@ -1,5 +1,5 @@
 {
-  "/Auth": {
+  "/Account": {
     "target": "http://127.0.0.1:5093/api/v1",
     "secure": false,
     "changeOrigin": true,
@@ -17,6 +17,12 @@
     "changeOrigin": true,
     "logLevel": "debug"
   },
+  "/theaters": {
+    "target": "http://127.0.0.1:5112/api/v1",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
     "/Movies": {
     "target": "http://127.0.0.1:5222/api/v1",
     "secure": false,
@@ -25,6 +31,18 @@
   },
     "/Seances": {
     "target": "http://127.0.0.1:5222/api/v1",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/Reservations": {
+    "target": "http://127.0.0.1:5045/api",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+    "/Seating": {
+    "target": "http://127.0.0.1:5045/api",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"

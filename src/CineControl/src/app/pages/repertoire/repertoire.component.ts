@@ -8,7 +8,7 @@ import { Cinema } from '../../models/cinema.model';
 import { Seance } from '../../models/seance.model';
 
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -20,11 +20,17 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 
+interface ShowTime {
+  time: string;
+  seanceId: number;
+}
+
 interface GroupedSeances {
   movieTitle: string;
   posterUrl: string;
-  times: string[];
+  shows: ShowTime[];
 }
+
 
 @Component({
   selector: 'app-repertoire',
@@ -57,7 +63,8 @@ export class RepertoireComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private cinemaService: CinemaService,
-    private seanceService: SeanceService
+    private seanceService: SeanceService,
+    private router: Router
   ) {
     this.scheduleForm = this.fb.group({
       city: [''],
@@ -128,17 +135,26 @@ export class RepertoireComponent implements OnInit {
 
   groupSeancesByMovie(seances: Seance[]) {
     const grouped = seances.reduce((acc: GroupedSeances[], seance) => {
-      const movie = acc.find(g => g.movieTitle === seance.movieTitle);
-      const time = new Date(seance.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-      if (movie) {
-        movie.times.push(time);
+      const movieGroup = acc.find(g => g.movieTitle === seance.movieTitle);
+      const timeStr = new Date(seance.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const showTime: ShowTime = { time: timeStr, seanceId: seance.id };
+  
+      if (movieGroup) {
+        movieGroup.shows.push(showTime);
       } else {
-        acc.push({ movieTitle: seance.movieTitle, posterUrl: seance.posterUrl, times: [time] });
+        acc.push({
+          movieTitle: seance.movieTitle,
+          posterUrl: seance.posterUrl,
+          shows: [showTime]
+        });
       }
-
+  
       return acc;
     }, []);
     this.groupedSeances = grouped;
   }
+  goToBooking(seanceId: number) {
+    this.router.navigate(['/booking', seanceId]);
+  }
+  
 }

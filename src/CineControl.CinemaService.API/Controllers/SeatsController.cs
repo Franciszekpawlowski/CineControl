@@ -18,6 +18,7 @@ namespace CineControl.CinemaService.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Seat>>> GetSeats(int theaterId)
         {
             return Ok(await _cinemaService.GetSeatsByTheaterId(theaterId));
