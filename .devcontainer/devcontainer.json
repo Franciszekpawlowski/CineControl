@@ -11,7 +11,8 @@
 	"features": {
 		"ghcr.io/devcontainers/features/github-cli:1": {},
         "ghcr.io/devcontainers/features/node": {
-            "pnpmVersion": "none"
+            "pnpmVersion": "none",
+            "installYarnUsingApt": false
         }
     },
     "customizations": {
@@ -50,7 +51,7 @@
 	// }
 
     // Use 'postCreateCommand' to run commands after the container is created.
-    "postCreateCommand": "yarn global add @angular/cli"
+    "postCreateCommand": ". ${NVM_DIR}/nvm.sh && nvm install --lts && yarn global add @angular/cli"
 
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root"
