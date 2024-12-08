@@ -3,7 +3,7 @@ namespace CineControl.Common.Results
     public class ResultT<TValue> : Result
     {
         private readonly TValue? _value;
-        protected ResultT(TValue? value): base()
+        protected ResultT(TValue value): base()
         {
             _value = value;
         }
@@ -12,9 +12,8 @@ namespace CineControl.Common.Results
         {
             _value = default;
         }
-        public TValue? Value => 
-            IsSuccess ? _value : throw new InvalidOperationException("Result is not successful");
-        public Error? Error { get;}
+        public TValue Value => 
+            IsSuccess ? _value! : throw new InvalidOperationException("Result is not successful");
 
         public static implicit operator ResultT<TValue>(Error error) => new(error);
         public static implicit operator ResultT<TValue>(TValue value) => new(value);
@@ -22,6 +21,6 @@ namespace CineControl.Common.Results
 
         public static ResultT<TValue> Success(TValue value) => new(value);
 
-        public static ResultT<TValue> Failure(Error error) => new(error);
+        public static new ResultT<TValue> Failure(Error error) => new(error);
     }
 }

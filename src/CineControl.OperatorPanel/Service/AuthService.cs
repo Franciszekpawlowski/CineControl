@@ -52,7 +52,7 @@ public class AuthService(IIdentityServiceClient authServiceClient) : IAuthServic
             authenticationProperties
         );
 
-        return Result.Success;
+        return Result.Success();
     }
 
     public async Task<ResultT<GetUserResult>> GetUserAsync(HttpContext context)
@@ -88,6 +88,6 @@ public class AuthService(IIdentityServiceClient authServiceClient) : IAuthServic
                 Expires = DateTime.Now.AddDays(-1)
             });
         });
-        return Result.Success;
+        return Result.Success();
     }
 }
