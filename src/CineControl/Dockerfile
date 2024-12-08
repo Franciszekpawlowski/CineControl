@@ -1,15 +1,22 @@
-FROM node:20-alpine AS build
+FROM node:22-alpine AS build
+
+ARG yarn_version=4.5.3
 
 WORKDIR /app
 
-COPY src/CineControl/package*.json ./
-COPY src/CineControl/yarn* ./
+RUN apk add --no-cache libc6-compat
 
-RUN yarn install --frozen-lockfile
+COPY src/CineControl/package.json ./
+
+RUN corepack prepare yarn
+
+COPY src/CineControl/yarn* src/CineControl/angular.json src/CineControl/.yarnrc.yml ./
+
 
 COPY src/CineControl .
+RUN corepack yarn install --immutable
 
-RUN yarn ng build
+RUN corepack yarn build
 
 FROM nginx:latest
 
