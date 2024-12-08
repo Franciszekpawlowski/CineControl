@@ -14,7 +14,7 @@ namespace CineControl.Common.Results
         }
         public TValue? Value => 
             IsSuccess ? _value : throw new InvalidOperationException("Result is not successful");
-        public Error? Error { get;}
+        //public Error? Error { get;}
 
         public static implicit operator ResultT<TValue>(Error error) => new(error);
         public static implicit operator ResultT<TValue>(TValue value) => new(value);
