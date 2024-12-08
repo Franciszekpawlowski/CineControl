@@ -10,7 +10,8 @@
                 "C#: CineControl.CinemaService.API Debug",
                 "C#: CineControl.IdentityService.API Debug",
                 "C#: CineControl.SeanceService.API Debug",
-                "C#: CineControl.OperatorPanel Debug"
+                "C#: CineControl.OperatorPanel Debug",
+                "C#: CineControl.BookingService.API Debug"
             ],
             "stopAll": true
         }
@@ -46,6 +47,12 @@
             "type": "dotnet",
             "request": "launch",
             "projectPath": "${workspaceFolder}/src/CineControl.OperatorPanel/CineControl.OperatorPanel.csproj"
+        },
+        {
+            "name": "C#: CineControl.BookingService.API Debug",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/src/CineControl.BookingService.API/CineControl.BookingService.API.csproj"
         },
         {
             "name": ".NET Core Launch (web)",

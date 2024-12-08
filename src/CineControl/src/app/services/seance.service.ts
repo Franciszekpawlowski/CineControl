@@ -8,7 +8,7 @@ import { Seance } from '../models/seance.model';
   providedIn: 'root',
 })
 export class SeanceService {
-  private apiUrl = '/api/Seances'; // Używamy względnego URL dla proxy
+  private apiUrl = '/Seances'; 
 
   constructor(private http: HttpClient) {}
 
