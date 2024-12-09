@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="../Common/CineControl.Common.Clients.TenantService/CineControl.Common.Clients.TenantService.csproj" />
     <ProjectReference Include="..\Common\CineControl.Common.ServiceDefaults\CineControl.Common.ServiceDefaults.csproj" />
     <ProjectReference Include="..\Common\CineControl.Common\CineControl.Common.csproj" />
   </ItemGroup>

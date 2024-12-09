@@ -1,8 +1,10 @@
 using System.Security.Claims;
 using CineControl.Common;
+using CineControl.Common.Clients.TenantService.IClients;
 using CineControl.Common.Enums;
 using CineControl.Common.Results;
 using CineControl.IdentityService.API.Errors;
+using CineControl.IdentityService.API.Extensions;
 using CineControl.IdentityService.API.Models;
 using CineControl.IdentityService.API.Models.DTOs.Auth;
 using CineControl.IdentityService.API.Service.IService;
@@ -12,14 +14,13 @@ namespace CineControl.IdentityService.API.Service
 {
     public class AccountService(
         UserManager<ApplicationUser> userManager,
-        RoleManager<IdentityRole> roleManager,
-        IJwtTokenGenerator jwtTokenGenerator
+        IJwtTokenGenerator jwtTokenGenerator,
+        ITenantServiceClient tenantServiceClient
         ) : IAccountService
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
-        private readonly RoleManager<IdentityRole> _roleManager = roleManager;
-
         private readonly IJwtTokenGenerator _jwtTokenGenerator = jwtTokenGenerator;
+        private readonly ITenantServiceClient _tenantServiceClient = tenantServiceClient;
 
         public async Task<ResultT<LoginResponse>> LoginAsync(LoginRequest loginRequest)
         {
@@ -46,7 +47,11 @@ namespace CineControl.IdentityService.API.Service
 
         public async Task<Result> RegisterAsync(RegisterRequest registerRequest)
         {
-
+            var tenantIdExist = await _tenantServiceClient.GetTenantByIdAsync(registerRequest.TenantId);
+            if (tenantIdExist is null)
+            {
+                return AuthErrors.UnprocessableEntity();
+            }
             var user = registerRequest.ToApplicationUser();
             var createAsyncResult = await _userManager.CreateAsync(user, registerRequest.Password);
             if (!createAsyncResult.Succeeded)
@@ -55,10 +60,9 @@ namespace CineControl.IdentityService.API.Service
             }
             var claim = new Claim(CustomClaims.Role.ToString(), Roles.User.ToString());
             var addClaimResult = await _userManager.AddClaimAsync(user, claim);
-
             if (!addClaimResult.Succeeded)
             {
-                return AuthErrors.UnprocessableEntity();
+                return addClaimResult.MapToCustomErrors();
             }
             return Result.Success();
         }
