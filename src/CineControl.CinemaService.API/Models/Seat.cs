@@ -3,6 +3,7 @@ namespace CineControl.CinemaService.API.Models
     public class Seat
     {
         public int Id { get; set; }
+        public Guid TenantId { get; set; }
         public int Row { get; set; }
         public int Number { get; set; }
         public SeatType Type { get; set; }

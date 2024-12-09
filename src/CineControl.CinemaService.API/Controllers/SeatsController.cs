@@ -1,14 +1,18 @@
+using System;
 using CineControl.CinemaService.API.Models;
-using CineControl.CinemaService.API.Services;
+using CineControl.CinemaService.API.Service.IService; 
+using CineControl.Common.Enums;
+using CineControl.CinemaService.API.Models.DTOs; 
+using CineControl.Common.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CineControl.CinemaService.API.Controllers
 {
-    [Route("api/v1/theaters/{theaterId}/seats")]
+    [Route("api/v1/theaters/{theaterId:int}/seats")]
     [ApiController]
-    [Authorize]
-    public class SeatsController : ControllerBase
+    //[Authorize(Policy = nameof(CustomPolicies.Operator))]
+    public class SeatsController : BaseController
     {
         private readonly ICinemaService _cinemaService;
 
@@ -19,23 +23,33 @@ namespace CineControl.CinemaService.API.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<Seat>>> GetSeats(int theaterId)
+        public async Task<IActionResult> GetSeats(int theaterId)
         {
-            return Ok(await _cinemaService.GetSeatsByTheaterId(theaterId));
+            var result = await _cinemaService.GetSeatsByTheaterId(theaterId);
+            return result.Match(
+                onSuccess: seats => Ok(seats.Select(s => s.ToResponse())), 
+                onFailure: Problem
+            );
         }
 
         [HttpPost]
-        public async Task<ActionResult<Seat>> AddSeat(int theaterId, Seat seat)
+        public async Task<IActionResult> AddSeat(int theaterId, [FromBody] Seat seat)
         {
-            await _cinemaService.AddSeat(theaterId, seat);
-            return CreatedAtAction(nameof(GetSeats), new { theaterId }, seat);
+            var result = await _cinemaService.AddSeat(theaterId, seat);
+            return result.Match(
+                onSuccess: () => NoContent(),
+                onFailure: Problem
+            );
         }
 
-        [HttpDelete("{seatId}")]
+        [HttpDelete("{seatId:int}")]
         public async Task<IActionResult> RemoveSeat(int theaterId, int seatId)
         {
-            await _cinemaService.RemoveSeat(theaterId, seatId);
-            return NoContent();
+            var result = await _cinemaService.RemoveSeat(theaterId, seatId);
+            return result.Match(
+                onSuccess: () => NoContent(),
+                onFailure: Problem
+            );
         }
     }
 }

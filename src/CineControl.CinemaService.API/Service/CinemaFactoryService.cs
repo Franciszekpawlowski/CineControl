@@ -1,30 +1,31 @@
 using System;
-using System.Collections.Generic;
 using CineControl.CinemaService.API.Models;
-using CineControl.CinemaService.API.Models.Request.Cinemas;
+using CineControl.CinemaService.API.Models.DTOs.Cinemas;
 
-namespace CineControl.CinemaService.API.Services
+namespace CineControl.CinemaService.API.Service
 {
     public static class CinemaFactory
     {
-        public static Cinema CreateCinema(AddCinemaRequest request)
+        public static Cinema CreateCinema(Guid tenantId, AddCinemaRequest request)
         {
             var cinema = new Cinema
             {
-                Name = request.Name ?? "Cinema Complex",
-                Address = request.Address ?? "123 Movie Street",
-                City = request.City ?? "Film City",
-                State = request.State ?? "FS",
-                ZipCode = request.ZipCode ?? "12345",
+                TenantId = tenantId,
+                Name = request.Name,
+                Address = request.Address,
+                City = request.City,
+                State = request.State,
+                ZipCode = request.ZipCode,
             };
 
             foreach (var config in request.TheaterConfigs)
             {
                 var theater = new Theater
                 {
+                    TenantId = tenantId,
                     Name = config.Name ?? "Theater",
                     SeatingCapacity = config.SeatingCapacity,
-                    Seats = GenerateSeats(config.SeatingCapacity, config.SeatsPerRow)
+                    Seats = GenerateSeats(tenantId, config.SeatingCapacity, config.SeatsPerRow)
                 };
 
                 cinema.Theaters.Add(theater);
@@ -33,7 +34,7 @@ namespace CineControl.CinemaService.API.Services
             return cinema;
         }
 
-        private static List<Seat> GenerateSeats(int seatingCapacity, int seatsPerRow)
+        public static List<Seat> GenerateSeats(Guid tenantId, int seatingCapacity, int seatsPerRow)
         {
             var seats = new List<Seat>();
             int rows = (int)Math.Ceiling(seatingCapacity / (double)seatsPerRow);
@@ -43,6 +44,7 @@ namespace CineControl.CinemaService.API.Services
                 {
                     seats.Add(new Seat
                     {
+                        TenantId = tenantId,
                         Row = row,
                         Number = number,
                         Type = SeatType.Standard
