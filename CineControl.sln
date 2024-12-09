@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CineControl.BookingService.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CineControl.WebsiteGateway", "src\CineControl.WebsiteGateway\CineControl.WebsiteGateway.csproj", "{A759108B-A2F4-44CF-A6CB-A0905B9BCAB4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CineControl.Common.Clients.TenantService", "src\Common\CineControl.Common.Clients.TenantService\CineControl.Common.Clients.TenantService.csproj", "{A7CE7006-6A3F-4176-BD0D-56E06E671F42}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{A759108B-A2F4-44CF-A6CB-A0905B9BCAB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A759108B-A2F4-44CF-A6CB-A0905B9BCAB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A759108B-A2F4-44CF-A6CB-A0905B9BCAB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7CE7006-6A3F-4176-BD0D-56E06E671F42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7CE7006-6A3F-4176-BD0D-56E06E671F42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7CE7006-6A3F-4176-BD0D-56E06E671F42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7CE7006-6A3F-4176-BD0D-56E06E671F42}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -82,6 +88,7 @@ Global
 		{2EDB51E6-7409-40EF-901A-41519DACF61E} = {D361E00D-8A30-47EE-A2B4-F4A745C90D5D}
 		{EAAAF6BB-50EB-4BBD-A5C3-B1EFA31B0CE6} = {253C2735-F514-4176-B53B-E2976768196A}
 		{A759108B-A2F4-44CF-A6CB-A0905B9BCAB4} = {253C2735-F514-4176-B53B-E2976768196A}
+		{A7CE7006-6A3F-4176-BD0D-56E06E671F42} = {D361E00D-8A30-47EE-A2B4-F4A745C90D5D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EA997A1A-C23F-46CE-B2A7-3C2CEA3ADB41}
