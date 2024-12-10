@@ -1,4 +1,6 @@
-namespace BookingService.API.Models.Request
+using System.Collections.Generic;
+
+namespace CineControl.BookingService.API.Models.DTOs.Reservations
 {
     public class ReservationRequest
     {

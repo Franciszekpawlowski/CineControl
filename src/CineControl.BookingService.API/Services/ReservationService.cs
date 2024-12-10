@@ -1,8 +1,9 @@
-using BookingService.API.Data;
-using BookingService.API.Models;
-using BookingService.API.Models.Request;
-using BookingService.API.Models.Response;
-using BookingService.API.Models.Results;
+using CineControl.BookingService.API.Data;
+using CineControl.BookingService.API.Models;
+using CineControl.BookingService.API.Models.DTOs.Reservations;
+using CineControl.Common.Results;
+using CineControl.Common.Tenant;
+using CineControl.BookingService.Errors;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -10,20 +11,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BookingService.API.Services
+namespace CineControl.BookingService.API.Services
 {
-    public class ReservationService : IReservationService
+    public class ReservationService : IReservationService 
     {
         private readonly AppDbContext _context;
         private readonly ILogger<ReservationService> _logger;
+        private readonly ITenantProvider _tenantProvider;
 
         public ReservationService(
             AppDbContext context,
-            ILogger<ReservationService> logger)
+            ILogger<ReservationService> logger,
+            ITenantProvider tenantProvider)
         {
             _context = context;
-
             _logger = logger;
+            _tenantProvider = tenantProvider;
         }
 
         public async Task<bool> AreSeatsAvailableAsync(int seanceId, List<int> seatIds)
@@ -37,23 +40,28 @@ namespace BookingService.API.Services
             // Sprawdź, czy żadne z żądanych siedzeń nie są już zarezerwowane
             return !reservedSeats.Any();
         }
-        public async Task<List<int>> GetReservedSeatsAsync(int seanceId)
+
+        public async Task<ResultT<List<int>>> GetReservedSeatsAsync(int seanceId)
         {
-            return await _context.Tickets
+            var seats = await _context.Tickets
                 .Where(t => t.SeanceId == seanceId)
                 .Select(t => t.SeatId)
                 .ToListAsync();
+
+            return seats;
         }
 
-        public async Task<GenericResults<ReservationResponse>> CreateReservationAsync(ReservationRequest request)
+        public async Task<ResultT<ReservationResponse>> CreateReservationAsync(ReservationRequest request)
         {
-            var result = new GenericResults<ReservationResponse>();
+            if (!_tenantProvider.HasTenant)
+            {
+                return BookingErrors.AccessUnauthorized("Brak określonego tenant.");
+            }
 
             using var transaction = await _context.Database.BeginTransactionAsync();
 
             try
             {
-
                 // Sprawdzenie dostępności siedzeń
                 var areAvailable = await AreSeatsAvailableAsync(request.SeanceId, request.SeatIds);
                 if (!areAvailable)
@@ -64,17 +72,18 @@ namespace BookingService.API.Services
                         .ToListAsync();
 
                     var unavailableSeats = request.SeatIds.Intersect(reservedSeats).ToList();
-                    result.AddError($"Siedzenia o ID {string.Join(", ", unavailableSeats)} są już zarezerwowane.");
-                    return result;
+                    return BookingErrors.Conflict($"Siedzenia o ID {string.Join(", ", unavailableSeats)} są już zarezerwowane.");
                 }
 
                 // Utworzenie rezerwacji
                 var reservation = new Reservation
                 {
+                    TenantId = _tenantProvider.TenantId,
                     SeanceId = request.SeanceId,
                     ReservationTime = DateTime.UtcNow,
                     Tickets = request.SeatIds.Select(seatId => new Ticket
                     {
+                        TenantId = _tenantProvider.TenantId,
                         SeanceId = request.SeanceId,
                         SeatId = seatId
                     }).ToList()
@@ -94,8 +103,7 @@ namespace BookingService.API.Services
                     ReservationTime = reservation.ReservationTime
                 };
 
-                result.SetData(response);
-                return result;
+                return response; 
             }
             catch (DbUpdateException dbEx)
             {
@@ -105,23 +113,19 @@ namespace BookingService.API.Services
                 {
                     // Pobierz siedzenia, które spowodowały konflikt
                     var conflictingSeats = request.SeatIds.ToList(); // Można bardziej precyzyjnie pobrać ID
-                    result.AddError($"Siedzenia o ID {string.Join(", ", conflictingSeats)} są już zarezerwowane.");
-                    return result;
+                    return BookingErrors.Conflict($"Siedzenia o ID {string.Join(", ", conflictingSeats)} są już zarezerwowane.");
                 }
 
                 _logger.LogError(dbEx, "Wystąpił błąd podczas tworzenia rezerwacji.");
-                result.AddError("Wystąpił błąd podczas tworzenia rezerwacji.");
-                return result;
+                return BookingErrors.Failure("Wystąpił błąd podczas tworzenia rezerwacji.");
             }
             catch (Exception ex)
             {
                 await transaction.RollbackAsync();
                 _logger.LogError(ex, "Wystąpił błąd podczas tworzenia rezerwacji.");
-                result.AddError("Wystąpił błąd podczas tworzenia rezerwacji.");
-                return result;
+                return BookingErrors.Failure("Wystąpił błąd podczas tworzenia rezerwacji.");
             }
         }
 
     }
-    
 }

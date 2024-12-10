@@ -1,4 +1,7 @@
-namespace BookingService.API.Models.Response
+using System;
+using System.Collections.Generic;
+
+namespace CineControl.BookingService.API.Models.DTOs.Reservations
 {
     public class ReservationResponse
     {

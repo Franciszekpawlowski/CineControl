@@ -1,12 +1,17 @@
-using BookingService.API.Models;
+using CineControl.BookingService.API.Models;
 using Microsoft.EntityFrameworkCore;
+using CineControl.Common.Tenant;
 
-namespace BookingService.API.Data
+namespace CineControl.BookingService.API.Data
 {
     public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        private readonly ITenantProvider _tenantProvider;
+
+        public AppDbContext(DbContextOptions<AppDbContext> options, ITenantProvider tenantProvider)
+            : base(options)
         {
+            _tenantProvider = tenantProvider;
         }
 
         public DbSet<Reservation> Reservations { get; set; }
@@ -24,6 +29,10 @@ namespace BookingService.API.Data
                 .HasIndex(t => new { t.SeanceId, t.SeatId })
                 .IsUnique()
                 .HasDatabaseName("IX_Ticket_SeanceId_SeatId");
+
+            // Konfiguracja multi-tenancy
+            modelBuilder.Entity<Reservation>().HasQueryFilter(r => r.TenantId == _tenantProvider.TenantId);
+            modelBuilder.Entity<Ticket>().HasQueryFilter(t => t.TenantId == _tenantProvider.TenantId);
 
             base.OnModelCreating(modelBuilder);
         }

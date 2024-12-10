@@ -1,11 +1,13 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Builder;
 
-namespace BookingService.API.Data
+namespace CineControl.BookingService.API.Data
 {
     public static class MigrationsExtension
     {
         public static WebApplication ApplyMigrations(this WebApplication app)
-        {
+        { 
             using (var scope = app.Services.CreateScope())
             {
                 var _db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
