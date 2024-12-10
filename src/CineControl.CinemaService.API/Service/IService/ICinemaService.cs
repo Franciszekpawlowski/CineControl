@@ -7,12 +7,12 @@ namespace CineControl.CinemaService.API.Service.IService
 {
     public interface ICinemaService
     {
-        Task<ResultT<IEnumerable<Cinema>>> GetAllCinemas();
-        Task<ResultT<Cinema>> GetCinemaById(int id);
-        Task<ResultT<IEnumerable<string>>> GetAllCities();
-        Task<ResultT<IEnumerable<Cinema>>> GetCinemasByCity(string city);
+        Task<ResultT<IEnumerable<CinemaResponse>>> GetAllCinemas();
+        Task<ResultT<CinemaResponse>> GetCinemaById(int id);
+        Task<ResultT<CitiesResponse>> GetAllCities();
+        Task<ResultT<IEnumerable<CinemaResponse>>> GetCinemasByCity(string city);
 
-        Task<ResultT<Cinema>> AddCinema(AddCinemaRequest request);
+        Task<ResultT<CinemaResponse>> AddCinema(AddCinemaRequest request);
         Task<Result> UpdateCinema(Cinema cinema);
         Task<Result> DeleteCinema(int id);
 

@@ -1,4 +1,3 @@
-using CineControl.CinemaService.API.Models;
 using CineControl.CinemaService.API.Models.DTOs.Cinemas;
 using CineControl.CinemaService.API.Models.DTOs.Theaters;
 using CineControl.CinemaService.API.Models.DTOs.Seats;
@@ -40,6 +39,21 @@ public static class CinemaMappingExtensions
             Row = seat.Row,
             Number = seat.Number,
             Type = seat.Type.ToString()
+        };
+    }
+
+    public static List<CinemaResponse> ToResponse(this List<Cinema> cinemas)
+    {
+        return cinemas.Select(ToResponse).ToList();
+    }
+
+    public static CitiesResponse ToResponse(
+        this List<string> cities
+    )
+    {
+        return new CitiesResponse
+        {
+            Cities = cities
         };
     }
 }

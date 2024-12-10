@@ -7,10 +7,7 @@ using CineControl.CinemaService.API.Service.IService;
 using CineControl.Common.Results;
 using CineControl.Common.Tenant;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Collections.Generic;
+using CineControl.CinemaService.API.Models.DTOs;
 
 namespace CineControl.CinemaService.API.Service
 {
@@ -25,7 +22,7 @@ namespace CineControl.CinemaService.API.Service
             _tenantProvider = tenantProvider;
         }
 
-        public async Task<ResultT<IEnumerable<Cinema>>> GetAllCinemas()
+        public async Task<ResultT<IEnumerable<CinemaResponse>>> GetAllCinemas()
         {
             if (!_tenantProvider.HasTenant)
             {
@@ -37,10 +34,10 @@ namespace CineControl.CinemaService.API.Service
                 .ThenInclude(t => t.Seats)
                 .ToListAsync();
 
-            return cinemas;
+            return cinemas.ToResponse();
         }
 
-        public async Task<ResultT<Cinema>> GetCinemaById(int id)
+        public async Task<ResultT<CinemaResponse>> GetCinemaById(int id)
         {
             if (!_tenantProvider.HasTenant)
             {
@@ -53,21 +50,21 @@ namespace CineControl.CinemaService.API.Service
                 .FirstOrDefaultAsync(c => c.Id == id);
 
             return cinema is not null
-                ? cinema
+                ? cinema.ToResponse()
                 : CinemaErrors.NotFound($"Cinema with id {id} not found");
         }
 
-        public async Task<ResultT<IEnumerable<string>>> GetAllCities()
+        public async Task<ResultT<CitiesResponse>> GetAllCities()
         {
             var cities = await _context.Cinemas
                 .Select(c => c.City)
                 .Distinct()
                 .ToListAsync();
 
-            return cities;
+            return cities.ToResponse();
         }
 
-        public async Task<ResultT<IEnumerable<Cinema>>> GetCinemasByCity(string city)
+        public async Task<ResultT<IEnumerable<CinemaResponse>>> GetCinemasByCity(string city)
         {
             if (!_tenantProvider.HasTenant)
             {
@@ -78,10 +75,10 @@ namespace CineControl.CinemaService.API.Service
                 .Where(c => c.City.ToLower() == city.ToLower())
                 .ToListAsync();
 
-            return cinemas;
+            return cinemas.ToResponse();
         }
 
-        public async Task<ResultT<Cinema>> AddCinema(AddCinemaRequest request)
+        public async Task<ResultT<CinemaResponse>> AddCinema(AddCinemaRequest request)
         {
             if (!_tenantProvider.HasTenant)
             {
@@ -91,7 +88,7 @@ namespace CineControl.CinemaService.API.Service
             var cinema = CinemaFactory.CreateCinema(_tenantProvider.TenantId, request);
             await _context.Cinemas.AddAsync(cinema);
             await _context.SaveChangesAsync();
-            return cinema;
+            return cinema.ToResponse();
         }
 
         public async Task<Result> UpdateCinema(Cinema cinema)

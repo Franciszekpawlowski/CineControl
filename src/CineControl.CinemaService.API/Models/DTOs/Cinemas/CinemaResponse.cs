@@ -1,4 +1,3 @@
-using CineControl.CinemaService.API.Models.DTOs.Theaters;
 namespace CineControl.CinemaService.API.Models.DTOs.Cinemas;
 
 public class CinemaResponse

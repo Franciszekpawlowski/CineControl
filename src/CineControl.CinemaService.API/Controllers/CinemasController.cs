@@ -1,11 +1,8 @@
 using CineControl.CinemaService.API.Models.DTOs.Cinemas;
-using CineControl.CinemaService.API.Models.DTOs;
 using CineControl.CinemaService.API.Service.IService;
-using CineControl.Common.Enums;
 using CineControl.Common.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 
 namespace CineControl.CinemaService.API.Controllers
 {
@@ -27,7 +24,7 @@ namespace CineControl.CinemaService.API.Controllers
         {
             var result = await _cinemaService.GetAllCinemas();
             return result.Match(
-                onSuccess: cinemas => Ok(cinemas.Select(c => c.ToResponse())),
+                onSuccess: Ok,
                 onFailure: Problem
             );
         }
@@ -38,7 +35,7 @@ namespace CineControl.CinemaService.API.Controllers
         {
             var result = await _cinemaService.GetCinemaById(id);
             return result.Match(
-                onSuccess: cinema => Ok(cinema.ToResponse()),
+                onSuccess: Ok,
                 onFailure: Problem
             );
         }
@@ -49,7 +46,7 @@ namespace CineControl.CinemaService.API.Controllers
         {
             var result = await _cinemaService.GetAllCities();
             return result.Match(
-                onSuccess: cities => Ok(new CitiesResponse { Cities = cities }),
+                onSuccess: Ok,
                 onFailure: Problem
             );
         }
@@ -60,7 +57,7 @@ namespace CineControl.CinemaService.API.Controllers
         {
             var result = await _cinemaService.GetCinemasByCity(city);
             return result.Match(
-                onSuccess: cinemas => Ok(new CityCinemasResponse { City = city, Cinemas = cinemas.Select(c => c.ToResponse()) }),
+                onSuccess: Ok,
                 onFailure: Problem
             );
         }
@@ -70,7 +67,7 @@ namespace CineControl.CinemaService.API.Controllers
         {
             var result = await _cinemaService.AddCinema(request);
             return result.Match(
-                onSuccess: cinema => CreatedAtAction(nameof(GetCinema), new { id = cinema.Id }, cinema.ToResponse()),
+                onSuccess: Created,
                 onFailure: Problem
             );
         }
@@ -90,7 +87,7 @@ namespace CineControl.CinemaService.API.Controllers
 
             var result = await _cinemaService.UpdateCinema(cinema);
             return result.Match(
-                onSuccess: () => NoContent(),
+                onSuccess: Ok,
                 onFailure: Problem
             );
         }
@@ -100,7 +97,7 @@ namespace CineControl.CinemaService.API.Controllers
         {
             var result = await _cinemaService.DeleteCinema(id);
             return result.Match(
-                onSuccess: () => NoContent(),
+                onSuccess: Ok,
                 onFailure: Problem
             );
         }

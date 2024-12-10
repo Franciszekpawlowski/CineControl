@@ -1,4 +1,3 @@
-using System;
 using CineControl.CinemaService.API.Models;
 using CineControl.CinemaService.API.Models.DTOs.Cinemas;
 

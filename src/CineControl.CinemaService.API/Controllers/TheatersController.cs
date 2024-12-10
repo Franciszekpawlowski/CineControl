@@ -1,13 +1,9 @@
-using CineControl.CinemaService.API.Models;
 using CineControl.CinemaService.API.Models.DTOs;
 using CineControl.CinemaService.API.Models.DTOs.Theaters;
-using CineControl.CinemaService.API.Service.IService; 
-using CineControl.CinemaService.API.Service;
-using CineControl.Common.Enums;
+using CineControl.CinemaService.API.Service.IService;
 using CineControl.Common.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 
 namespace CineControl.CinemaService.API.Controllers
 {
