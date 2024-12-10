@@ -7,8 +7,9 @@ namespace CineControl.Common.Tenant
     {
         public static IServiceCollection AddTenantProvider(this IServiceCollection services)
         {
-            services.AddScoped<TenantProvider>();
-            services.AddScoped<ITenantProvider>(sp => sp.GetRequiredService<TenantProvider>());
+            // services.AddScoped<TenantProvider>();
+            // services.AddScoped<ITenantProvider>(sp => sp.GetRequiredService<TenantProvider>());
+            services.AddScoped<ITenantProvider,TenantProvider>();
             return services;
         }
 
