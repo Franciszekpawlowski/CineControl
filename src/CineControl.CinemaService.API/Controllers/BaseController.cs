@@ -14,6 +14,7 @@ namespace CineControl.CinemaService.API.Controllers
                 ErrorType.AccessUnauthorized => StatusCodes.Status403Forbidden,
                 ErrorType.Conflict => StatusCodes.Status409Conflict,
                 ErrorType.UnprocessableEntity => StatusCodes.Status422UnprocessableEntity,
+                ErrorType.BadRequest => StatusCodes.Status400BadRequest,
                 _ => StatusCodes.Status500InternalServerError
             };
 

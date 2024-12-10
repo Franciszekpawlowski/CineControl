@@ -26,7 +26,7 @@ namespace CineControl.CinemaService.API.Service
         {
             if (!_tenantProvider.HasTenant)
             {
-                return CinemaErrors.AccessUnauthorized("No tenant specified");
+                return CinemaErrors.MissingTenantHeader();
             }
 
             var cinemas = await _context.Cinemas
@@ -41,7 +41,7 @@ namespace CineControl.CinemaService.API.Service
         {
             if (!_tenantProvider.HasTenant)
             {
-                return CinemaErrors.AccessUnauthorized("No tenant specified");
+                return CinemaErrors.MissingTenantHeader();
             }
 
             var cinema = await _context.Cinemas
@@ -51,7 +51,7 @@ namespace CineControl.CinemaService.API.Service
 
             return cinema is not null
                 ? cinema.ToResponse()
-                : CinemaErrors.NotFound($"Cinema with id {id} not found");
+                : CinemaErrors.CinemaNotFound(cinema.Id);
         }
 
         public async Task<ResultT<CitiesResponse>> GetAllCities()
@@ -68,7 +68,7 @@ namespace CineControl.CinemaService.API.Service
         {
             if (!_tenantProvider.HasTenant)
             {
-                return CinemaErrors.AccessUnauthorized("No tenant specified");
+                return CinemaErrors.MissingTenantHeader();
             }
 
             var cinemas = await _context.Cinemas
@@ -82,7 +82,7 @@ namespace CineControl.CinemaService.API.Service
         {
             if (!_tenantProvider.HasTenant)
             {
-                return CinemaErrors.AccessUnauthorized("No tenant specified");
+                return CinemaErrors.MissingTenantHeader();
             }
 
             var cinema = CinemaFactory.CreateCinema(_tenantProvider.TenantId, request);
@@ -95,7 +95,7 @@ namespace CineControl.CinemaService.API.Service
         {
             if (!_tenantProvider.HasTenant)
             {
-                return CinemaErrors.AccessUnauthorized("No tenant specified");
+                return CinemaErrors.MissingTenantHeader();
             }
 
             var existing = await _context.Cinemas
@@ -103,7 +103,7 @@ namespace CineControl.CinemaService.API.Service
 
             if (existing is null)
             {
-                return CinemaErrors.NotFound($"Cinema with id {cinema.Id} not found");
+                return CinemaErrors.CinemaNotFound(cinema.Id);
             }
 
             existing.Name = cinema.Name;
@@ -121,14 +121,14 @@ namespace CineControl.CinemaService.API.Service
         {
             if (!_tenantProvider.HasTenant)
             {
-                return CinemaErrors.AccessUnauthorized("No tenant specified");
+                return CinemaErrors.MissingTenantHeader();
             }
 
             var cinema = await _context.Cinemas
                 .FirstOrDefaultAsync(c => c.Id == id);
             if (cinema is null)
             {
-                return CinemaErrors.NotFound($"Cinema with id {id} not found");
+                return CinemaErrors.CinemaNotFound(id);
             }
 
             _context.Cinemas.Remove(cinema);
@@ -140,7 +140,7 @@ namespace CineControl.CinemaService.API.Service
         {
             if (!_tenantProvider.HasTenant)
             {
-                return CinemaErrors.AccessUnauthorized("No tenant specified");
+                return CinemaErrors.MissingTenantHeader();
             }
 
             var theater = await _context.Theaters
@@ -149,14 +149,14 @@ namespace CineControl.CinemaService.API.Service
 
             return theater is not null
                 ? theater
-                : CinemaErrors.NotFound($"Theater with id {theaterId} not found");
+                : CinemaErrors.TheaterNotFound(theaterId);
         }
 
         public async Task<ResultT<IEnumerable<Theater>>> GetTheatersByCinemaId(int cinemaId)
         {
             if (!_tenantProvider.HasTenant)
             {
-                return CinemaErrors.AccessUnauthorized("No tenant specified");
+                return CinemaErrors.MissingTenantHeader();
             }
 
             var cinema = await _context.Cinemas
@@ -166,14 +166,14 @@ namespace CineControl.CinemaService.API.Service
 
             return cinema is not null
                 ? cinema.Theaters
-                : CinemaErrors.NotFound($"Cinema with id {cinemaId} not found");
+                : CinemaErrors.CinemaNotFound(cinemaId);
         }
 
         public async Task<Result> AddTheater(int cinemaId, AddTheaterRequest request)
         {
             if (!_tenantProvider.HasTenant)
             {
-                return CinemaErrors.AccessUnauthorized("No tenant specified");
+                return CinemaErrors.MissingTenantHeader();
             }
 
             var cinema = await _context.Cinemas
@@ -182,7 +182,7 @@ namespace CineControl.CinemaService.API.Service
 
             if (cinema is null)
             {
-                return CinemaErrors.NotFound($"Cinema with id {cinemaId} not found");
+                return CinemaErrors.CinemaNotFound(cinemaId);
             }
 
             var theater = new Theater
@@ -202,7 +202,7 @@ namespace CineControl.CinemaService.API.Service
         {
             if (!_tenantProvider.HasTenant)
             {
-                return CinemaErrors.AccessUnauthorized("No tenant specified");
+                return CinemaErrors.MissingTenantHeader();
             }
 
             var cinema = await _context.Cinemas
@@ -211,13 +211,13 @@ namespace CineControl.CinemaService.API.Service
 
             if (cinema is null)
             {
-                return CinemaErrors.NotFound($"Cinema with id {cinemaId} not found");
+                return CinemaErrors.CinemaNotFound(cinemaId);
             }
 
             var theater = cinema.Theaters.FirstOrDefault(t => t.Id == theaterId);
             if (theater == null)
             {
-                return CinemaErrors.NotFound($"Theater with id {theaterId} not found");
+                return CinemaErrors.TheaterNotFound(theaterId);
             }
 
             cinema.Theaters.Remove(theater);
@@ -229,7 +229,7 @@ namespace CineControl.CinemaService.API.Service
         {
             if (!_tenantProvider.HasTenant)
             {
-                return CinemaErrors.AccessUnauthorized("No tenant specified");
+                return CinemaErrors.MissingTenantHeader();
             }
 
             var theater = await _context.Theaters
@@ -238,14 +238,14 @@ namespace CineControl.CinemaService.API.Service
 
             return theater is not null
                 ? theater.Seats
-                : CinemaErrors.NotFound($"Seat with id {theaterId} not found");
+                : CinemaErrors.TheaterNotFound(theaterId);
         }
 
         public async Task<Result> AddSeat(int theaterId, Seat seat)
         {
             if (!_tenantProvider.HasTenant)
             {
-                return CinemaErrors.AccessUnauthorized("No tenant specified");
+                return CinemaErrors.MissingTenantHeader();
             }
 
             var theater = await _context.Theaters
@@ -254,7 +254,7 @@ namespace CineControl.CinemaService.API.Service
 
             if (theater is null)
             {
-                return CinemaErrors.NotFound($"Theater with id {theaterId} not found");
+                return CinemaErrors.TheaterNotFound(theaterId);
             }
 
             seat.TenantId = _tenantProvider.TenantId;
@@ -268,7 +268,7 @@ namespace CineControl.CinemaService.API.Service
         {
             if (!_tenantProvider.HasTenant)
             {
-                return CinemaErrors.AccessUnauthorized("No tenant specified");
+                return CinemaErrors.MissingTenantHeader();
             }
 
             var theater = await _context.Theaters
@@ -277,13 +277,13 @@ namespace CineControl.CinemaService.API.Service
 
             if (theater is null)
             {
-                return CinemaErrors.NotFound($"Seat with id {seatId} not found");
+                return CinemaErrors.TheaterNotFound(theaterId);
             }
 
             var seat = theater.Seats.FirstOrDefault(s => s.Id == seatId);
             if (seat == null)
             {
-                return CinemaErrors.NotFound($"Seat with id {seatId} not found");
+                return CinemaErrors.SeatNotFound(seatId);
             }
 
             theater.Seats.Remove(seat);
