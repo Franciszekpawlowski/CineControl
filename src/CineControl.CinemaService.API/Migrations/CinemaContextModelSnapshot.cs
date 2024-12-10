@@ -17,7 +17,7 @@ namespace CineControl.CinemaService.API.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.6")
+                .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -46,6 +46,9 @@ namespace CineControl.CinemaService.API.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("ZipCode")
                         .IsRequired()
                         .HasColumnType("text");
@@ -68,6 +71,9 @@ namespace CineControl.CinemaService.API.Migrations
 
                     b.Property<int>("Row")
                         .HasColumnType("integer");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uuid");
 
                     b.Property<int?>("TheaterId")
                         .HasColumnType("integer");
@@ -99,6 +105,9 @@ namespace CineControl.CinemaService.API.Migrations
 
                     b.Property<int>("SeatingCapacity")
                         .HasColumnType("integer");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 

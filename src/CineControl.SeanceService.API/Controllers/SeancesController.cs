@@ -1,215 +1,86 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using CineControl.SeanceService.API.Data;
+using CineControl.Common.Results;
 using CineControl.SeanceService.API.Models;
+using CineControl.SeanceService.API.Models.DTOs;
+using CineControl.SeanceService.API.Models.DTOs.Seances;
+using CineControl.SeanceService.API.Service.IService;
 using Microsoft.AspNetCore.Authorization;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CineControl.SeanceService.API.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    [Authorize]
-    public class SeancesController : ControllerBase
+    //[Authorize(Policy = nameof(CustomPolicies.Operator))]
+    public class SeancesController : BaseController
     {
-        private readonly AppDbContext _context;
+        private readonly ISeanceService _seanceService;
 
-        public SeancesController(AppDbContext context)
+        public SeancesController(ISeanceService seanceService)
         {
-            _context = context;
+            _seanceService = seanceService;
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<SeanceDto>>> GetSeances()
+        public async Task<IActionResult> GetSeances()
         {
-            var seances = await _context.Seances
-                .Include(s => s.Movie)
-                .ToListAsync();
-
-            var seanceDtos = seances.Select(seance => new SeanceDto
-            {
-                Id = seance.Id,
-                MovieId = seance.MovieId,
-                MovieTitle = seance.Movie.Title,
-                TheaterId = seance.TheaterId,
-                CinemaId = seance.CinemaId,
-                PosterUrl = seance.Movie.PosterUrl,
-                StartTime = seance.StartTime,
-                EndTime = seance.EndTime
-            }).ToList();
-
-            return seanceDtos;
+            var result = await _seanceService.GetAllSeances();
+            return result.Match(
+                onSuccess: seances => Ok(seances.Select(s => s.ToDto())),
+                onFailure: Problem
+            );
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         [AllowAnonymous]
-        public async Task<ActionResult<SeanceDto>> GetSeance(int id)
+        public async Task<IActionResult> GetSeance(int id)
         {
-            var seance = await _context.Seances
-                .Include(s => s.Movie)
-                .FirstOrDefaultAsync(s => s.Id == id);
-
-            if (seance == null)
-            {
-                return NotFound();
-            }
-
-            var seanceDto = new SeanceDto
-            {
-                Id = seance.Id,
-                MovieId = seance.MovieId,
-                MovieTitle = seance.Movie.Title,
-                TheaterId = seance.TheaterId,
-                CinemaId = seance.CinemaId,
-                PosterUrl = seance.Movie.PosterUrl,
-                StartTime = seance.StartTime,
-                EndTime = seance.EndTime
-            };
-
-            return seanceDto;
+            var result = await _seanceService.GetSeanceById(id);
+            return result.Match(
+                onSuccess: seance => Ok(seance.ToDto()),
+                onFailure: Problem
+            );
         }
 
-        [HttpGet("bycinema/{cinemaId}/date/{date}")]
+        [HttpGet("bycinema/{cinemaId:int}/date/{date:datetime}")]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<SeanceDto>>> GetSeancesByCinemaAndDate(int cinemaId, DateTime date)
+        public async Task<IActionResult> GetSeancesByCinemaAndDate(int cinemaId, DateTime date)
         {
-            var utcDate = DateTime.SpecifyKind(date, DateTimeKind.Utc);
-
-            var seances = await _context.Seances
-                .Include(s => s.Movie)
-                .Where(s => s.CinemaId == cinemaId && s.StartTime.Date == utcDate.Date)
-                .ToListAsync();
-
-            var seanceDtos = seances.Select(seance => new SeanceDto
-            {
-                Id = seance.Id,
-                MovieId = seance.MovieId,
-                MovieTitle = seance.Movie.Title,
-                TheaterId = seance.TheaterId,
-                CinemaId = seance.CinemaId,
-                PosterUrl = seance.Movie.PosterUrl,
-                StartTime = seance.StartTime,
-                EndTime = seance.EndTime
-            }).ToList();
-
-            return Ok(seanceDtos);
+            var result = await _seanceService.GetSeancesByCinemaAndDate(cinemaId, date);
+            return result.Match(
+                onSuccess: seances => Ok(seances.Select(s => s.ToDto())),
+                onFailure: Problem
+            );
         }
 
         [HttpPost]
-        public async Task<ActionResult<SeanceDto>> PostSeance(SeanceCreateDto seanceDto)
+        public async Task<IActionResult> AddSeance([FromBody] SeanceCreateDto seanceCreateDto)
         {
-            var movie = await _context.Movies.FindAsync(seanceDto.MovieId);
-            if (movie == null)
-            {
-                return BadRequest("Movie not found.");
-            }
-
-            var seance = new Seance
-            {
-                MovieId = seanceDto.MovieId,
-                TheaterId = seanceDto.TheaterId,
-                CinemaId = seanceDto.CinemaId, // Ustawiamy CinemaId
-                StartTime = seanceDto.StartTime,
-                EndTime = seanceDto.StartTime.AddMinutes(movie.Duration)
-            };
-
-            var overlappingSeance = await _context.Seances
-                .Where(s => s.TheaterId == seance.TheaterId)
-                .Where(s => s.StartTime < seance.EndTime && s.EndTime > seance.StartTime)
-                .FirstOrDefaultAsync();
-
-            if (overlappingSeance != null)
-            {
-                return BadRequest("The seance overlaps with an existing seance.");
-            }
-
-            _context.Seances.Add(seance);
-            await _context.SaveChangesAsync();
-
-            var resultDto = new SeanceDto
-            {
-                Id = seance.Id,
-                MovieId = seance.MovieId,
-                MovieTitle = movie.Title,
-                TheaterId = seance.TheaterId,
-                CinemaId = seance.CinemaId,
-                PosterUrl = movie.PosterUrl,
-                StartTime = seance.StartTime,
-                EndTime = seance.EndTime
-            };
-
-            return CreatedAtAction(nameof(GetSeance), new { id = seance.Id }, resultDto);
+            var result = await _seanceService.AddSeance(seanceCreateDto);
+            return result.Match(
+                onSuccess: seance => CreatedAtAction(nameof(GetSeance), new { id = seance.Id }, seance.ToDto()),
+                onFailure: Problem
+            );
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutSeance(int id, Seance seance)
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> UpdateSeance(int id, [FromBody] SeanceDto seanceDto)
         {
-            if (id != seance.Id)
-            {
-                return BadRequest();
-            }
-
-            var movie = await _context.Movies.FindAsync(seance.MovieId);
-            if (movie == null)
-            {
-                return BadRequest("Movie not found.");
-            }
-
-            seance.EndTime = seance.StartTime.AddMinutes(movie.Duration);
-
-            var overlappingSeance = await _context.Seances
-                .Where(s => s.TheaterId == seance.TheaterId && s.Id != seance.Id)
-                .Where(s => s.StartTime < seance.EndTime && s.EndTime > seance.StartTime)
-                .FirstOrDefaultAsync();
-
-            if (overlappingSeance != null)
-            {
-                return BadRequest("The seance overlaps with an existing seance.");
-            }
-
-            _context.Entry(seance).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!SeanceExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            var result = await _seanceService.UpdateSeance(id, seanceDto);
+            return result.Match(
+                onSuccess: () => NoContent(),
+                onFailure: Problem
+            );
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteSeance(int id)
         {
-            var seance = await _context.Seances.FindAsync(id);
-            if (seance == null)
-            {
-                return NotFound();
-            }
-
-            _context.Seances.Remove(seance);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool SeanceExists(int id)
-        {
-            return _context.Seances.Any(e => e.Id == id);
+            var result = await _seanceService.DeleteSeance(id);
+            return result.Match(
+                onSuccess: () => NoContent(),
+                onFailure: Problem
+            );
         }
     }
 }

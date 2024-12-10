@@ -1,37 +1,32 @@
-using BookingService.API.Models.Request;
-using BookingService.API.Models.Response;
-using BookingService.API.Models.Results;
-using BookingService.API.Services;
+using CineControl.BookingService.API.Models.DTOs.Reservations;
+using CineControl.BookingService.API.Services;
+using CineControl.Common.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-namespace BookingService.API.Controllers
+namespace CineControl.BookingService.API.Controllers
 {
+    [Route("api/v1/[controller]")]
     [ApiController]
-    [Route("api/[controller]")]
-    public class ReservationsController : ControllerBase
+    //[Authorize(Policy = nameof(CustomPolicies.Operator))]
+    public class ReservationsController : BaseController
     {
         private readonly IReservationService _reservationService;
-        private readonly ILogger<ReservationsController> _logger;
 
-        public ReservationsController(IReservationService reservationService, ILogger<ReservationsController> logger)
+        public ReservationsController(IReservationService reservationService)
         {
             _reservationService = reservationService;
-            _logger = logger;
         }
 
         [HttpPost]
-        public async Task<ActionResult<GenericResults<ReservationResponse>>> CreateReservation([FromBody] ReservationRequest request)
+        public async Task<IActionResult> CreateReservation([FromBody] ReservationRequest request)
         {
             var result = await _reservationService.CreateReservationAsync(request);
-            if (result.IsSuccess)
-            {
-                return Ok(result);
-            }
-            else
-            {
-                return BadRequest(result);
-            }
+            return result.Match(
+                onSuccess: reservation => Ok(reservation),
+                onFailure: Problem
+            );
         }
     }
 }
