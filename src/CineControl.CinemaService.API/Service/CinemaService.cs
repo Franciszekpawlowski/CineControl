@@ -27,21 +27,30 @@ namespace CineControl.CinemaService.API.Service
 
         public async Task<ResultT<IEnumerable<Cinema>>> GetAllCinemas()
         {
+            if (!_tenantProvider.HasTenant)
+            {
+                return CinemaErrors.AccessUnauthorized("No tenant specified");
+            }
+
             var cinemas = await _context.Cinemas
-                .Where(c => c.TenantId == _tenantProvider.TenantId)
                 .Include(c => c.Theaters)
                 .ThenInclude(t => t.Seats)
                 .ToListAsync();
+
             return cinemas;
         }
 
         public async Task<ResultT<Cinema>> GetCinemaById(int id)
         {
+            if (!_tenantProvider.HasTenant)
+            {
+                return CinemaErrors.AccessUnauthorized("No tenant specified");
+            }
+
             var cinema = await _context.Cinemas
-                .Where(c => c.TenantId == _tenantProvider.TenantId && c.Id == id)
                 .Include(c => c.Theaters)
                 .ThenInclude(t => t.Seats)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(c => c.Id == id);
 
             return cinema is not null
                 ? cinema
@@ -51,7 +60,6 @@ namespace CineControl.CinemaService.API.Service
         public async Task<ResultT<IEnumerable<string>>> GetAllCities()
         {
             var cities = await _context.Cinemas
-                .Where(c => c.TenantId == _tenantProvider.TenantId)
                 .Select(c => c.City)
                 .Distinct()
                 .ToListAsync();
@@ -61,8 +69,13 @@ namespace CineControl.CinemaService.API.Service
 
         public async Task<ResultT<IEnumerable<Cinema>>> GetCinemasByCity(string city)
         {
+            if (!_tenantProvider.HasTenant)
+            {
+                return CinemaErrors.AccessUnauthorized("No tenant specified");
+            }
+
             var cinemas = await _context.Cinemas
-                .Where(c => c.TenantId == _tenantProvider.TenantId && c.City.ToLower() == city.ToLower())
+                .Where(c => c.City.ToLower() == city.ToLower())
                 .ToListAsync();
 
             return cinemas;
@@ -83,9 +96,13 @@ namespace CineControl.CinemaService.API.Service
 
         public async Task<Result> UpdateCinema(Cinema cinema)
         {
+            if (!_tenantProvider.HasTenant)
+            {
+                return CinemaErrors.AccessUnauthorized("No tenant specified");
+            }
+
             var existing = await _context.Cinemas
-                .Where(c => c.TenantId == _tenantProvider.TenantId && c.Id == cinema.Id)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(c => c.Id == cinema.Id);
 
             if (existing is null)
             {
@@ -105,9 +122,13 @@ namespace CineControl.CinemaService.API.Service
 
         public async Task<Result> DeleteCinema(int id)
         {
+            if (!_tenantProvider.HasTenant)
+            {
+                return CinemaErrors.AccessUnauthorized("No tenant specified");
+            }
+
             var cinema = await _context.Cinemas
-                .Where(c => c.TenantId == _tenantProvider.TenantId && c.Id == id)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(c => c.Id == id);
             if (cinema is null)
             {
                 return CinemaErrors.NotFound($"Cinema with id {id} not found");
@@ -120,10 +141,14 @@ namespace CineControl.CinemaService.API.Service
 
         public async Task<ResultT<Theater>> GetTheaterById(int theaterId)
         {
+            if (!_tenantProvider.HasTenant)
+            {
+                return CinemaErrors.AccessUnauthorized("No tenant specified");
+            }
+
             var theater = await _context.Theaters
-                .Where(t => t.TenantId == _tenantProvider.TenantId && t.Id == theaterId)
                 .Include(t => t.Seats)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(t => t.Id == theaterId);
 
             return theater is not null
                 ? theater
@@ -132,11 +157,15 @@ namespace CineControl.CinemaService.API.Service
 
         public async Task<ResultT<IEnumerable<Theater>>> GetTheatersByCinemaId(int cinemaId)
         {
+            if (!_tenantProvider.HasTenant)
+            {
+                return CinemaErrors.AccessUnauthorized("No tenant specified");
+            }
+
             var cinema = await _context.Cinemas
-                .Where(c => c.TenantId == _tenantProvider.TenantId && c.Id == cinemaId)
                 .Include(c => c.Theaters)
                 .ThenInclude(t => t.Seats)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(c => c.Id == cinemaId);
 
             return cinema is not null
                 ? cinema.Theaters
@@ -145,9 +174,14 @@ namespace CineControl.CinemaService.API.Service
 
         public async Task<Result> AddTheater(int cinemaId, AddTheaterRequest request)
         {
+            if (!_tenantProvider.HasTenant)
+            {
+                return CinemaErrors.AccessUnauthorized("No tenant specified");
+            }
+
             var cinema = await _context.Cinemas
-                .Where(c => c.TenantId == _tenantProvider.TenantId && c.Id == cinemaId)
-                .FirstOrDefaultAsync();
+                .Include(c => c.Theaters)
+                .FirstOrDefaultAsync(c => c.Id == cinemaId);
 
             if (cinema is null)
             {
@@ -167,13 +201,16 @@ namespace CineControl.CinemaService.API.Service
             return Result.Success();
         }
 
-
         public async Task<Result> RemoveTheater(int cinemaId, int theaterId)
         {
+            if (!_tenantProvider.HasTenant)
+            {
+                return CinemaErrors.AccessUnauthorized("No tenant specified");
+            }
+
             var cinema = await _context.Cinemas
-                .Where(c => c.TenantId == _tenantProvider.TenantId && c.Id == cinemaId)
                 .Include(c => c.Theaters)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(c => c.Id == cinemaId);
 
             if (cinema is null)
             {
@@ -193,22 +230,30 @@ namespace CineControl.CinemaService.API.Service
 
         public async Task<ResultT<IEnumerable<Seat>>> GetSeatsByTheaterId(int theaterId)
         {
+            if (!_tenantProvider.HasTenant)
+            {
+                return CinemaErrors.AccessUnauthorized("No tenant specified");
+            }
+
             var theater = await _context.Theaters
-                .Where(t => t.TenantId == _tenantProvider.TenantId && t.Id == theaterId)
                 .Include(t => t.Seats)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(t => t.Id == theaterId);
 
             return theater is not null
                 ? theater.Seats
-                : CinemaErrors.NotFound($"Theater with id {theaterId} not found");
+                : CinemaErrors.NotFound($"Seat with id {theaterId} not found");
         }
 
         public async Task<Result> AddSeat(int theaterId, Seat seat)
         {
+            if (!_tenantProvider.HasTenant)
+            {
+                return CinemaErrors.AccessUnauthorized("No tenant specified");
+            }
+
             var theater = await _context.Theaters
-                .Where(t => t.TenantId == _tenantProvider.TenantId && t.Id == theaterId)
                 .Include(t => t.Seats)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(t => t.Id == theaterId);
 
             if (theater is null)
             {
@@ -216,7 +261,7 @@ namespace CineControl.CinemaService.API.Service
             }
 
             seat.TenantId = _tenantProvider.TenantId;
-            seat.Id = theater.Seats.Count > 0 ? theater.Seats.Max(s => s.Id) + 1 : 1;
+            seat.Id = theater.Seats.Any() ? theater.Seats.Max(s => s.Id) + 1 : 1;
             theater.Seats.Add(seat);
             await _context.SaveChangesAsync();
             return Result.Success();
@@ -224,14 +269,18 @@ namespace CineControl.CinemaService.API.Service
 
         public async Task<Result> RemoveSeat(int theaterId, int seatId)
         {
+            if (!_tenantProvider.HasTenant)
+            {
+                return CinemaErrors.AccessUnauthorized("No tenant specified");
+            }
+
             var theater = await _context.Theaters
-                .Where(t => t.TenantId == _tenantProvider.TenantId && t.Id == theaterId)
                 .Include(t => t.Seats)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(t => t.Id == theaterId);
 
             if (theater is null)
             {
-                return CinemaErrors.NotFound($"Theater with id {theaterId} not found");
+                return CinemaErrors.NotFound($"Seat with id {seatId} not found");
             }
 
             var seat = theater.Seats.FirstOrDefault(s => s.Id == seatId);

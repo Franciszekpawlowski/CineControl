@@ -11,7 +11,6 @@ namespace CineControl.CinemaService.API.Data
         public DbSet<Theater> Theaters { get; set; }
         public DbSet<Seat> Seats { get; set; }
 
-        // Deklarujemy metodę partial bez implementacji (zostanie zdefiniowana w drugim pliku)
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -30,8 +29,14 @@ namespace CineControl.CinemaService.API.Data
             modelBuilder.Entity<Theater>().Property(t => t.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Seat>().Property(s => s.Id).ValueGeneratedOnAdd();
 
-            // Wywołaj metodę partial, w której dodajemy filtry
-            OnModelCreatingPartial(modelBuilder);
+            modelBuilder.Entity<Cinema>()
+                    .HasQueryFilter(c => c.TenantId == _tenantProvider.TenantId);
+
+                modelBuilder.Entity<Theater>()
+                    .HasQueryFilter(t => t.TenantId == _tenantProvider.TenantId);
+
+                modelBuilder.Entity<Seat>()
+                    .HasQueryFilter(s => s.TenantId == _tenantProvider.TenantId);
         }
     }
 }

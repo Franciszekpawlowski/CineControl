@@ -81,7 +81,6 @@ namespace CineControl.CinemaService.API.Controllers
             var cinema = new Models.Cinema
             {
                 Id = id,
-                TenantId = updatedCinema.TenantId,
                 Name = updatedCinema.Name,
                 Address = updatedCinema.Address,
                 City = updatedCinema.City,

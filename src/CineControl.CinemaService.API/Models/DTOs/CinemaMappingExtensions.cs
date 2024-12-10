@@ -17,7 +17,7 @@ public static class CinemaMappingExtensions
             City = cinema.City,
             State = cinema.State,
             ZipCode = cinema.ZipCode,
-            Theaters = cinema.Theaters.Select(t => t.ToResponse()).ToList()
+            //Theaters = cinema.Theaters.Select(t => t.ToResponse()).ToList()
         };
     }
 
