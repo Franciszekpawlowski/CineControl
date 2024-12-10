@@ -1,5 +1,3 @@
-using System;
-
 namespace CineControl.Common.Tenant
 {
     public class TenantProvider : ITenantProvider

@@ -1,6 +1,4 @@
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Threading.Tasks;
 
 namespace CineControl.Common.Tenant
 {
@@ -13,7 +11,7 @@ namespace CineControl.Common.Tenant
             _next = next;
         }
 
-        public async Task InvokeAsync(HttpContext context, TenantProvider tenantProvider)
+        public async Task InvokeAsync(HttpContext context, ITenantProvider tenantProvider)
         {
             if (context.Request.Headers.TryGetValue("X-TenantId", out var tenantIdValues))
             {
