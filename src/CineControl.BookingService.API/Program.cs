@@ -9,9 +9,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Dodanie usług do kontenera DI
 builder.Services.AddControllers();
 
-// Dodanie Swagger
-builder.Services.AddSwaggers("CineControl.BookingService.API");
-
 // Konfiguracja PostgreSQL database
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -24,6 +21,8 @@ builder.Services.AddScoped<IReservationService, ReservationService>();
 
 // Dodanie HttpClient, jeśli potrzebne
 builder.Services.AddHttpClient();
+
+builder.Services.AddTenantProvider();
 
 // Budowanie aplikacji
 var app = builder.Build();
