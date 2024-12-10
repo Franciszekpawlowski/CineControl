@@ -25,5 +25,8 @@ namespace CineControl.Common.Results
 
         public static Error UnprocessableEntity(string description) => 
             new(description, ErrorType.UnprocessableEntity);
+
+        public static Error BadRequest(string description) => 
+            new(description, ErrorType.BadRequest);
     }
 }
