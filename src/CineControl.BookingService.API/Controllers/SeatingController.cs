@@ -1,40 +1,33 @@
-using BookingService.API.Models.Results;
-using BookingService.API.Services;
+using CineControl.BookingService.API.Services;
+using BookingService.API.Models.DTOs;
+using CineControl.BookingService.API.Models.DTOs.Seatings;
+using CineControl.Common.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-namespace BookingService.API.Controllers
+namespace CineControl.BookingService.API.Controllers
 {
+    [Route("api/v1/[controller]")]
     [ApiController]
-    [Route("api/[controller]")]
-    public class SeatingController : ControllerBase
+    //[Authorize(Policy = nameof(CustomPolicies.Operator))]
+    public class SeatingController : BaseController
     {
         private readonly IReservationService _reservationService;
-        private readonly ILogger<SeatingController> _logger;
 
-        public SeatingController(IReservationService reservationService, ILogger<SeatingController> logger)
+        public SeatingController(IReservationService reservationService)
         {
             _reservationService = reservationService;
-            _logger = logger;
         }
 
         [HttpGet("seance/{seanceId}/reserved-seats")]
-        public async Task<ActionResult<GenericResults<int[]>>> GetReservedSeats(int seanceId)
+        public async Task<IActionResult> GetReservedSeats(int seanceId)
         {
-            var result = new GenericResults<int[]>();
-
-            // Zwracamy wyłącznie ID zarezerwowanych siedzeń dla danego seansu
-            var reservedSeats = await _reservationService.GetReservedSeatsAsync(seanceId);
-
-            if (reservedSeats == null || reservedSeats.Count == 0)
-            {
-                // Brak zarezerwowanych miejsc
-                result.SetData(new int[0]);
-                return Ok(result);
-            }
-
-            result.SetData(reservedSeats.ToArray());
-            return Ok(result);
+            var result = await _reservationService.GetReservedSeatsAsync(seanceId);
+            return result.Match(
+                onSuccess: seats => Ok(seats.ToReservedSeatsResponse()),
+                onFailure: Problem
+            );
         }
     }
 }

@@ -34,6 +34,7 @@ public static class AddSwagger
                     new List<string>()
                 }
             });
+            c.OperationFilter<AddTenantHeaderParameter>();
         });
 
         return services;

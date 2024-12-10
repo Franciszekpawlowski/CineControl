@@ -1,13 +1,17 @@
+using System;
+
 namespace CineControl.SeanceService.API.Models
 {
     public class Seance
     {
         public int Id { get; set; }
+        public Guid TenantId { get; set; } 
         public int MovieId { get; set; }
         public int TheaterId { get; set; }
+        public int CinemaId { get; set; }
+
         private DateTime startTime;
         private DateTime endTime;
-        public int CinemaId { get; set; }
 
         public DateTime StartTime
         {
