@@ -48,6 +48,8 @@ services:
       - cinemaservice
       - identityservice
       - seanceservice
+      - tenantservice
+      - bookingservice
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.cinecontrol.rule=Host(`cinecontrol.local`)"
@@ -65,6 +67,18 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.bookingservice.rule=Host(`bookingservice.cinecontrol.local`)"
 
+  tenantservice:
+    build:
+      context: .
+      dockerfile: src/CineControl.TenantService.API/Dockerfile
+    ports:
+      - "8085:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.tenantservice.rule=Host(`tenantservice.cinecontrol.local`)"
 
   websitegateway:
     build: 

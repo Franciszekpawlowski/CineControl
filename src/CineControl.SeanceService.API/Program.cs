@@ -20,9 +20,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Rejestracja serwisów
 builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<ISeanceService, SeanceService>();
-
-// Dodanie Swagger
-builder.Services.AddSwaggers("CineControl.SeanceService.API");
+builder.Services.AddTenantProvider();
 
 var app = builder.Build();
 
