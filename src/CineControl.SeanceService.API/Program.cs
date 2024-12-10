@@ -1,36 +1,43 @@
 using CineControl.Common.ServiceDefaults;
+using CineControl.Common.Tenant;
 using CineControl.SeanceService.API.Data;
+using CineControl.SeanceService.API.Service;
+using CineControl.SeanceService.API.Service.IService;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Dodanie domyślnych usług
 builder.AddServiceDefaults("CineControl.SeanceService.API");
-// Add services to the container.
+
+// Dodanie kontrolerów
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
 
-// Configure DbContext with PostgreSQL
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+// Dodanie DbContext z PostgreSQL
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(connectionString));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Rejestracja serwisów
+builder.Services.AddScoped<IMovieService, MovieService>();
+builder.Services.AddScoped<ISeanceService, SeanceService>();
+
+// Dodanie Swagger
+builder.Services.AddSwaggers("CineControl.SeanceService.API");
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-// if (app.Environment.IsDevelopment())
-// {
-//     app.UseSwagger();
-//     app.UseSwaggerUI();
-// }
-
+// Middleware
 app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
+app.UseTenantMiddleware();
+
+app.UseAuthentication();
 app.UseAuthorization();
 
+app.ApplyMigrations();
 app.MapControllers();
 
 app.Run();

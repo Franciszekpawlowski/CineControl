@@ -1,4 +1,6 @@
-namespace CineControl.SeanceService.API.Models
+using System;
+
+namespace CineControl.SeanceService.API.Models.DTOs.Seances
 {
     public class SeanceCreateDto
     {
