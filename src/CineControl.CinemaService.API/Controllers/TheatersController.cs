@@ -10,22 +10,17 @@ namespace CineControl.CinemaService.API.Controllers
     [Route("api/v1/cinemas/{cinemaId:int}/theaters")]
     [ApiController]
     //[Authorize(Policy = nameof(CustomPolicies.Operator))]
-    public class TheatersController : BaseController
+    public class TheatersController(ITheaterServices theaterService) : BaseController
     {
-        private readonly ICinemaService _cinemaService;
-
-        public TheatersController(ICinemaService cinemaService)
-        {
-            _cinemaService = cinemaService;
-        }
+        private readonly ITheaterServices _theaterService = theaterService;
 
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> GetTheaters(int cinemaId)
         {
-            var result = await _cinemaService.GetTheatersByCinemaId(cinemaId);
+            var result = await _theaterService.GetTheatersByCinemaId(cinemaId);
             return result.Match(
-                onSuccess: theaters => Ok(new TheatersResponse { Theaters = theaters.Select(t => t.ToResponse()) }),
+                onSuccess: Ok,
                 onFailure: Problem
             );
         }
@@ -34,9 +29,9 @@ namespace CineControl.CinemaService.API.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetTheaterById(int theaterId)
         {
-            var result = await _cinemaService.GetTheaterById(theaterId);
+            var result = await _theaterService.GetTheaterById(theaterId);
             return result.Match(
-                onSuccess: theater => Ok(theater.ToResponse()),
+                onSuccess: Ok,
                 onFailure: Problem
             );
         }
@@ -44,9 +39,9 @@ namespace CineControl.CinemaService.API.Controllers
         [HttpPost]
         public async Task<IActionResult> AddTheater(int cinemaId, [FromBody] AddTheaterRequest request)
         {
-            var result = await _cinemaService.AddTheater(cinemaId, request);
+            var result = await _theaterService.AddTheater(cinemaId, request);
             return result.Match(
-                onSuccess: () => NoContent(),
+                onSuccess: NoContent,
                 onFailure: Problem
             );
         }
@@ -55,9 +50,9 @@ namespace CineControl.CinemaService.API.Controllers
         [HttpDelete("{theaterId:int}")]
         public async Task<IActionResult> RemoveTheater(int cinemaId, int theaterId)
         {
-            var result = await _cinemaService.RemoveTheater(cinemaId, theaterId);
+            var result = await _theaterService.RemoveTheater(cinemaId, theaterId);
             return result.Match(
-                onSuccess: () => NoContent(),
+                onSuccess: NoContent,
                 onFailure: Problem
             );
         }

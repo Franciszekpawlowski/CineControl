@@ -47,13 +47,23 @@ public static class CinemaMappingExtensions
         return cinemas.Select(ToResponse).ToList();
     }
 
-    public static CitiesResponse ToResponse(
+    public static GetCinemasByCityResponse ToResponse(
         this List<string> cities
     )
     {
-        return new CitiesResponse
+        return new GetCinemasByCityResponse
         {
             Cities = cities
         };
+    }
+
+    public static List<TheaterResponse> ToResponse(this List<Theater> theaters)
+    {
+        return theaters.Select(ToResponse).ToList();
+    }
+
+    public static List<SeatResponse> ToResponse(this List<Seat> seats)
+    {
+        return seats.Select(ToResponse).ToList();
     }
 }

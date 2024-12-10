@@ -14,6 +14,8 @@ builder.Services.AddDbContext<CinemaContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<ICinemaService, CinemaService>();
+builder.Services.AddScoped<ISeatService, SeatService>();
+builder.Services.AddScoped<ITheaterServices, TheaterServices>();
 builder.Services.AddTenantProvider();
 
 builder.Services.AddEndpointsApiExplorer();

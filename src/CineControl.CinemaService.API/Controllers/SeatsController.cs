@@ -10,22 +10,17 @@ namespace CineControl.CinemaService.API.Controllers
     [Route("api/v1/theaters/{theaterId:int}/seats")]
     [ApiController]
     //[Authorize(Policy = nameof(CustomPolicies.Operator))]
-    public class SeatsController : BaseController
+    public class SeatsController(ISeatService seatService) : BaseController
     {
-        private readonly ICinemaService _cinemaService;
-
-        public SeatsController(ICinemaService cinemaService)
-        {
-            _cinemaService = cinemaService;
-        }
+        private readonly ISeatService _seatService = seatService;
 
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> GetSeats(int theaterId)
         {
-            var result = await _cinemaService.GetSeatsByTheaterId(theaterId);
+            var result = await _seatService.GetSeatsByTheaterId(theaterId);
             return result.Match(
-                onSuccess: seats => Ok(seats.Select(s => s.ToResponse())), 
+                onSuccess: Ok, 
                 onFailure: Problem
             );
         }
@@ -33,9 +28,9 @@ namespace CineControl.CinemaService.API.Controllers
         [HttpPost]
         public async Task<IActionResult> AddSeat(int theaterId, [FromBody] Seat seat)
         {
-            var result = await _cinemaService.AddSeat(theaterId, seat);
+            var result = await _seatService.AddSeat(theaterId, seat);
             return result.Match(
-                onSuccess: () => NoContent(),
+                onSuccess: NoContent,
                 onFailure: Problem
             );
         }
@@ -43,9 +38,9 @@ namespace CineControl.CinemaService.API.Controllers
         [HttpDelete("{seatId:int}")]
         public async Task<IActionResult> RemoveSeat(int theaterId, int seatId)
         {
-            var result = await _cinemaService.RemoveSeat(theaterId, seatId);
+            var result = await _seatService.RemoveSeat(theaterId, seatId);
             return result.Match(
-                onSuccess: () => NoContent(),
+                onSuccess: NoContent,
                 onFailure: Problem
             );
         }
