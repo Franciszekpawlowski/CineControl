@@ -6,7 +6,6 @@ using CineControl.CinemaService.API.Service.IService;
 using CineControl.Common.Results;
 using CineControl.Common.Tenant;
 using Microsoft.EntityFrameworkCore;
-using CineControl.CinemaService.API.Models.DTOs;
 
 namespace CineControl.CinemaService.API.Service
 {
