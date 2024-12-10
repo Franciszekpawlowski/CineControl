@@ -11,7 +11,8 @@
                 "C#: CineControl.IdentityService.API Debug",
                 "C#: CineControl.SeanceService.API Debug",
                 "C#: CineControl.OperatorPanel Debug",
-                "C#: CineControl.BookingService.API Debug"
+                "C#: CineControl.BookingService.API Debug",
+                "C#: CineControl.TenantService.API Debug"
             ],
             "stopAll": true
         }
@@ -55,29 +56,10 @@
             "projectPath": "${workspaceFolder}/src/CineControl.BookingService.API/CineControl.BookingService.API.csproj"
         },
         {
-            "name": ".NET Core Launch (web)",
-            "type": "coreclr",
+            "name": "C#: CineControl.TenantService.API Debug",
+            "type": "dotnet",
             "request": "launch",
-            "preLaunchTask": "build",
-            "program": "${workspaceFolder}/src/CineControl.IdentityService.API/bin/Debug/net8.0/CineControl.IdentityService.API.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/src/CineControl.IdentityService.API",
-            "stopAtEntry": false,
-            "serverReadyAction": {
-                "action": "openExternally",
-                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
-            },
-            "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            },
-            "sourceFileMap": {
-                "/Views": "${workspaceFolder}/Views"
-            }
-        },
-        {
-            "name": ".NET Core Attach",
-            "type": "coreclr",
-            "request": "attach"
+            "projectPath": "${workspaceFolder}/src/CineControl.TenantService.API/CineControl.TenantService.API.csproj"
         },
         {
             "name": "Docker .NET Launch",
@@ -85,7 +67,7 @@
             "request": "launch",
             "preLaunchTask": "docker-run: debug",
             "netCore": {
-                "appProject": "${workspaceFolder}/src/CineControl.IdentityService.API/CineControl.IdentityService.API.csproj"
+                "appProject": "${workspaceFolder}/src/CineControl.TenantService.API/CineControl.TenantService.API.csproj"
             }
         }
     ]
