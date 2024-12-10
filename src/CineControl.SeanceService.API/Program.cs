@@ -20,6 +20,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Rejestracja serwisów
 builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<ISeanceService, SeanceService>();
+
 builder.Services.AddTenantProvider();
 
 var app = builder.Build();
