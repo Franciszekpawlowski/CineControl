@@ -10,16 +10,15 @@ import { Theater } from '../models/theater.model';
 import { GetCinemasByCityResponse } from '../models/Response/get-cinemas-by-city-response.model';
 import { GetCitiesResponse } from '../models/Response/get-cities-response.model';
 import { ErrorResponse } from '../models/Response/error-response.model';
+import { environment } from '../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CinemaService {
-  private cinemasApiUrl = '/Cinemas'; 
-  private theatersApiUrl ='/theaters'
-
-
-  private tenantId: string = '3fa85f64-5717-4562-b3fc-2c963f66afa6';
+  private cinemasApiUrl = environment.CinemasApiUrl; 
+  private theatersApiUrl = environment.TheatersApiUrl; 
+  private tenantId: string = environment.tenantId;
 
   constructor(private http: HttpClient) {}
 

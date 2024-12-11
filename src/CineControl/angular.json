@@ -73,20 +73,20 @@
             }
           },
           
-          "defaultConfiguration": "production"
+          "defaultConfiguration": "development"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "host": "0.0.0.0",
-            "proxyConfig": "proxy.conf.json"
+            "host": "0.0.0.0"
           },
           "configurations": {
             "production": {
               "buildTarget": "cinecontrol:build:production"
             },
             "development": {
-              "buildTarget": "cinecontrol:build:development"
+              "buildTarget": "cinecontrol:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"

@@ -8,7 +8,7 @@ namespace CineControl.Common.Clients.TenantService;
 
 public class TenantServiceClient : ITenantServiceClient, IDisposable
 {
-    readonly string _baseUrl = "http://localhost:5000/api/v1";
+    readonly string _baseUrl = "http://localhost:5188/api/v1";
     readonly RestClient _client;
     public TenantServiceClient()
     {
