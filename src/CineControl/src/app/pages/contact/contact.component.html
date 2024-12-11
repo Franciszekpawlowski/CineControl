@@ -1,0 +1,48 @@
+<div class="contact-container">
+    <h1>Kontakt</h1>
+  
+    <div class="contact-info">
+      <div class="contact-details">
+        <h2>Nasze dane kontaktowe</h2>
+        <p><strong>Adres:</strong> ul. Kino 1, 00-000 Miasto</p>
+        <p><strong>Telefon:</strong> +48 123 456 789</p>
+        <p><strong>E-mail:</strong> kontakt&#64;twojekino.pl</p>
+        <p><strong>Godziny otwarcia:</strong></p>
+        <p>Poniedziałek - Piątek: 10:00 - 22:00</p>
+        <p>Sobota - Niedziela: 12:00 - 23:00</p>
+      </div>
+      <div class="map">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2436.5797201943453!2d16.920891415799735!3d52.4026910797945!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470445f3b72ebf3f%3A0x2c1b441a517dbd5d!2sCinema!5e0!3m2!1sen!2spl!4v1689513260276!5m2!1sen!2spl"
+          width="100%"
+          height="250"
+          style="border: 0"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
+      </div>
+    </div>
+  
+    <div class="contact-form">
+      <h2>Formularz kontaktowy</h2>
+      <form (ngSubmit)="onSubmit()" #contactForm="ngForm">
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Imię i nazwisko</mat-label>
+          <input matInput name="name" ngModel required />
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Adres e-mail</mat-label>
+          <input matInput name="email" ngModel required email />
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Wiadomość</mat-label>
+          <textarea matInput name="message" ngModel required rows="5"></textarea>
+        </mat-form-field>
+        <button mat-raised-button color="primary" [disabled]="!contactForm.form.valid">
+          Wyślij wiadomość
+        </button>
+      </form>
+    </div>
+  </div>
+  
