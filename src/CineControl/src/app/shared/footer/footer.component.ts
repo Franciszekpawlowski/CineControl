@@ -24,12 +24,4 @@ import { CommonModule } from '@angular/common';
   ],
 })
 export class FooterComponent {
-  email: string = '';
-
-  subscribeNewsletter() {
-    // Implementacja logiki subskrypcji newslettera
-    console.log('Subskrypcja newslettera:', this.email);
-    // Możesz dodać tutaj logikę wysyłania e-maila lub integrację z usługą newslettera
-    this.email = ''; // Resetowanie pola po subskrypcji
-  }
 }
