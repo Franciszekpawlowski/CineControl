@@ -2,16 +2,19 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { GetUserResponseModel } from '../../models/Response/get-user-response.model';
 import { CommonModule } from '@angular/common';
+import { MatIcon } from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
+
 
 @Component({
   selector: 'app-user-panel',
-  imports: [CommonModule],
+  imports: [CommonModule, MatIcon, MatIconModule],
   templateUrl: './user-panel.component.html',
   styleUrls: ['./user-panel.component.scss'],
   standalone: true,
 })
 export class UserPanelComponent implements OnInit {
-  user!: GetUserResponseModel; 
+  user!: GetUserResponseModel;
   isLoading: boolean = true; 
   error: string | null = null; 
 

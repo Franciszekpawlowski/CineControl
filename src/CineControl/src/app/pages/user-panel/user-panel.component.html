@@ -13,10 +13,25 @@
   
     <!-- Dane użytkownika -->
     <div *ngIf="!isLoading && !error" class="user-info">
-      <h2>Witaj, {{ user.username }}</h2>
-      <p><strong>Email:</strong> {{ user.email }}</p>
-      <p><strong>Rola:</strong> {{ user.role }}</p>
-      <p><strong>ID użytkownika:</strong> {{ user.userId }}</p>
+      <div class="profile-icon">
+        <mat-icon>account_circle</mat-icon>
+      </div>
+      <form class="user-form">
+        <div class="form-group">
+          <label for="username">Nazwa użytkownika:</label>
+          <input id="username" type="text" [value]="user.username" disabled />
+        </div>
+  
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input id="email" type="text" [value]="user.email" disabled />
+        </div>
+  
+        <div class="form-group">
+          <label for="role">Rola:</label>
+          <input id="role" type="text" [value]="user.role" disabled />
+        </div>
+      </form>
     </div>
   </div>
   
