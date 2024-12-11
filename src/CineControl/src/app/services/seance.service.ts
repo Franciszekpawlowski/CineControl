@@ -2,15 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-
+import { environment } from '../../environments/environment.prod';
 import { Seance } from '../models/seance.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SeanceService {
-  private apiUrl = '/Seances'; 
-  private tenantId = '3fa85f64-5717-4562-b3fc-2c963f66afa6'; // Stały TenantId
+  private apiUrl = environment.SeancesApiUrl; 
+  private tenantId = environment.tenantId;
 
   constructor(private http: HttpClient) {}
 

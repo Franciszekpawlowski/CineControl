@@ -5,14 +5,15 @@ import { catchError, map } from 'rxjs/operators';
 import { CinemaService } from './cinema.service';
 import { ErrorResponse } from '../models/Response/error-response.model';
 import { ReservationResponse } from '../models/Response/get-reserved-seats-response';
+import { environment } from '../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BookingService {
-  private seatingApiUrl = '/Seating';
-  private reservationsApiUrl = '/Reservations';
-  private tenantId = '3fa85f64-5717-4562-b3fc-2c963f66afa6'; // Stały TenantId
+  private seatingApiUrl = environment.SeatingApiUrl; 
+  private reservationsApiUrl = environment.ReservationsApiUrl; 
+  private tenantId = environment.tenantId; 
 
   constructor(private http: HttpClient, private cinemaService: CinemaService) {}
 

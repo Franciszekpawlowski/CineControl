@@ -3,13 +3,14 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Movie } from '../models/movie.model';
+import { environment } from '../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MovieService {
-  private apiUrl = '/Movies';
-  private tenantId = '3fa85f64-5717-4562-b3fc-2c963f66afa6'; 
+  private apiUrl = environment.MoviesApiUrl; 
+  private tenantId = environment.tenantId;
   constructor(private http: HttpClient) {}
 
   /**

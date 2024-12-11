@@ -3,13 +3,16 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, tap, BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { GetUserResponseModel } from '../models/Response/get-user-response.model';
+import { environment } from '../../environments/environment.prod'; 
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private authStatus = new BehaviorSubject<boolean>(this.isAuthenticated());
-  private tenantId = '3fa85f64-5717-4562-b3fc-2c963f66afa6'; // Stały TenantId
+  private authApiUrl = environment.AuthApiUrl; 
+  private userApiUrl = environment.UserApiUrl; 
+  private tenantId = environment.tenantId; 
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -32,7 +35,7 @@ export class AuthService {
       password: credentials.password,
     };
 
-    return this.http.post<any>('/Account/Login', payload, { headers: this.getHeaders() }).pipe(
+    return this.http.post<any>(`${this.authApiUrl}/Login`, payload, { headers: this.getHeaders() }).pipe(
       tap((response) => {
         if (response.accessToken) {
           sessionStorage.setItem('authToken', response.accessToken);
@@ -52,7 +55,7 @@ export class AuthService {
       password: data.password,
     };
 
-    return this.http.post<any>('/Account/Register', payload, { headers: this.getHeaders() }).pipe(
+    return this.http.post<any>(`${this.authApiUrl}/Register`, payload, { headers: this.getHeaders() }).pipe(
       tap((response) => {
         // Obsługa rejestracji
       })
@@ -88,8 +91,12 @@ export class AuthService {
   getAuthStatus(): Observable<boolean> {
     return this.authStatus.asObservable();
   }
+
+  /**
+   * Pobiera informacje o zalogowanym użytkowniku
+   */
   getUser(): Observable<GetUserResponseModel> {
-    return this.http.get<GetUserResponseModel>('/User/GetUser', {
+    return this.http.get<GetUserResponseModel>(`${this.userApiUrl}/GetUser`, {
       headers: this.getHeaders(),
     });
   }
