@@ -55,6 +55,14 @@
   
   <div class="user-actions">
     <button 
+      mat-icon-button 
+      routerLink="/user-panel" 
+      *ngIf="isLoggedIn" 
+      aria-label="Profil">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+    
+    <button 
       mat-button 
       *ngIf="!isLoggedIn" 
       (click)="openAuthDialog()" 

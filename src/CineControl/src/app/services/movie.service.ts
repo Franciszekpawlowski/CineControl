@@ -9,8 +9,7 @@ import { Movie } from '../models/movie.model';
 })
 export class MovieService {
   private apiUrl = '/Movies';
-  private tenantId = '3fa85f64-5717-4562-b3fc-2c963f66afa6'; // Stały TenantId
-
+  private tenantId = '3fa85f64-5717-4562-b3fc-2c963f66afa6'; 
   constructor(private http: HttpClient) {}
 
   /**

@@ -1,1 +1,22 @@
-<p>user-panel works!</p>
+<div class="user-panel">
+    <h1>Panel użytkownika</h1>
+  
+    <!-- Loader -->
+    <div *ngIf="isLoading" class="loading">
+      Ładowanie danych użytkownika...
+    </div>
+  
+    <!-- Obsługa błędów -->
+    <div *ngIf="error" class="error">
+      {{ error }}
+    </div>
+  
+    <!-- Dane użytkownika -->
+    <div *ngIf="!isLoading && !error" class="user-info">
+      <h2>Witaj, {{ user.username }}</h2>
+      <p><strong>Email:</strong> {{ user.email }}</p>
+      <p><strong>Rola:</strong> {{ user.role }}</p>
+      <p><strong>ID użytkownika:</strong> {{ user.userId }}</p>
+    </div>
+  </div>
+  

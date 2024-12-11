@@ -1,0 +1,45 @@
+.user-panel {
+    background-color: #121212;
+    color: #e0e0e0;
+    padding: 20px;
+    border-radius: 8px;
+    font-family: 'Roboto', sans-serif;
+    max-width: 600px;
+    margin: 40px auto;
+    text-align: center;
+  
+    h1 {
+      color: #bb86fc;
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+  
+    .loading {
+      font-size: 1.2rem;
+      color: #ffb74d;
+    }
+  
+    .error {
+      font-size: 1.2rem;
+      color: #e57373;
+    }
+  
+    .user-info {
+      h2 {
+        color: #bb86fc;
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+      }
+  
+      p {
+        font-size: 1.1rem;
+        margin: 5px 0;
+        color: #e0e0e0;
+  
+        strong {
+          color: #bb86fc;
+        }
+      }
+    }
+  }
+  

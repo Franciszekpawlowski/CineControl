@@ -11,6 +11,7 @@ import { TermsAndConditionsComponent } from './pages/terms-and-conditions/terms-
 import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.component';
 import { BookingConditionsComponent } from './pages/booking-conditions/booking-conditions.component';
 import { HelpComponent } from './pages/help/help.component';
+import { UserPanelComponent } from './pages/user-panel/user-panel.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -24,5 +25,6 @@ export const routes: Routes = [
   { path: 'privacy', component: PrivacyPolicyComponent },
   { path: 'booking-conditions', component: BookingConditionsComponent },
   { path: 'help', component: HelpComponent },
+  { path: 'user-panel', component: UserPanelComponent },
 ];
 

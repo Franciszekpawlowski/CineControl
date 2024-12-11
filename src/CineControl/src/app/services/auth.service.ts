@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, tap, BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
+import { GetUserResponseModel } from '../models/Response/get-user-response.model';
 
 @Injectable({
   providedIn: 'root',
@@ -86,5 +87,10 @@ export class AuthService {
    */
   getAuthStatus(): Observable<boolean> {
     return this.authStatus.asObservable();
+  }
+  getUser(): Observable<GetUserResponseModel> {
+    return this.http.get<GetUserResponseModel>('/User/GetUser', {
+      headers: this.getHeaders(),
+    });
   }
 }
