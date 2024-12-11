@@ -1,5 +1,4 @@
-using CineControl.Common.Clients.IdentityService;
-using CineControl.Common.Clients.IdentityService.IClients;
+using CineControl.Common.Clients.IdentityService.ServiceExtension;
 using CineControl.Common.ServiceDefaults;
 using CineControl.OperatorPanel.Service;
 using CineControl.OperatorPanel.Service.IService;
@@ -8,7 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddSingleton<IIdentityServiceClient, IdentityServiceClient>();
+// builder.Services.AddSingleton<IIdentityServiceClient, IdentityServiceClient>();
+builder.Services.AddIdentityServiceClient(builder.Configuration);
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.AddLogger();
 builder.Services.AddAuthentication()
