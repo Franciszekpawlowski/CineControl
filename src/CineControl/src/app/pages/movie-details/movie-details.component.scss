@@ -1,0 +1,62 @@
+:host {
+    display: block;
+    background-color: #121212;
+    color: #e0e0e0;
+    padding: 20px;
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  .movie-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  
+    .movie-poster {
+      width: 100%;
+      max-width: 800px;
+      overflow: hidden;
+      border-radius: 12px;
+      img {
+        width: 100%;
+        height: auto;
+        border: 3px solid #6200ea;
+      }
+    }
+  
+    .movie-info {
+      text-align: center;
+      h1 {
+        font-size: 2.5rem;
+        color: #bb86fc;
+      }
+  
+      .genre {
+        font-size: 1.2rem;
+        color: #bb86fc;
+        margin: 10px 0;
+      }
+  
+      .description {
+        font-size: 1rem;
+        line-height: 1.6;
+        margin: 10px 0;
+      }
+  
+      .release-date,
+      .duration,
+      .rating {
+        font-size: 1rem;
+        margin: 5px 0;
+        strong {
+          color: #bb86fc;
+        }
+      }
+  
+      .rating span {
+        color: #ffb400;
+        font-size: 1.2rem;
+      }
+    }
+  }
+  
