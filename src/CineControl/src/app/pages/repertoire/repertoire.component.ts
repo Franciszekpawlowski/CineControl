@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { PromotionsComponent } from '../../shared/promotions/promotions.component';
 
 import { CinemaService } from '../../services/cinema.service';
 import { SeanceService } from '../../services/seance.service';
@@ -50,6 +51,7 @@ interface GroupedSeances {
     MatNativeDateModule,
     MatButtonModule,
     MatCardModule,
+    PromotionsComponent,
   ],
 })
 export class RepertoireComponent implements OnInit {
