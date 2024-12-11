@@ -122,5 +122,66 @@ namespace CineControl.SeanceService.API.Service
             await _context.SaveChangesAsync();
             return Result.Success();
         }
+
+        public async Task<ResultT<IEnumerable<Movie>>> GetCurrentMovies()
+        {
+            if (!_tenantProvider.HasTenant)
+            {
+                return SeanceErrors.AccessUnauthorized("No tenant specified");
+            }
+
+            var currentMovies = await _context.Movies
+                .Where(m => m.ReleaseDate <= DateTime.UtcNow)
+                .ToListAsync();
+
+            return currentMovies;
+        }
+
+        public async Task<ResultT<IEnumerable<Movie>>> GetUpcomingMovies()
+        {
+            if (!_tenantProvider.HasTenant)
+            {
+                return SeanceErrors.AccessUnauthorized("No tenant specified");
+            }
+
+            var upcomingMovies = await _context.Movies
+                .Where(m => m.ReleaseDate > DateTime.UtcNow)
+                .ToListAsync();
+
+            return upcomingMovies;
+        }
+
+        public async Task<ResultT<IEnumerable<Movie>>> GetTopRatedMovies()
+        {
+            if (!_tenantProvider.HasTenant)
+            {
+                return SeanceErrors.AccessUnauthorized("No tenant specified");
+            }
+
+            var topRatedMovies = await _context.Movies
+                .OrderByDescending(m => m.Rating)
+                .Take(10)
+                .ToListAsync();
+
+            return topRatedMovies;
+        }
+
+        public async Task<ResultT<IEnumerable<Movie>>> GetPersonalizedRecommendations(int userId)
+        {
+            if (!_tenantProvider.HasTenant)
+            {
+                return SeanceErrors.AccessUnauthorized("No tenant specified");
+            }
+
+            // TODO: Dodać implementację personalizowanych rekomendacji na podstawie userId
+            // Na razie zwracamy top 5 najbardziej oceniane filmy
+
+            var recommendedMovies = await _context.Movies
+                .OrderByDescending(m => m.Rating)
+                .Take(5)
+                .ToListAsync();
+
+            return recommendedMovies;
+        }
     }
 }

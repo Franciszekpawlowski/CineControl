@@ -82,6 +82,7 @@ namespace CineControl.SeanceService.API.Service
             var seance = new Seance
             {
                 MovieId = seanceCreateDto.MovieId,
+                TenantId = _tenantProvider.TenantId,
                 TheaterId = seanceCreateDto.TheaterId,
                 CinemaId = seanceCreateDto.CinemaId,
                 StartTime = DateTime.SpecifyKind(seanceCreateDto.StartTime, DateTimeKind.Utc),
@@ -120,6 +121,9 @@ namespace CineControl.SeanceService.API.Service
             if (seance == null)
             {
                 return SeanceErrors.NotFound($"Seance with id {id} not found.");
+            }
+            if(seance.TenantId != _tenantProvider.TenantId){
+                return SeanceErrors.UnprocessableEntity("Tenant ID mismatch.");
             }
 
             var movie = await _context.Movies.FindAsync(seanceDto.MovieId);

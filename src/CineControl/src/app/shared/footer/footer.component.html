@@ -1,4 +1,3 @@
-<!-- src/app/shared/footer/footer.component.html -->
 <mat-toolbar class="footer">
   <div class="footer-links">
     <a routerLink="/terms" aria-label="Regulamin">Regulamin</a>
@@ -6,28 +5,6 @@
     <a routerLink="/booking-conditions" aria-label="Warunki rezerwacji">Warunki rezerwacji</a>
     <a routerLink="/contact" aria-label="Kontakt">Kontakt</a>
     <a routerLink="/help" aria-label="Pomoc/FAQ">Pomoc/FAQ</a>
-  </div>
-  
-  <div class="social-media">
-    <a href="https://www.facebook.com/TwojeKino" target="_blank" aria-label="Facebook">
-      <mat-icon>facebook</mat-icon>
-    </a>
-    <a href="https://www.instagram.com/TwojeKino" target="_blank" aria-label="Instagram">
-      <mat-icon>instagram</mat-icon>
-    </a>
-    <a href="https://twitter.com/TwojeKino" target="_blank" aria-label="Twitter">
-      <mat-icon>twitter</mat-icon>
-    </a>
-  </div>
-  
-  <div class="newsletter">
-    <mat-form-field appearance="outline" class="email-field">
-      <mat-label>Subskrybuj newsletter</mat-label>
-      <input matInput placeholder="Twój e-mail" [(ngModel)]="email" aria-label="Twój e-mail" />
-      <button mat-icon-button matSuffix (click)="subscribeNewsletter()" aria-label="Subskrybuj">
-        <mat-icon>send</mat-icon>
-      </button>
-    </mat-form-field>
   </div>
   
   <div class="contact-info">

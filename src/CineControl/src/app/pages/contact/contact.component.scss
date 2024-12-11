@@ -1,0 +1,64 @@
+.contact-container {
+    background-color: #121212;
+    color: #e0e0e0;
+    padding: 20px;
+    font-family: 'Roboto', sans-serif;
+  
+    h1 {
+      color: #bb86fc;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+  
+    .contact-info {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+  
+      .contact-details {
+        flex: 1;
+        margin-right: 20px;
+      }
+  
+      .map {
+        flex: 1;
+        margin-left: 20px;
+      }
+  
+      @media (max-width: 768px) {
+        flex-direction: column;
+  
+        .contact-details,
+        .map {
+          margin: 0 0 20px 0;
+        }
+      }
+    }
+  
+    .contact-form {
+      max-width: 600px;
+      margin: 0 auto;
+  
+      h2 {
+        color: #bb86fc;
+        margin-bottom: 10px;
+      }
+  
+      .form-field {
+        width: 100%;
+        margin-bottom: 15px;
+      }
+  
+      button {
+        background-color: #bb86fc;
+        color: #fff;
+        font-weight: bold;
+  
+        &:hover {
+          background-color: #9a67ea;
+        }
+      }
+    }
+  }
+  

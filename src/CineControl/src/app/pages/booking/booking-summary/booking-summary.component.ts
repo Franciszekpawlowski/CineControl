@@ -61,7 +61,7 @@ export class BookingSummaryComponent implements OnChanges {
 
   makeReservation() {
     if (!this.seanceId || this.selectedSeatIds.length === 0) return;
-
+  
     if (!this.authService.isAuthenticated()) {
       this.openAuthDialog().afterClosed().subscribe((result) => {
         if (this.authService.isAuthenticated()) {
@@ -70,28 +70,23 @@ export class BookingSummaryComponent implements OnChanges {
       });
       return;
     }
-
+  
     this.isReservationInProgress = true;
     this.reservationSuccess = false;
     this.reservationError = null;
-
+  
     this.bookingService.postReservation(this.seanceId, this.selectedSeatIds).subscribe({
-      next: (response: ReservationResponse) => {
+      next: (response) => {
         this.isReservationInProgress = false;
-        if (response.isSuccess) {
-          this.reservationSuccess = true;
-        } else {
-          this.reservationError = response.errors && response.errors.length > 0 
-            ? response.errors[0].message 
-            : 'Wystąpił nieznany błąd podczas rezerwacji.';
-        }
+        this.reservationSuccess = true;
       },
       error: (err) => {
         this.isReservationInProgress = false;
-        this.reservationError = 'Wystąpił błąd po stronie serwera.';
+        this.reservationError = err.message || 'Wystąpił błąd podczas rezerwacji.';
       }
     });
   }
+  
 
   openAuthDialog() {
     return this.dialog.open(AuthDialogComponent, {

@@ -35,6 +35,7 @@ export class BookingComponent implements OnInit {
         this.bookingService.getAgrigatedSeats(this.seance.id, this.seance.theaterId).subscribe({
           next: (seatsData) => {
             this.seats = seatsData;
+            console.log(this.seats);
             this.organizeSeatsByRow();
           },
           error: (err) => console.error('Błąd podczas pobierania siedzeń', err)
