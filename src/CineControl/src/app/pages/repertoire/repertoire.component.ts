@@ -102,10 +102,18 @@ export class RepertoireComponent implements OnInit {
   }
 
   loadCinemas(city: string) {
-    this.cinemaService.getCinemasByCity(city).subscribe((cinemas) => {
-      this.cinemas = cinemas;
+    this.cinemaService.getCinemasByCity(city).subscribe({
+      next: (cinemas) => {
+        this.cinemas = cinemas;
+        console.log("Cinemas loaded:", this.cinemas); // Debug
+      },
+      error: (err) => {
+        console.error("Error loading cinemas:", err);
+        this.cinemas = []; // Upewnij się, że zmienna cinemas jest zainicjalizowana
+      },
     });
   }
+  
 
   onCinemaSelected() {
     this.scheduleForm.get('date')?.setValue(null);

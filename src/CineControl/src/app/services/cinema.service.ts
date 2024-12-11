@@ -37,12 +37,14 @@ export class CinemaService {
   getCinemasByCity(city: string): Observable<Cinema[]> {
     const url = `${this.cinemasApiUrl}/bycity/${encodeURIComponent(city)}`;
     return this.http
-      .get<GetCinemasByCityResponse>(url, { headers: this.getHeaders() })
+      .get<Cinema[]>(url, { headers: this.getHeaders() })
       .pipe(
-        map(response => response.cinemas),
+        map((response) => {
+          return response;
+        }),
         catchError(this.handleError)
       );
-  }
+  }  
 
   getCities(): Observable<string[]> {
     const url = `${this.cinemasApiUrl}/cities`;
