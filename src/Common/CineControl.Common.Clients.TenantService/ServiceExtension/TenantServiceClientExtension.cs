@@ -1,5 +1,5 @@
+using CineControl.Common.Clients.TenantService.IClients;
 using CineControl.Common.Clients.TenantService.Options;
-using CineControl.Common.Tenant;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,7 +13,7 @@ public static class TenantServiceClientExtension
         IConfiguration configuration)
         {
             services.Configure<TenantServiceClientOptions>(GetConfiguration(configuration));
-            services.AddSingleton<ITenantProvider, TenantProvider>();
+            services.AddSingleton<ITenantServiceClient, TenantServiceClient>();
             return services;
         }
 
