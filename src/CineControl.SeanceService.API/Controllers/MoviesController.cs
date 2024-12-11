@@ -85,5 +85,51 @@ namespace CineControl.SeanceService.API.Controllers
                 onFailure: Problem
             );
         }
+
+        // Dodane endpointy
+
+        [HttpGet("current")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetCurrentMovies()
+        {
+            var result = await _movieService.GetCurrentMovies();
+            return result.Match(
+                onSuccess: movies => Ok(movies.Select(m => m.ToResponse())),
+                onFailure: Problem
+            );
+        }
+
+        [HttpGet("upcoming")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetUpcomingMovies()
+        {
+            var result = await _movieService.GetUpcomingMovies();
+            return result.Match(
+                onSuccess: movies => Ok(movies.Select(m => m.ToResponse())),
+                onFailure: Problem
+            );
+        }
+
+        [HttpGet("top-rated")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetTopRatedMovies()
+        {
+            var result = await _movieService.GetTopRatedMovies();
+            return result.Match(
+                onSuccess: movies => Ok(movies.Select(m => m.ToResponse())),
+                onFailure: Problem
+            );
+        }
+
+        [HttpGet("recommendations/{userId}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetPersonalizedRecommendations(int userId)
+        {
+            var result = await _movieService.GetPersonalizedRecommendations(userId);
+            return result.Match(
+                onSuccess: movies => Ok(movies.Select(m => m.ToResponse())),
+                onFailure: Problem
+            );
+        }
     }
 }

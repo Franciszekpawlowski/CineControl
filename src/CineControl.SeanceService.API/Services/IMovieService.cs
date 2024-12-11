@@ -11,5 +11,9 @@ namespace CineControl.SeanceService.API.Service.IService
         Task<ResultT<Movie>> AddMovie(AddMovieRequest request);
         Task<Result> UpdateMovie(Movie movie);
         Task<Result> DeleteMovie(int id);
+        Task<ResultT<IEnumerable<Movie>>> GetCurrentMovies();
+        Task<ResultT<IEnumerable<Movie>>> GetUpcomingMovies();
+        Task<ResultT<IEnumerable<Movie>>> GetTopRatedMovies();
+        Task<ResultT<IEnumerable<Movie>>> GetPersonalizedRecommendations(int userId);
     }
 }
