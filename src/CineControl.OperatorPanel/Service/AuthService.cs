@@ -1,4 +1,3 @@
-using System.Net;
 using System.Security.Claims;
 using CineControl.Common.Clients.IdentityService.Errors;
 using CineControl.Common.Clients.IdentityService.IClients;
@@ -14,11 +13,12 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace CineControl.OperatorPanel.Service;
 
-public class AuthService(IIdentityServiceClient authServiceClient) : IAuthService
+public class AuthService(IIdentityServiceClient authServiceClient, IHttpContextAccessor httpContextAccessor) : IAuthService
 {
     private readonly IIdentityServiceClient _authServiceClient = authServiceClient;
+    private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
-    public async Task<Result> LoginAsync(UserLoginRequest userRequest, HttpContext context)
+    public async Task<Result> LoginAsync(UserLoginRequest userRequest)
     {
         
         var loginRequestModel = new LoginRequestModel() {
@@ -28,10 +28,9 @@ public class AuthService(IIdentityServiceClient authServiceClient) : IAuthServic
         var loginResponseModel = await _authServiceClient.LoginAsync(loginRequestModel);
         if (!loginResponseModel.IsSuccess)
         {
-            return AuthServiceErrors.AccessUnauthorized;
+            return AuthServiceErrors.AccessUnauthorized();
         }
-        context.AddCookies(loginResponseModel.Value!);
-
+        _httpContextAccessor.HttpContext.AddCookies(loginResponseModel.Value!);
         var claims = new List<Claim>()
         {
             new(ClaimTypes.Name, userRequest.Username)
@@ -46,7 +45,7 @@ public class AuthService(IIdentityServiceClient authServiceClient) : IAuthServic
             ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30)
         };
 
-        await context.SignInAsync(
+        await _httpContextAccessor.HttpContext.SignInAsync(
             CookieAuthenticationDefaults.AuthenticationScheme, 
             new ClaimsPrincipal(claimsIdentity), 
             authenticationProperties
@@ -55,9 +54,9 @@ public class AuthService(IIdentityServiceClient authServiceClient) : IAuthServic
         return Result.Success();
     }
 
-    public async Task<ResultT<GetUserResult>> GetUserAsync(HttpContext context)
+    public async Task<ResultT<GetUserResult>> GetUserAsync()
     {
-        string token = context.Request.Cookies["Token"].ToString();
+        string token = _httpContextAccessor.HttpContext.Request.Cookies["Token"].ToString();
         
         if (string.IsNullOrEmpty(token))
         {
@@ -65,26 +64,18 @@ public class AuthService(IIdentityServiceClient authServiceClient) : IAuthServic
         }
 
         var result = await _authServiceClient.GetUserAsync(token);
-        if (result.IsSuccess)
+        if (!result.IsSuccess)
         {
             return ClientErrors.NotFound;
         }
-        var getUserResult = new GetUserResult
-        {
-            UserId = result.Value.UserId,
-            Email = result.Value.Email,
-            Username = result.Value.Username,
-            Role = result.Value.Role
-        };
-        return getUserResult;
+        return new GetUserResult(result.Value);
     }
 
-    public async Task<Result> LogoutAsync(HttpContext context)
+    public async Task<Result> LogoutAsync()
     {
-        await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        context.Session.Clear();
-        context.Request.Cookies.Select(x => x.Key).ToList().ForEach(x => {
-            context.Response.Cookies.Append(x,string.Empty,new CookieOptions {
+        await _httpContextAccessor.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        _httpContextAccessor.HttpContext.Request.Cookies.Select(x => x.Key).ToList().ForEach(x => {
+            _httpContextAccessor.HttpContext.Response.Cookies.Append(x,string.Empty,new CookieOptions {
                 Expires = DateTime.Now.AddDays(-1)
             });
         });

@@ -2,5 +2,5 @@ namespace CineControl.Common.Clients.TenantService.Options;
 
 public class TenantServiceClientOptions
 {
-    public string? BaseUrl { get; set; }
+    public string BaseUrl { get; set; }
 }

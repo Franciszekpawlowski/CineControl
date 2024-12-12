@@ -1,17 +1,22 @@
 ﻿using CineControl.Common.Clients.TenantService.Errors;
 using CineControl.Common.Clients.TenantService.IClients;
 using CineControl.Common.Clients.TenantService.Models.Tenant;
+using CineControl.Common.Clients.TenantService.Options;
 using CineControl.Common.Results;
+using Microsoft.Extensions.Options;
 using RestSharp;
 
 namespace CineControl.Common.Clients.TenantService;
 
 public class TenantServiceClient : ITenantServiceClient, IDisposable
 {
-    readonly string _baseUrl = "http://tenantservice:8080/api/v1";
+    readonly string _baseUrl;
+    readonly TenantServiceClientOptions _tenantOptions;
     readonly RestClient _client;
-    public TenantServiceClient()
+    public TenantServiceClient(IOptions<TenantServiceClientOptions> tenantOptions)
     {
+        _tenantOptions = tenantOptions.Value;
+        _baseUrl = _tenantOptions.BaseUrl;
         var options = new RestClientOptions(_baseUrl);
         _client = new RestClient(options);
     }
@@ -19,12 +24,16 @@ public class TenantServiceClient : ITenantServiceClient, IDisposable
 
     public async Task<ResultT<GetResponseModel>> GetAsync(Guid tenantId)
     {
-        var request = new RestRequest($"/Tenant/{tenantId}");   
+        var request = new RestRequest($"/api/v1/Tenant/{tenantId}");   
         var responseModel = await _client.GetAsync<GetResponseModel>(request);
 
         if (responseModel == null)
         {
-            return ClientErrors.Failure;
+            return ClientErrors.Failure();
+        }
+        if (responseModel.Id == Guid.Empty)
+        {
+            return ClientErrors.NotFound();
         }
         return responseModel;
     }
@@ -41,7 +50,7 @@ public class TenantServiceClient : ITenantServiceClient, IDisposable
         var responseModel = await _client.GetAsync<IEnumerable<GetResponseModel>>(request);
         if (responseModel == null)
         {
-            return ClientErrors.Failure;
+            return ClientErrors.Failure();
         }
         return responseModel.ToList();
     }
@@ -53,7 +62,7 @@ public class TenantServiceClient : ITenantServiceClient, IDisposable
         var responseModel = await _client.PostAsync<GetResponseModel>(request);
         if (responseModel == null)
         {
-            return ClientErrors.Failure;
+            return ClientErrors.Failure();
         }
         return responseModel;
     }
@@ -65,7 +74,7 @@ public class TenantServiceClient : ITenantServiceClient, IDisposable
         var responseModel = await _client.PutAsync(request);
         if(responseModel == null)
         {
-            return ClientErrors.Failure;
+            return ClientErrors.Failure();
         }
         return Result.Success();
         
@@ -77,7 +86,7 @@ public class TenantServiceClient : ITenantServiceClient, IDisposable
         var responseModel = await _client.DeleteAsync(requestModel);
         if (responseModel == null)
         {
-            return ClientErrors.Failure;
+            return ClientErrors.Failure();
         }
         return Result.Success();
     }

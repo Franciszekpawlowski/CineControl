@@ -1,5 +1,8 @@
 using CineControl.Common.Clients.IdentityService.ServiceExtension;
+using CineControl.Common.Clients.TenantService.ServiceExtension;
+using CineControl.Common.Clients.CinemaService.ServiceExtension;
 using CineControl.Common.ServiceDefaults;
+using CineControl.Common.Tenant;
 using CineControl.OperatorPanel.Service;
 using CineControl.OperatorPanel.Service.IService;
 
@@ -7,16 +10,26 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-// builder.Services.AddSingleton<IIdentityServiceClient, IdentityServiceClient>();
-builder.Services.AddIdentityServiceClient(builder.Configuration);
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddTenantProvider();
+
+builder.Services.AddIdentityServiceClient(builder.Configuration)
+                .AddTenantServiceClient(builder.Configuration)
+                .AddCinemaServiceClient(builder.Configuration);
+
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ICinemaService, CinemaService>();
+
+
 builder.AddLogger();
+
 builder.Services.AddAuthentication()
     .AddCookie(options =>
     {
         options.LoginPath = "/Auth/Login";
     });
-// builder.AddJwtAuthExtension();
+
 
 var app = builder.Build();
 
@@ -30,7 +43,6 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 
 app.UseAuthentication();
@@ -38,6 +50,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=User}/{action=Login}");
+    pattern: "{controller=Auth}/{action=Login}");
 
 app.Run();

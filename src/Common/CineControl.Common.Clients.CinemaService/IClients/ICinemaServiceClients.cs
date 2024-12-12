@@ -5,12 +5,12 @@ using CineControl.Common.Results;
 
 namespace CineControl.Common.Clients.CinemaService.IClients;
 
-public interface ICinemaServiceClients
+public interface ICinemaServiceClient
 {
-    Task<ResultT<IEnumerable<GetCinemasResponseModel>>> GetCinemasAsync();
-    Task<ResultT<GetCinemasResponseModel>> GetCinemaAsync(int id);
-    Task<ResultT<GetCinemasResponseModel>> GetCinemaByCity(string city);
-    Task<Result> AddCinemaAsync(AddCinemaRequestModel model);
-    Task<Result> UpdateCinemaAsync(int id, UpdateCinemaRequestModel model);
-    Task<Result> DeleteCinemaAsync(int id);
+    Task<ResultT<IEnumerable<GetCinemasResponseModel>>> GetCinemasAsync(string TenantId = null);
+    Task<ResultT<GetCinemasResponseModel>> GetCinemaAsync(int id,string TenantId = null);
+    Task<ResultT<GetCinemasResponseModel>> GetCinemaByCity(string city,string TenantId = null);
+    Task<Result> AddCinemaAsync(AddCinemaRequestModel model,string TenantId = null);
+    Task<Result> UpdateCinemaAsync(int id, UpdateCinemaRequestModel model, string TenantId = null);
+    Task<Result> DeleteCinemaAsync(int id, string TenantId = null);
 }

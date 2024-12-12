@@ -3,6 +3,8 @@ using CineControl.Common.Clients.IdentityService.IClients;
 using CineControl.Common.Clients.IdentityService.Models.GetUser;
 using CineControl.Common.Clients.IdentityService.Models.Login;
 using CineControl.Common.Results;
+using CineControl.Common.Tenant;
+using Microsoft.Extensions.DependencyInjection;
 using RestSharp;
 using RestSharp.Authenticators;
 
@@ -12,8 +14,10 @@ public partial class IdentityServiceClient : IIdentityServiceClient, IDisposable
 {
     readonly string _baseUrl = "http://localhost:5093/api/v1";
     readonly RestClient _client;
-    public IdentityServiceClient()
+    readonly IServiceScopeFactory _serviceScopeFactory;
+    public IdentityServiceClient(IServiceScopeFactory serviceScopeFactory)
     {
+        _serviceScopeFactory = serviceScopeFactory;
         var options = new RestClientOptions(_baseUrl);
         _client = new RestClient(options);
     }
@@ -21,9 +25,21 @@ public partial class IdentityServiceClient : IIdentityServiceClient, IDisposable
 
     public async Task<ResultT<LoginResponseModel>> LoginAsync(LoginRequestModel loginRequestModel)
     {
-        var request = new RestRequest("/Auth/Login");
+        using var scope = _serviceScopeFactory.CreateScope();
+        var _tenantProvider = scope.ServiceProvider.GetRequiredService<ITenantProvider>();
+
+        var request = new RestRequest("/Account/Login");
         request.AddJsonBody(loginRequestModel);
-        var responseModel = await _client.PostAsync<LoginResponseModel>(request);
+        request.AddHeader(TenantFieldNames.HeaderName, _tenantProvider.TenantId.ToString());
+        LoginResponseModel responseModel;
+        try
+        {
+            responseModel = await _client.PostAsync<LoginResponseModel>(request);
+        }
+        catch
+        {
+            return ClientErrors.Failure;
+        }
 
         if (responseModel == null)
         {
@@ -34,10 +50,14 @@ public partial class IdentityServiceClient : IIdentityServiceClient, IDisposable
 
     public async Task<ResultT<GetUserResponseModel>> GetUserAsync(string Token)
     {
-        var request = new RestRequest("/Auth/GetUser")
+        using var scope = _serviceScopeFactory.CreateScope();
+        var _tenantProvider = scope.ServiceProvider.GetRequiredService<ITenantProvider>();
+
+        var request = new RestRequest("/Account/GetUser")
         {
             Authenticator = new JwtAuthenticator(Token)
         };
+        request.AddHeader(TenantFieldNames.HeaderName, _tenantProvider.TenantId.ToString());
 
         var responseModel = await _client.GetAsync<GetUserResponseModel>(request);
         if (responseModel == null)

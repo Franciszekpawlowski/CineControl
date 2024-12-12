@@ -10,6 +10,10 @@ namespace CineControl.OperatorPanel.Controllers
 
         public ActionResult Login()
         {
+            if ( User.Identity.IsAuthenticated )
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 
@@ -19,14 +23,14 @@ namespace CineControl.OperatorPanel.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("", "Invalid username or password");
+                ModelState.AddModelError("Invalid username or password", "Invalid username or password");
                 return View();
             }
 
-            var result = await _authService.LoginAsync(user, HttpContext);
+            var result = await _authService.LoginAsync(user);
             if (!result.IsSuccess)
             {
-                ModelState.AddModelError("",result.Error.ToString());  
+                ModelState.AddModelError("Invalid username or password",result.Error.ToString());  
                 return View();
             }
 
@@ -35,7 +39,7 @@ namespace CineControl.OperatorPanel.Controllers
 
         public async Task<ActionResult> Logout()
         {
-            await _authService.LogoutAsync(HttpContext);
+            await _authService.LogoutAsync();
             return RedirectToAction("Login", "Auth");
         }
     }
