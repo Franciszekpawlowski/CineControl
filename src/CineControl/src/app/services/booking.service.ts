@@ -1,64 +1,90 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError, forkJoin } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { CinemaService } from './cinema.service';
-import { forkJoin, map } from 'rxjs';
-
-interface ApiResponse<T> {
-  data: T;
-  errors: { message: string }[];
-  isSuccess: boolean;
-}
-
-interface ReservationData {
-  reservationId: number;
-  seanceId: number;
-  seatIds: number[];
-  reservationTime: string;
-}
-
-type ReservationResponse = ApiResponse<ReservationData>;
-
-type SeatingResponse = ApiResponse<number[]>;
+import { ErrorResponse } from '../models/Response/error-response.model';
+import { ReservationResponse } from '../models/Response/get-reserved-seats-response';
+import { environment } from '../../environments/environment.prod';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class BookingService {
-  private seatingApiUrl = '/Seating'; 
-  private reservationsApiUrl ='/Reservations';
+  private seatingApiUrl = environment.SeatingApiUrl; 
+  private reservationsApiUrl = environment.ReservationsApiUrl; 
+  private tenantId = environment.tenantId; 
 
   constructor(private http: HttpClient, private cinemaService: CinemaService) {}
 
+  private getHeaders(): HttpHeaders {
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      'X-TenantId': this.tenantId,
+    });
+  }
+
   /**
    * Pobiera listę zajętych miejsc dla danego seansu.
-   * Zwraca obiekt z polem data (number[]) zawierającym listę ID zajętych miejsc.
    */
-  getReservedSeats(seanceId: number): Observable<SeatingResponse> {
-    return this.http.get<SeatingResponse>(`${this.seatingApiUrl}/seance/${seanceId}/reserved-seats`);
+  getReservedSeats(seanceId: number): Observable<number[]> {
+    const url = `${this.seatingApiUrl}/seance/${seanceId}/reserved-seats`;
+    return this.http
+      .get<{ seatIds: number[] }>(url, { headers: this.getHeaders() })
+      .pipe(
+        map((response) => response.seatIds),
+        catchError((error: HttpErrorResponse) => this.handleHttpError(error))
+      );
   }
 
   /**
-   * Tworzy nową rezerwację dla danego seansu z określonymi miejscami.
-   * Oczekuje seanceId oraz tablicy seatIds.
-   * Zwraca obiekt z danymi rezerwacji.
+   * Tworzy nową rezerwację dla danego seansu.
    */
   postReservation(seanceId: number, seatIds: number[]): Observable<ReservationResponse> {
+    const url = this.reservationsApiUrl;
     const body = { seanceId, seatIds };
-    return this.http.post<ReservationResponse>(this.reservationsApiUrl, body);
+
+    return this.http
+      .post<ReservationResponse>(url, body, { headers: this.getHeaders() })
+      .pipe(
+        catchError((error: HttpErrorResponse) => this.handleHttpError(error))
+      );
   }
 
-  getAgrigatedSeats(seanceId:number, theaterId:number){
-    let seats$ = this.cinemaService.getTheaterSeats(theaterId);
-    let reservedSeats$ = this.getReservedSeats(seanceId);
+  /**
+   * Łączy dane o miejscach w sali i miejscach zajętych.
+   */
+  getAgrigatedSeats(seanceId: number, theaterId: number): Observable<any[]> {
+    const seats$ = this.cinemaService.getTheaterSeats(theaterId);
+    const reservedSeats$ = this.getReservedSeats(seanceId);
+
     return forkJoin([seats$, reservedSeats$]).pipe(
-      map(([allSeats, reservedResponse]) => {
-        const reservedIds = new Set(reservedResponse.data);
-        return allSeats.map(seat => ({
+      map(([allSeats, reservedIds]) => {
+        const reservedSet = new Set(reservedIds);
+        console.log('Reserved Seat IDs:', reservedSet);
+        return allSeats.map((seat) => ({
           ...seat,
-          isReserved: reservedIds.has(seat.id) 
+          isReserved: reservedSet.has(seat.id),
         }));
-      })
+      }),
+      catchError((error: HttpErrorResponse) => this.handleHttpError(error))
     );
+  }
+
+  /**
+   * Obsługuje błędy HTTP.
+   */
+  private handleHttpError(error: HttpErrorResponse): Observable<never> {
+    if (error.status === 409) {
+      const conflictError: ErrorResponse = error.error;
+      console.error('Conflict error:', conflictError.detail);
+      return throwError(() => new Error(conflictError.detail));
+    }
+    const errorMessage =
+      error.error instanceof ErrorEvent
+        ? `Błąd: ${error.error.message}`
+        : `Błąd ${error.status}: ${error.error.detail || error.message}`;
+    console.error(errorMessage);
+    return throwError(() => new Error(errorMessage));
   }
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { PromotionsComponent } from '../../shared/promotions/promotions.component';
 
 import { CinemaService } from '../../services/cinema.service';
 import { SeanceService } from '../../services/seance.service';
@@ -50,6 +51,7 @@ interface GroupedSeances {
     MatNativeDateModule,
     MatButtonModule,
     MatCardModule,
+    PromotionsComponent,
   ],
 })
 export class RepertoireComponent implements OnInit {
@@ -102,10 +104,18 @@ export class RepertoireComponent implements OnInit {
   }
 
   loadCinemas(city: string) {
-    this.cinemaService.getCinemasByCity(city).subscribe((cinemas) => {
-      this.cinemas = cinemas;
+    this.cinemaService.getCinemasByCity(city).subscribe({
+      next: (cinemas) => {
+        this.cinemas = cinemas;
+        console.log("Cinemas loaded:", this.cinemas); // Debug
+      },
+      error: (err) => {
+        console.error("Error loading cinemas:", err);
+        this.cinemas = []; // Upewnij się, że zmienna cinemas jest zainicjalizowana
+      },
     });
   }
+  
 
   onCinemaSelected() {
     this.scheduleForm.get('date')?.setValue(null);

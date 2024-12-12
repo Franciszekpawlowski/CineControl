@@ -1,6 +1,79 @@
-@CineControl.SeanceService.API_HostAddress = http://localhost:5222
+# @CineControl.SeanceService.API_HostAddress = http://localhost:5222
+@CineControl.SeanceService.API_HostAddress = http://gateway.cinecontrol.local/seance
 
-GET {{CineControl.SeanceService.API_HostAddress}}/weatherforecast/
-Accept: application/json
+POST  {{CineControl.SeanceService.API_HostAddress}}/api/v1/Movies
+Content-Type: application/json
+X-TenantId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+
+
+  {
+    "id": 3,
+    "title": "Zemsta Salazara",
+    "description": "Mocny Film",
+    "shortDescription": "Film",
+    "releaseDate": "2024-10-25T21:05:55.192Z",
+    "duration": 150,
+    "posterUrl": "https://cdn.swiatksiazki.pl/media/catalog/product/8/4/8499906360184.jpg?width=650&height=650&store=default&image-type=small_image",
+    "panoramicPosterUrl": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/5298bac0-b8bf-4c80-af67-725c1272dbb0/db9d9fh-e1141db0-dbcf-45e4-bc17-b197126d29de.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzUyOThiYWMwLWI4YmYtNGM4MC1hZjY3LTcyNWMxMjcyZGJiMFwvZGI5ZDlmaC1lMTE0MWRiMC1kYmNmLTQ1ZTQtYmMxNy1iMTk3MTI2ZDI5ZGUuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.gH4jAdZxi0K5AljNSM-6AfKEzMVaCE9CkyWn_9RBCV4",
+    "genre": "Action",
+    "rating": 5
+  }
 
 ###
+
+POST  {{CineControl.SeanceService.API_HostAddress}}/api/v1/Movies
+Content-Type: application/json
+X-TenantId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+
+
+  {
+    "id": 4,
+    "title": "Diuna",
+    "description": "Ekranizacja bestsellerowej powieści Franka Herberta. Bardzo odległa przyszłość. Pustynna planeta Arrakis, zwana także Diuną, jest jedynym miejscem we wszechświecie skąd wydobywa się melanż - cenną substancję, która nie tylko przedłuża życie, ale również pozwala na podróże międzygwiezdne i zaglądanie w przyszłość. Z rozkazu imperatora Shaddama IV Diuna zostaje oddana w lenno szlachetnemu rodowi Atrydów. Na Arrakis przybywa książę Leto Atryda, lady Jessika oraz ich syn, Paul. Nikczemny ród Harkonnenów nie zamierza jednak oddać tak łatwo planety swoim wrogom. Bo kto włada Diuną, ten włada całym wszechświatem.",
+    "shortDescription": "Szlachetny ród Atrydów przybywa na Diunę, będącą jedynym źródłem najcenniejszej substancji we wszechświecie.",
+    "releaseDate": "2024-11-05T21:13:29.545Z",
+    "duration": 180,
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/8/8e/Dune_%282021_film%29.jpg",
+    "panoramicPosterUrl": "https://static.posters.cz/image/hp/116547.jpg",
+    "genre": "Action",
+    "rating": 10
+  }
+
+###
+
+POST  {{CineControl.SeanceService.API_HostAddress}}/api/v1/Seances
+Content-Type: application/json
+X-TenantId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+
+{
+  "movieId": 1,
+  "theaterId": 1,
+  "cinemaId": 1,
+  "startTime": "2024-12-14T00:06:05.461Z"
+}
+
+###
+
+POST  {{CineControl.SeanceService.API_HostAddress}}/api/v1/Seances
+Content-Type: application/json
+X-TenantId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+
+{
+  "movieId": 1,
+  "theaterId": 1,
+  "cinemaId": 1,
+  "startTime": "2024-12-14T12:00:05.461Z"
+}
+
+###
+
+POST  {{CineControl.SeanceService.API_HostAddress}}/api/v1/Seances
+Content-Type: application/json
+X-TenantId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+
+{
+  "movieId": 2,
+  "theaterId": 1,
+  "cinemaId": 1,
+  "startTime": "2024-12-14T09:00:05.461Z"
+}

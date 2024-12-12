@@ -1,12 +1,36 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../services/auth.service';
+import { GetUserResponseModel } from '../../models/Response/get-user-response.model';
+import { CommonModule } from '@angular/common';
+import { MatIcon } from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
+
 
 @Component({
   selector: 'app-user-panel',
-  standalone: true,
-  imports: [],
+  imports: [CommonModule, MatIcon, MatIconModule],
   templateUrl: './user-panel.component.html',
-  styleUrl: './user-panel.component.scss'
+  styleUrls: ['./user-panel.component.scss'],
+  standalone: true,
 })
-export class UserPanelComponent {
+export class UserPanelComponent implements OnInit {
+  user!: GetUserResponseModel;
+  isLoading: boolean = true; 
+  error: string | null = null; 
 
+  constructor(private authService: AuthService) {}
+
+  ngOnInit() {
+    this.authService.getUser().subscribe({
+      next: (data) => {
+        this.user = data;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.error = 'Nie udało się załadować danych użytkownika.';
+        console.error(err);
+        this.isLoading = false;
+      },
+    });
+  }
 }

@@ -1,143 +1,135 @@
-using CineControl.SeanceService.API.Data;
+using CineControl.Common.Results;
 using CineControl.SeanceService.API.Models;
+using CineControl.SeanceService.API.Models.DTOs;
+using CineControl.SeanceService.API.Models.DTOs.Movies;
+using CineControl.SeanceService.API.Service.IService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace CineControl.SeanceService.API.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    [Authorize]
-    public class MoviesController : ControllerBase
+    //[Authorize(Policy = nameof(CustomPolicies.Operator))]
+    public class MoviesController : BaseController
     {
-        private readonly AppDbContext _context;
+        private readonly IMovieService _movieService;
 
-        public MoviesController(AppDbContext context)
+        public MoviesController(IMovieService movieService)
         {
-            _context = context;
+            _movieService = movieService;
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<Movie>>> GetMovies()
+        public async Task<IActionResult> GetMovies()
         {
-            return await _context.Movies.ToListAsync();
+            var result = await _movieService.GetAllMovies();
+            return result.Match(
+                onSuccess: movies => Ok(movies.Select(m => m.ToResponse())),
+                onFailure: Problem
+            );
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         [AllowAnonymous]
-        public async Task<ActionResult<Movie>> GetMovie(int id)
+        public async Task<IActionResult> GetMovie(int id)
         {
-            var movie = await _context.Movies.FindAsync(id);
-
-            if (movie == null)
-            {
-                return NotFound();
-            }
-
-            return movie;
+            var result = await _movieService.GetMovieById(id);
+            return result.Match(
+                onSuccess: movie => Ok(movie.ToResponse()),
+                onFailure: Problem
+            );
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AddMovie([FromBody] AddMovieRequest request)
+        {
+            var result = await _movieService.AddMovie(request);
+            return result.Match(
+                onSuccess: movie => CreatedAtAction(nameof(GetMovie), new { id = movie.Id }, movie.ToResponse()),
+                onFailure: Problem
+            );
+        }
+
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> UpdateMovie(int id, [FromBody] MovieResponse updatedMovie)
+        {
+            var movie = new Movie
+            {
+                Id = id,
+                Title = updatedMovie.Title,
+                Description = updatedMovie.Description,
+                ShortDescription = updatedMovie.ShortDescription,
+                ReleaseDate = updatedMovie.ReleaseDate,
+                Duration = updatedMovie.Duration,
+                PosterUrl = updatedMovie.PosterUrl,
+                PanoramicPosterUrl = updatedMovie.PanoramicPosterUrl,
+                Genre = updatedMovie.Genre,
+                Rating = updatedMovie.Rating
+            };
+
+            var result = await _movieService.UpdateMovie(movie);
+            return result.Match(
+                onSuccess: () => NoContent(),
+                onFailure: Problem
+            );
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> DeleteMovie(int id)
+        {
+            var result = await _movieService.DeleteMovie(id);
+            return result.Match(
+                onSuccess: () => NoContent(),
+                onFailure: Problem
+            );
+        }
+
+        // Dodane endpointy
 
         [HttpGet("current")]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<Movie>>> GetCurrentMovies()
+        public async Task<IActionResult> GetCurrentMovies()
         {
-            var currentMovies = await _context.Movies
-                .Where(m => m.ReleaseDate <= DateTime.UtcNow) 
-                .ToListAsync();
-            return Ok(currentMovies);
+            var result = await _movieService.GetCurrentMovies();
+            return result.Match(
+                onSuccess: movies => Ok(movies.Select(m => m.ToResponse())),
+                onFailure: Problem
+            );
         }
 
         [HttpGet("upcoming")]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<Movie>>> GetUpcomingMovies()
+        public async Task<IActionResult> GetUpcomingMovies()
         {
-            var upcomingMovies = await _context.Movies
-                .Where(m => m.ReleaseDate > DateTime.UtcNow) 
-                .ToListAsync();
-            return Ok(upcomingMovies);
+            var result = await _movieService.GetUpcomingMovies();
+            return result.Match(
+                onSuccess: movies => Ok(movies.Select(m => m.ToResponse())),
+                onFailure: Problem
+            );
         }
 
         [HttpGet("top-rated")]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<Movie>>> GetTopRatedMovies()
+        public async Task<IActionResult> GetTopRatedMovies()
         {
-            var topRatedMovies = await _context.Movies
-                .OrderByDescending(m => m.Rating)
-                .Take(10)
-                .ToListAsync();
-            return Ok(topRatedMovies);
+            var result = await _movieService.GetTopRatedMovies();
+            return result.Match(
+                onSuccess: movies => Ok(movies.Select(m => m.ToResponse())),
+                onFailure: Problem
+            );
         }
 
         [HttpGet("recommendations/{userId}")]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<Movie>>> GetPersonalizedRecommendations(int userId)
+        public async Task<IActionResult> GetPersonalizedRecommendations(int userId)
         {
-            //To Do dodac implementacje
-            var recommendedMovies = await _context.Movies
-                .OrderByDescending(m => m.Rating)
-                .Take(5)
-                .ToListAsync();
-            return Ok(recommendedMovies);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<Movie>> PostMovie(Movie movie)
-        {
-            _context.Movies.Add(movie);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetMovie), new { id = movie.Id }, movie);
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutMovie(int id, Movie movie)
-        {
-            if (id != movie.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(movie).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!MovieExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteMovie(int id)
-        {
-            var movie = await _context.Movies.FindAsync(id);
-            if (movie == null)
-            {
-                return NotFound();
-            }
-
-            _context.Movies.Remove(movie);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool MovieExists(int id)
-        {
-            return _context.Movies.Any(e => e.Id == id);
+            var result = await _movieService.GetPersonalizedRecommendations(userId);
+            return result.Match(
+                onSuccess: movies => Ok(movies.Select(m => m.ToResponse())),
+                onFailure: Problem
+            );
         }
     }
 }

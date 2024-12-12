@@ -36,13 +36,13 @@
     "logLevel": "debug"
   },
   "/Reservations": {
-    "target": "http://127.0.0.1:5045/api",
+    "target": "http://127.0.0.1:5045/api/v1",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"
   },
     "/Seating": {
-    "target": "http://127.0.0.1:5045/api",
+    "target": "http://127.0.0.1:5045/api/v1",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"

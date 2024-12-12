@@ -32,6 +32,7 @@ $RECYCLE.BIN/
 
 # Node
 node_modules
+dist
 npm-debug.log
 yarn-error.log
 .yarn

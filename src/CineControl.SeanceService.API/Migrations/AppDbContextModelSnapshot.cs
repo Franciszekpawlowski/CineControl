@@ -59,8 +59,8 @@ namespace CineControl.SeanceService.API.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("TenantID")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("TenantID")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -90,6 +90,9 @@ namespace CineControl.SeanceService.API.Migrations
 
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uuid");
 
                     b.Property<int>("TheaterId")
                         .HasColumnType("integer");

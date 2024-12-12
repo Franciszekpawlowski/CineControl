@@ -4,6 +4,7 @@ namespace CineControl.CinemaService.API.Models
     public class Cinema
     {
         public int Id { get; set; }
+        public Guid TenantId { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
         public string City { get; set; }

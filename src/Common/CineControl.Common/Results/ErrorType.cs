@@ -6,6 +6,7 @@ namespace CineControl.Common.Results
         NotFound,
         AccessUnauthorized,
         Conflict,
-        UnprocessableEntity
+        UnprocessableEntity,
+        BadRequest
     }
 }

@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using CineControl.IdentityService.API.Service.IService;
 using CineControl.IdentityService.API.Service;
 using CineControl.Common.ServiceDefaults;
+using CineControl.Common.Tenant;
+using CineControl.Common.Clients.TenantService.ServiceExtension;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,9 +24,12 @@ builder.Logging.AddConsole();
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddTenantProvider();
+builder.Services.AddTenantServiceClient(builder.Configuration);
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IUserService, UserService>();
+
 builder.Services.AddEndpointsApiExplorer();
 
 
@@ -40,6 +45,9 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
+
+app.UseTenantMiddleware();
+
 app.UseAuthentication();
 app.UseAuthorization();
 

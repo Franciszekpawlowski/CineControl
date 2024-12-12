@@ -1,5 +1,4 @@
 using System.IdentityModel.Tokens.Jwt;
-using System.Reflection.Metadata.Ecma335;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -38,6 +37,8 @@ namespace CineControl.IdentityService.API.Service
                 new Claim(JwtRegisteredClaimNames.Email,applicationUser.Email),
                 new Claim(JwtRegisteredClaimNames.Sub,applicationUser.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Name,applicationUser.UserName),
+                new Claim(ClaimTypes.Name,applicationUser.UserName),
+                new Claim(ClaimTypes.Email,applicationUser.Email)
             };
 
             if (claim is not null)

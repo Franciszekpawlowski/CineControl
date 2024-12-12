@@ -1,8 +1,11 @@
 using System.Security.Claims;
 using CineControl.Common;
+using CineControl.Common.Clients.TenantService.IClients;
 using CineControl.Common.Enums;
 using CineControl.Common.Results;
+using CineControl.Common.Tenant;
 using CineControl.IdentityService.API.Errors;
+using CineControl.IdentityService.API.Extensions;
 using CineControl.IdentityService.API.Models;
 using CineControl.IdentityService.API.Models.DTOs.Auth;
 using CineControl.IdentityService.API.Service.IService;
@@ -12,19 +15,25 @@ namespace CineControl.IdentityService.API.Service
 {
     public class AccountService(
         UserManager<ApplicationUser> userManager,
-        RoleManager<IdentityRole> roleManager,
-        IJwtTokenGenerator jwtTokenGenerator
+        IJwtTokenGenerator jwtTokenGenerator,
+        ITenantProvider tenantProvider,
+        ITenantServiceClient tenantServiceClient
         ) : IAccountService
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
-        private readonly RoleManager<IdentityRole> _roleManager = roleManager;
-
         private readonly IJwtTokenGenerator _jwtTokenGenerator = jwtTokenGenerator;
+        private readonly ITenantServiceClient _tenantServiceClient = tenantServiceClient;
+        private readonly ITenantProvider _tenantProvider = tenantProvider;
 
         public async Task<ResultT<LoginResponse>> LoginAsync(LoginRequest loginRequest)
         {
             ApplicationUser? user = await _userManager.FindByNameAsync(loginRequest.Username);
             if (user is null)
+            {
+                return AuthErrors.AccessUnauthorized();
+            }
+
+            if (user.TenantId != _tenantProvider.TenantId)
             {
                 return AuthErrors.AccessUnauthorized();
             }
@@ -46,19 +55,24 @@ namespace CineControl.IdentityService.API.Service
 
         public async Task<Result> RegisterAsync(RegisterRequest registerRequest)
         {
-
+            //todo validate tenantId
+            var tenantIdExist = await _tenantServiceClient.GetAsync(_tenantProvider.TenantId);
+            if (tenantIdExist is null)
+            {
+                return AuthErrors.NotFound();
+            }
             var user = registerRequest.ToApplicationUser();
+            user.TenantId = tenantIdExist.Value.Id;
             var createAsyncResult = await _userManager.CreateAsync(user, registerRequest.Password);
             if (!createAsyncResult.Succeeded)
             {
                 return AuthErrors.Conflict();
             }
-            var claim = new Claim(CustomClaims.Role.ToString(), Roles.User.ToString());
-            var addClaimResult = await _userManager.AddClaimAsync(user, claim);
 
+            var addClaimResult = await AddClaimsAsync(user);
             if (!addClaimResult.Succeeded)
             {
-                return AuthErrors.UnprocessableEntity();
+                return addClaimResult.MapToCustomErrors();
             }
             return Result.Success();
         }
@@ -93,6 +107,17 @@ namespace CineControl.IdentityService.API.Service
                 RefreshToken = RefreshToken,
                 ExpiresIn = (int)DateTime.Now.Subtract(RefreshTokenExpiryTime).TotalSeconds
             };
+        }
+
+        private async Task<IdentityResult> AddClaimsAsync(ApplicationUser user)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(CustomClaims.Role, Roles.User.ToString()),
+                new Claim(CustomClaims.UserId, user.Id.ToString()),
+                new Claim(CustomClaims.TenantId, user.TenantId.ToString())
+            };
+            return await _userManager.AddClaimsAsync(user, claims);
         }
     }
 }

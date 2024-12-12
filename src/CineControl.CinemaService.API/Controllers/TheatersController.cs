@@ -1,52 +1,60 @@
-using CineControl.CinemaService.API.Models;
-using CineControl.CinemaService.API.Services;
+using CineControl.CinemaService.API.Models.DTOs;
+using CineControl.CinemaService.API.Models.DTOs.Theaters;
+using CineControl.CinemaService.API.Service.IService;
+using CineControl.Common.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CineControl.CinemaService.API.Controllers
 {
-    [Route("api/v1/cinemas/{cinemaId}/theaters")]
+    [Route("api/v1/cinemas/{cinemaId:int}/theaters")]
     [ApiController]
-    [Authorize]
-    public class TheatersController : ControllerBase
+    //[Authorize(Policy = nameof(CustomPolicies.Operator))]
+    public class TheatersController(ITheaterServices theaterService) : BaseController
     {
-        private readonly ICinemaService _cinemaService;
+        private readonly ITheaterServices _theaterService = theaterService;
 
-        public TheatersController(ICinemaService cinemaService)
-        {
-            _cinemaService = cinemaService;
-        }
-        [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Theater>>> GetTheaters(int cinemaId)
-        {
-            return Ok(await _cinemaService.GetTheatersByCinemaId(cinemaId));
-        }
-        [HttpGet("~/api/theaters/{theaterId}")]
         [AllowAnonymous]
-        public async Task<ActionResult<Theater>> GetTheaterById(int theaterId)
+        public async Task<IActionResult> GetTheaters(int cinemaId)
         {
-            var theater = await _cinemaService.GetTheaterById(theaterId);
-            if (theater == null)
-            {
-                return NotFound();
-            }
-            return Ok(theater);
+            var result = await _theaterService.GetTheatersByCinemaId(cinemaId);
+            return result.Match(
+                onSuccess: Ok,
+                onFailure: Problem
+            );
         }
 
+        [HttpGet("~/api/theaters/{theaterId:int}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetTheaterById(int theaterId)
+        {
+            var result = await _theaterService.GetTheaterById(theaterId);
+            return result.Match(
+                onSuccess: Ok,
+                onFailure: Problem
+            );
+        }
 
         [HttpPost]
-        public async Task<ActionResult<Theater>> AddTheater(int cinemaId, Theater theater)
+        public async Task<IActionResult> AddTheater(int cinemaId, [FromBody] AddTheaterRequest request)
         {
-            await _cinemaService.AddTheater(cinemaId, theater);
-            return CreatedAtAction(nameof(GetTheaters), new { cinemaId }, theater);
+            var result = await _theaterService.AddTheater(cinemaId, request);
+            return result.Match(
+                onSuccess: NoContent,
+                onFailure: Problem
+            );
         }
 
-        [HttpDelete("{theaterId}")]
+
+        [HttpDelete("{theaterId:int}")]
         public async Task<IActionResult> RemoveTheater(int cinemaId, int theaterId)
         {
-            await _cinemaService.RemoveTheater(cinemaId, theaterId);
-            return NoContent();
+            var result = await _theaterService.RemoveTheater(cinemaId, theaterId);
+            return result.Match(
+                onSuccess: NoContent,
+                onFailure: Problem
+            );
         }
     }
 }
