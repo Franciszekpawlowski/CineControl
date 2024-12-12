@@ -29,10 +29,9 @@ namespace CineControl.IdentityService.API.Service
 
             SymmetricSecurityKey key = new(Encoding.ASCII.GetBytes(_jwtOptions.Secret));
 
-            var claimsList = await _userManager.GetClaimsAsync(applicationUser);
-            var claim = claimsList.FirstOrDefault(claim => claim.Type == CustomClaims.Role);
+            var UserClaims = await _userManager.GetClaimsAsync(applicationUser);
 
-            var claimList = new List<Claim>
+            var AdditionalClaimList = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Email,applicationUser.Email),
                 new Claim(JwtRegisteredClaimNames.Sub,applicationUser.Id.ToString()),
@@ -40,19 +39,13 @@ namespace CineControl.IdentityService.API.Service
                 new Claim(ClaimTypes.Name,applicationUser.UserName),
                 new Claim(ClaimTypes.Email,applicationUser.Email)
             };
-
-            if (claim is not null)
-            {
-                claimList.Add(claim);
-            }
-
-            // claimList.AddRange(roles.Select(role => new Claim(ClaimTypes.Role,role)));
+            AdditionalClaimList.ForEach(UserClaims.Add);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Issuer = _jwtOptions.Issuer,
                 Audience = _jwtOptions.Audience,
-                Subject = new ClaimsIdentity(claimList),
+                Subject = new ClaimsIdentity(UserClaims),
                 Expires = DateTime.UtcNow.AddHours(2),
                 SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature)
             };
