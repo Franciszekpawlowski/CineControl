@@ -55,6 +55,7 @@ namespace CineControl.IdentityService.API.Service
 
         public async Task<Result> RegisterAsync(RegisterRequest registerRequest)
         {
+            //todo validate tenantId
             var tenantIdExist = await _tenantServiceClient.GetAsync(_tenantProvider.TenantId);
             if (tenantIdExist is null)
             {

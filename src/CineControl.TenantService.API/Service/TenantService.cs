@@ -29,6 +29,7 @@ namespace CineControl.TenantService.API.Service
 
         public async Task<ResultT<Tenant>> CreateAsync(Tenant tenant)
         {
+            //TODO validacja
             _context.Tenants.Add(tenant);
             await _context.SaveChangesAsync();
             return tenant;
