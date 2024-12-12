@@ -1,5 +1,6 @@
-@CineControl.IdentityService.API_HostAddress = http://localhost:5093
+# @CineControl.IdentityService.API_HostAddress = http://localhost:5093
 # @CineControl.IdentityService.API_HostAddress = http://identityservice.cinecontrol.local
+@CineControl.IdentityService.API_HostAddress = http://gateway.cinecontrol.local/identity
 
 POST {{CineControl.IdentityService.API_HostAddress}}/api/v1/Account/Register
 Content-Type: application/json
@@ -15,6 +16,7 @@ X-TenantId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
 # @name Login
 POST {{CineControl.IdentityService.API_HostAddress}}/api/v1/Account/Login
 Content-Type: application/json
+X-TenantId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
 
 {
     "Username": "Testowy",
