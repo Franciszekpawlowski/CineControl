@@ -5,6 +5,7 @@ using CineControl.Common.ServiceDefaults;
 using CineControl.Common.Tenant;
 using CineControl.OperatorPanel.Service;
 using CineControl.OperatorPanel.Service.IService;
+using CineControl.Common.JWTProvider.Extension;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +13,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddTenantProvider();
+builder.Services.AddTenantProvider()
+                .AddJWTProvider();
 
 builder.Services.AddIdentityServiceClient(builder.Configuration)
                 .AddTenantServiceClient(builder.Configuration)

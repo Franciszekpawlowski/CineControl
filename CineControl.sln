@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CineControl.Common.Clients.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CineControl.Common.Clients.CinemaService", "src\Common\CineControl.Common.Clients.CinemaService\CineControl.Common.Clients.CinemaService.csproj", "{DA1109E5-6C8A-412E-9BAE-A6814152E035}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CineControl.Common.JWTProvider", "src\Common\CineControl.Common.JWTProvider\CineControl.Common.JWTProvider.csproj", "{5E168D2B-AAA0-4F3D-8806-ED2A66CB6EA3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +87,10 @@ Global
 		{DA1109E5-6C8A-412E-9BAE-A6814152E035}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA1109E5-6C8A-412E-9BAE-A6814152E035}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA1109E5-6C8A-412E-9BAE-A6814152E035}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E168D2B-AAA0-4F3D-8806-ED2A66CB6EA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E168D2B-AAA0-4F3D-8806-ED2A66CB6EA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E168D2B-AAA0-4F3D-8806-ED2A66CB6EA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E168D2B-AAA0-4F3D-8806-ED2A66CB6EA3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -103,6 +109,7 @@ Global
 		{0D7480BB-A29C-4129-A4F4-DAD460F1988A} = {253C2735-F514-4176-B53B-E2976768196A}
 		{E688AF4E-0A1D-4948-B663-1CBC5280B928} = {D361E00D-8A30-47EE-A2B4-F4A745C90D5D}
 		{DA1109E5-6C8A-412E-9BAE-A6814152E035} = {D361E00D-8A30-47EE-A2B4-F4A745C90D5D}
+		{5E168D2B-AAA0-4F3D-8806-ED2A66CB6EA3} = {D361E00D-8A30-47EE-A2B4-F4A745C90D5D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EA997A1A-C23F-46CE-B2A7-3C2CEA3ADB41}
