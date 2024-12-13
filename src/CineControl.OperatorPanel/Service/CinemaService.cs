@@ -37,4 +37,36 @@ public class CinemaService(ICinemaServiceClient cinemaServiceClients,
         }
         return GetCinema.Value.ToResponse();
     }
+
+    public async Task<ResultT<GetCinemaResponse>> GetCinemaAsync(int id)
+    {
+        _jwtProvider.SetToken(_httpContextAccessor.GetTokenValue());
+        var TenantId = _jwtProvider.GetTenantId();
+
+        _tenantProvider.SetTenant(Guid.Parse(TenantId));
+
+        var GetCinema = await _cinemaServiceClients.GetCinemaAsync(id,TenantId);
+        
+        if ( !GetCinema.IsSuccess )
+        {
+            return CinemaServiceErrors.Failure();
+        }
+        return GetCinema.Value.ToResponse();
+    }
+
+    public async Task<Result> AddCinemaAsync(AddCinemaRequest request)
+    {
+        _jwtProvider.SetToken(_httpContextAccessor.GetTokenValue());
+        var TenantId = _jwtProvider.GetTenantId();
+
+        _tenantProvider.SetTenant(Guid.Parse(TenantId));
+
+        var AddCinema = await _cinemaServiceClients.AddCinemaAsync(request.ToRequest(),TenantId);
+        
+        if ( !AddCinema.IsSuccess )
+        {
+            return CinemaServiceErrors.Failure();
+        }
+        return Result.Success();   
+    }
 }

@@ -1,3 +1,4 @@
+using CineControl.OperatorPanel.Models.DTOs.Cinemas;
 using CineControl.OperatorPanel.Service.IService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,5 +15,25 @@ namespace CineControl.OperatorPanel.Controllers
             return View(model.Value);
         }
 
+        public async Task<ActionResult> AddCinema()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> AddCinema(AddCinemaRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(request);
+            }
+            var result = await _cinemaService.AddCinemaAsync(request);
+            if (!result.IsSuccess)
+            {
+                ModelState.AddModelError("Error", result.Error.ToString());
+                return View(request);
+            }
+            return View();
+        }
     }
 }

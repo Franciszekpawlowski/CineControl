@@ -6,4 +6,6 @@ namespace CineControl.OperatorPanel.Service.IService;
 public interface ICinemaService
 {
     Task<ResultT<IEnumerable<GetCinemaResponse>>> GetCinemasAsync();
+    Task<Result> AddCinemaAsync(AddCinemaRequest request);
+    
 }

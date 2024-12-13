@@ -6,5 +6,5 @@ namespace CineControl.Common.JWTProvider.Extension;
 public static class JWTProviderExtension
 {
     public static IServiceCollection AddJWTProvider(this IServiceCollection services) 
-        => services.AddJWTProvider();
+        => services.AddScoped<IJWTProvider, JWTProvider>();
 }
