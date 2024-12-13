@@ -29,7 +29,7 @@ public class CinemaServiceClient : ICinemaServiceClient, IDisposable
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var _tenantProvider = scope.ServiceProvider.GetRequiredService<ITenantProvider>();
-            TenantId = _tenantProvider.TenantId.ToString();
+            TenantId = _tenantProvider.GetTenantId().ToString();
         }
 
         var request = new RestRequest("/Cinemas");
@@ -55,7 +55,7 @@ public class CinemaServiceClient : ICinemaServiceClient, IDisposable
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var _tenantProvider = scope.ServiceProvider.GetRequiredService<ITenantProvider>();
-            TenantId = _tenantProvider.TenantId.ToString();
+            TenantId = _tenantProvider.GetTenantId().ToString();
         }
 
         var request = new RestRequest($"/Cinemas/{id}");
@@ -74,7 +74,7 @@ public class CinemaServiceClient : ICinemaServiceClient, IDisposable
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var _tenantProvider = scope.ServiceProvider.GetRequiredService<ITenantProvider>();
-            TenantId = _tenantProvider.TenantId.ToString();
+            TenantId = _tenantProvider.GetTenantId().ToString();
         }
 
         var request = new RestRequest($"/Cinemas/ByCity/{city}");
@@ -93,7 +93,7 @@ public class CinemaServiceClient : ICinemaServiceClient, IDisposable
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var _tenantProvider = scope.ServiceProvider.GetRequiredService<ITenantProvider>();
-            TenantId = _tenantProvider.TenantId.ToString();
+            TenantId = _tenantProvider.GetTenantId().ToString();
         }
         var request = new RestRequest("/Cinemas/AddCinema");
         request.AddHeader(TenantFieldNames.HeaderName, TenantId);
@@ -112,7 +112,7 @@ public class CinemaServiceClient : ICinemaServiceClient, IDisposable
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var _tenantProvider = scope.ServiceProvider.GetRequiredService<ITenantProvider>();
-            TenantId = _tenantProvider.TenantId.ToString();
+            TenantId = _tenantProvider.GetTenantId().ToString();
         }
 
         var request = new RestRequest($"/Cinemas/{id}");
@@ -132,7 +132,7 @@ public class CinemaServiceClient : ICinemaServiceClient, IDisposable
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var _tenantProvider = scope.ServiceProvider.GetRequiredService<ITenantProvider>();
-            TenantId = _tenantProvider.TenantId.ToString();
+            TenantId = _tenantProvider.GetTenantId().ToString();
         }
         var request = new RestRequest($"/Cinemas/{id}");
         request.AddHeader(TenantFieldNames.HeaderName, TenantId);

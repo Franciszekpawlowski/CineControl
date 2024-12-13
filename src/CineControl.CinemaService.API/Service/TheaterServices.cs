@@ -17,7 +17,7 @@ public class TheaterServices(CinemaContext context, ITenantProvider tenantProvid
 
     public async Task<ResultT<TheaterResponse>> GetTheaterById(int theaterId)
     {
-        if (!_tenantProvider.HasTenant)
+        if (!_tenantProvider.HasTenant())
         {
             return CinemaErrors.MissingTenantHeader();
         }
@@ -33,7 +33,7 @@ public class TheaterServices(CinemaContext context, ITenantProvider tenantProvid
 
     public async Task<ResultT<IEnumerable<TheaterResponse>>> GetTheatersByCinemaId(int cinemaId)
     {
-        if (!_tenantProvider.HasTenant)
+        if (!_tenantProvider.HasTenant())
         {
             return CinemaErrors.MissingTenantHeader();
         }
@@ -50,7 +50,7 @@ public class TheaterServices(CinemaContext context, ITenantProvider tenantProvid
 
     public async Task<Result> AddTheater(int cinemaId, AddTheaterRequest request)
     {
-        if (!_tenantProvider.HasTenant)
+        if (!_tenantProvider.HasTenant())
         {
             return CinemaErrors.MissingTenantHeader();
         }
@@ -66,10 +66,10 @@ public class TheaterServices(CinemaContext context, ITenantProvider tenantProvid
 
         var theater = new Theater
         {
-            TenantId = _tenantProvider.TenantId,
+            TenantId = _tenantProvider.GetTenantId(),
             Name = request.Name,
             SeatingCapacity = request.SeatingCapacity,
-            Seats = CinemaFactory.GenerateSeats(_tenantProvider.TenantId, request.SeatingCapacity, request.SeatsPerRow)
+            Seats = CinemaFactory.GenerateSeats(_tenantProvider.GetTenantId(), request.SeatingCapacity, request.SeatsPerRow)
         };
 
         cinema.Theaters.Add(theater);
@@ -79,7 +79,7 @@ public class TheaterServices(CinemaContext context, ITenantProvider tenantProvid
 
     public async Task<Result> RemoveTheater(int cinemaId, int theaterId)
     {
-        if (!_tenantProvider.HasTenant)
+        if (!_tenantProvider.HasTenant())
         {
             return CinemaErrors.MissingTenantHeader();
         }

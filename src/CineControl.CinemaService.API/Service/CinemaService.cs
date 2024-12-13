@@ -22,7 +22,7 @@ namespace CineControl.CinemaService.API.Service
 
         public async Task<ResultT<IEnumerable<CinemaResponse>>> GetAllCinemas()
         {
-            if (!_tenantProvider.HasTenant)
+            if (!_tenantProvider.HasTenant())
             {
                 return CinemaErrors.MissingTenantHeader();
             }
@@ -37,7 +37,7 @@ namespace CineControl.CinemaService.API.Service
 
         public async Task<ResultT<CinemaResponse>> GetCinemaById(int id)
         {
-            if (!_tenantProvider.HasTenant)
+            if (!_tenantProvider.HasTenant())
             {
                 return CinemaErrors.MissingTenantHeader();
             }
@@ -64,7 +64,7 @@ namespace CineControl.CinemaService.API.Service
 
         public async Task<ResultT<IEnumerable<CinemaResponse>>> GetCinemasByCity(string city)
         {
-            if (!_tenantProvider.HasTenant)
+            if (!_tenantProvider.HasTenant())
             {
                 return CinemaErrors.MissingTenantHeader();
             }
@@ -78,12 +78,12 @@ namespace CineControl.CinemaService.API.Service
 
         public async Task<ResultT<CinemaResponse>> AddCinema(AddCinemaRequest request)
         {
-            if (!_tenantProvider.HasTenant)
+            if (!_tenantProvider.HasTenant())
             {
                 return CinemaErrors.MissingTenantHeader();
             }
 
-            var cinema = CinemaFactory.CreateCinema(_tenantProvider.TenantId, request);
+            var cinema = CinemaFactory.CreateCinema(_tenantProvider.GetTenantId(), request);
             await _context.Cinemas.AddAsync(cinema);
             await _context.SaveChangesAsync();
             return cinema.ToResponse();
@@ -91,7 +91,7 @@ namespace CineControl.CinemaService.API.Service
 
         public async Task<Result> UpdateCinema(Cinema cinema)
         {
-            if (!_tenantProvider.HasTenant)
+            if (!_tenantProvider.HasTenant())
             {
                 return CinemaErrors.MissingTenantHeader();
             }
@@ -117,7 +117,7 @@ namespace CineControl.CinemaService.API.Service
 
         public async Task<Result> DeleteCinema(int id)
         {
-            if (!_tenantProvider.HasTenant)
+            if (!_tenantProvider.HasTenant())
             {
                 return CinemaErrors.MissingTenantHeader();
             }

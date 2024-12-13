@@ -35,7 +35,7 @@ namespace CineControl.IdentityService.API.Service
             var claimsList = await _userManager.GetClaimsAsync(user);
             var role = claimsList.FirstOrDefault(claim => claim.Type == CustomClaims.Role);
 
-            if (user.TenantId != _tenantProvider.TenantId && role?.Value == Roles.User.ToString())
+            if (user.TenantId != _tenantProvider.GetTenantId() && role?.Value == Roles.User.ToString())
             {
                 return AuthErrors.AccessUnauthorized();
             }
@@ -58,7 +58,7 @@ namespace CineControl.IdentityService.API.Service
         public async Task<Result> RegisterAsync(RegisterRequest registerRequest)
         {
             //todo validate tenantId
-            var tenantIdExist = await _tenantServiceClient.GetAsync(_tenantProvider.TenantId);
+            var tenantIdExist = await _tenantServiceClient.GetAsync(_tenantProvider.GetTenantId());
             if (!tenantIdExist.IsSuccess)
             {
                 return AuthErrors.NotFound();

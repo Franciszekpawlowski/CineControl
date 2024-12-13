@@ -53,7 +53,7 @@ namespace CineControl.BookingService.API.Services
 
         public async Task<ResultT<ReservationResponse>> CreateReservationAsync(ReservationRequest request)
         {
-            if (!_tenantProvider.HasTenant)
+            if (!_tenantProvider.HasTenant())
             {
                 return BookingErrors.AccessUnauthorized("Brak określonego tenant.");
             }
@@ -78,12 +78,12 @@ namespace CineControl.BookingService.API.Services
                 // Utworzenie rezerwacji
                 var reservation = new Reservation
                 {
-                    TenantId = _tenantProvider.TenantId,
+                    TenantId = _tenantProvider.GetTenantId(),
                     SeanceId = request.SeanceId,
                     ReservationTime = DateTime.UtcNow,
                     Tickets = request.SeatIds.Select(seatId => new Ticket
                     {
-                        TenantId = _tenantProvider.TenantId,
+                        TenantId = _tenantProvider.GetTenantId(),
                         SeanceId = request.SeanceId,
                         SeatId = seatId
                     }).ToList()

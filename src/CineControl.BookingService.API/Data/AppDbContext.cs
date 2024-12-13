@@ -31,8 +31,8 @@ namespace CineControl.BookingService.API.Data
                 .HasDatabaseName("IX_Ticket_SeanceId_SeatId");
 
             // Konfiguracja multi-tenancy
-            modelBuilder.Entity<Reservation>().HasQueryFilter(r => r.TenantId == _tenantProvider.TenantId);
-            modelBuilder.Entity<Ticket>().HasQueryFilter(t => t.TenantId == _tenantProvider.TenantId);
+            modelBuilder.Entity<Reservation>().HasQueryFilter(r => r.TenantId == _tenantProvider.GetTenantId());
+            modelBuilder.Entity<Ticket>().HasQueryFilter(t => t.TenantId == _tenantProvider.GetTenantId());
 
             base.OnModelCreating(modelBuilder);
         }

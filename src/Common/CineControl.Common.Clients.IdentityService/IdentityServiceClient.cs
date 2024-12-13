@@ -30,7 +30,7 @@ public partial class IdentityServiceClient : IIdentityServiceClient, IDisposable
 
         var request = new RestRequest("/Account/Login");
         request.AddJsonBody(loginRequestModel);
-        request.AddHeader(TenantFieldNames.HeaderName, _tenantProvider.TenantId.ToString());
+        request.AddHeader(TenantFieldNames.HeaderName, _tenantProvider.GetTenantId().ToString());
         LoginResponseModel responseModel;
         try
         {
@@ -57,7 +57,7 @@ public partial class IdentityServiceClient : IIdentityServiceClient, IDisposable
         {
             Authenticator = new JwtAuthenticator(Token)
         };
-        request.AddHeader(TenantFieldNames.HeaderName, _tenantProvider.TenantId.ToString());
+        request.AddHeader(TenantFieldNames.HeaderName, _tenantProvider.GetTenantId().ToString());
 
         var responseModel = await _client.GetAsync<GetUserResponseModel>(request);
         if (responseModel == null)
