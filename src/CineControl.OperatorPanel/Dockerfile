@@ -18,4 +18,7 @@ RUN dotnet publish "CineControl.OperatorPanel.csproj" -c $configuration -o /app/
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+USER root
+RUN mkdir ./keys && chown app:app ./keys
+USER app
 ENTRYPOINT ["dotnet", "CineControl.OperatorPanel.dll"]

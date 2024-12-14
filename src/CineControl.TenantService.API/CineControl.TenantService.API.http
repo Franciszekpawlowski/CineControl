@@ -10,3 +10,9 @@ Content-Type: application/json
   "name": "test",
   "description": "test"
 }
+
+###
+
+GET  {{CineControl.IdentityService.API_HostAddress}}/api/v1/Tenant
+Content-Type: application/json
+X-TenantId: 3fa85f64-5717-4562-b3fc-2c963f66afa6

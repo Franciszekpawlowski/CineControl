@@ -6,13 +6,15 @@ using CineControl.Common.Tenant;
 using CineControl.OperatorPanel.Service;
 using CineControl.OperatorPanel.Service.IService;
 using CineControl.Common.JWTProvider.Extension;
+using Microsoft.AspNetCore.DataProtection;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
-
+builder.AddLogger();
 builder.Services.AddTenantProvider()
                 .AddJWTProvider();
 
@@ -23,13 +25,17 @@ builder.Services.AddIdentityServiceClient(builder.Configuration)
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICinemaService, CinemaService>();
 
+builder.Services.AddDataProtection()
+                .PersistKeysToFileSystem(new DirectoryInfo("./keys"));
 
-builder.AddLogger();
+
 
 builder.Services.AddAuthentication()
     .AddCookie(options =>
     {
         options.LoginPath = "/Auth/Login";
+        options.ReturnUrlParameter = "ReturnUrl";
+        options.SlidingExpiration = true;
     });
 
 
@@ -42,6 +48,7 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -52,6 +59,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Auth}/{action=Login}");
+    pattern: "{controller=Home}/{action=Index}");
 
 app.Run();

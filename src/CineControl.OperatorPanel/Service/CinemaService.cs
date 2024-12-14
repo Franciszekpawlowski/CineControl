@@ -1,5 +1,3 @@
-using System.IdentityModel.Tokens.Jwt;
-using CineControl.Common;
 using CineControl.Common.Clients.CinemaService.IClients;
 using CineControl.Common.JWTProvider;
 using CineControl.Common.Results;

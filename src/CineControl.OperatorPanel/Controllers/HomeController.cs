@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace CineControl.OperatorPanel.Controllers;
 
+[Authorize]
 public class HomeController(ILogger<HomeController> logger) : Controller
 {
     private readonly ILogger<HomeController> _logger = logger;
 
-    [Authorize]
     public IActionResult Index()
     {
         return View();
