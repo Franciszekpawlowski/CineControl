@@ -22,7 +22,7 @@ namespace CineControl.SeanceService.API.Service
 
         public async Task<ResultT<IEnumerable<Movie>>> GetAllMovies()
         {
-            if (!_tenantProvider.HasTenant)
+            if (!_tenantProvider.HasTenant())
             {
                 return SeanceErrors.AccessUnauthorized("No tenant specified");
             }
@@ -33,7 +33,7 @@ namespace CineControl.SeanceService.API.Service
 
         public async Task<ResultT<Movie>> GetMovieById(int id)
         {
-            if (!_tenantProvider.HasTenant)
+            if (!_tenantProvider.HasTenant())
             {
                 return SeanceErrors.AccessUnauthorized("No tenant specified");
             }
@@ -46,14 +46,14 @@ namespace CineControl.SeanceService.API.Service
 
         public async Task<ResultT<Movie>> AddMovie(AddMovieRequest request)
         {
-            if (!_tenantProvider.HasTenant)
+            if (!_tenantProvider.HasTenant())
             {
                 return SeanceErrors.AccessUnauthorized("No tenant specified");
             }
 
             var movie = new Movie
             {
-                TenantID = _tenantProvider.TenantId,
+                TenantID = _tenantProvider.GetTenantId(),
                 Title = request.Title,
                 Description = request.Description,
                 ShortDescription = request.ShortDescription,
@@ -72,7 +72,7 @@ namespace CineControl.SeanceService.API.Service
 
         public async Task<Result> UpdateMovie(Movie movie)
         {
-            if (!_tenantProvider.HasTenant)
+            if (!_tenantProvider.HasTenant())
             {
                 return SeanceErrors.AccessUnauthorized("No tenant specified");
             }
@@ -107,7 +107,7 @@ namespace CineControl.SeanceService.API.Service
 
         public async Task<Result> DeleteMovie(int id)
         {
-            if (!_tenantProvider.HasTenant)
+            if (!_tenantProvider.HasTenant())
             {
                 return SeanceErrors.AccessUnauthorized("No tenant specified");
             }
@@ -125,7 +125,7 @@ namespace CineControl.SeanceService.API.Service
 
         public async Task<ResultT<IEnumerable<Movie>>> GetCurrentMovies()
         {
-            if (!_tenantProvider.HasTenant)
+            if (!_tenantProvider.HasTenant())
             {
                 return SeanceErrors.AccessUnauthorized("No tenant specified");
             }
@@ -139,7 +139,7 @@ namespace CineControl.SeanceService.API.Service
 
         public async Task<ResultT<IEnumerable<Movie>>> GetUpcomingMovies()
         {
-            if (!_tenantProvider.HasTenant)
+            if (!_tenantProvider.HasTenant())
             {
                 return SeanceErrors.AccessUnauthorized("No tenant specified");
             }
@@ -153,7 +153,7 @@ namespace CineControl.SeanceService.API.Service
 
         public async Task<ResultT<IEnumerable<Movie>>> GetTopRatedMovies()
         {
-            if (!_tenantProvider.HasTenant)
+            if (!_tenantProvider.HasTenant())
             {
                 return SeanceErrors.AccessUnauthorized("No tenant specified");
             }
@@ -168,7 +168,7 @@ namespace CineControl.SeanceService.API.Service
 
         public async Task<ResultT<IEnumerable<Movie>>> GetPersonalizedRecommendations(int userId)
         {
-            if (!_tenantProvider.HasTenant)
+            if (!_tenantProvider.HasTenant())
             {
                 return SeanceErrors.AccessUnauthorized("No tenant specified");
             }

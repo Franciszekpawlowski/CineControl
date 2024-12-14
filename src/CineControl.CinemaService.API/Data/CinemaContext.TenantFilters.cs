@@ -15,16 +15,16 @@ namespace CineControl.CinemaService.API.Data
         }
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder)
         {
-            if (_tenantProvider != null && _tenantProvider.HasTenant)
+            if (_tenantProvider != null && _tenantProvider.HasTenant())
             {
                 modelBuilder.Entity<Cinema>()
-                    .HasQueryFilter(c => c.TenantId == _tenantProvider.TenantId);
+                    .HasQueryFilter(c => c.TenantId == _tenantProvider.GetTenantId());
 
                 modelBuilder.Entity<Theater>()
-                    .HasQueryFilter(t => t.TenantId == _tenantProvider.TenantId);
+                    .HasQueryFilter(t => t.TenantId == _tenantProvider.GetTenantId());
 
                 modelBuilder.Entity<Seat>()
-                    .HasQueryFilter(s => s.TenantId == _tenantProvider.TenantId);
+                    .HasQueryFilter(s => s.TenantId == _tenantProvider.GetTenantId());
             }
         }
 

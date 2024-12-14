@@ -2,13 +2,19 @@ namespace CineControl.Common.Tenant
 {
     public class TenantProvider : ITenantProvider
     {
-        public Guid TenantId { get; private set; } = Guid.Empty;
-        public bool HasTenant { get; private set; } = false;
+        public Guid _tenantId { get; private set; } = Guid.Empty;
+
+        public Guid GetTenantId()
+        {
+            return _tenantId;
+        }
+
+        public bool HasTenant() 
+            => _tenantId != Guid.Empty;
 
         public void SetTenant(Guid tenantId)
         {
-            TenantId = tenantId;
-            HasTenant = true;
+            _tenantId = tenantId;
         }
     }
 }

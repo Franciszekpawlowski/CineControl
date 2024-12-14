@@ -3,44 +3,58 @@ services:
     build:
       context: .
       dockerfile: src/CineControl.CinemaService.API/Dockerfile
-    ports:
-      - "8083:8080"
+    # ports:
+    #   - "8083:8080"
     depends_on:
       db:
         condition: service_healthy
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.http.routers.cinemaservice.rule=Host(`cinemaservice.cinecontrol.local`)"
+    #   - "traefik.http.routers.cinemaservice.middlewares=cors@docker"
+
+  operatorpanel:
+    build:
+      context: .
+      dockerfile: src/CineControl.OperatorPanel/Dockerfile
+    ports:
+      - "8083:8080"
+    depends_on:
+      - websitegateway
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.cinemaservice.rule=Host(`cinemaservice.cinecontrol.local`)"
-      - "traefik.http.routers.cinemaservice.middlewares=cors@docker"
+      - "traefik.http.routers.operatorpanel.rule=Host(`operatorpanel.cinecontrol.local`)"
+      - "traefik.http.routers.operatorpanel.middlewares=cors@docker"
+
 
 
   identityservice:
     build:
       context: .
       dockerfile: src/CineControl.IdentityService.API/Dockerfile
-    ports:
-      - "8082:8080"
+    # ports: 
+      # - "8080"
     depends_on:
       db:
         condition: service_healthy
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.identityservice.rule=Host(`identityservice.cinecontrol.local`)"
-      - "traefik.http.routers.identityservice.middlewares=cors@docker"
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.http.routers.identityservice.rule=Host(`identityservice.cinecontrol.local`)"
+    #   - "traefik.http.routers.identityservice.middlewares=cors@docker"
 
   seanceservice:
     build:
       context: .
       dockerfile: src/CineControl.SeanceService.API/Dockerfile
-    ports:
-      - "8081:8080"
+    # ports:
+    #   - "8081:8080"
     depends_on:
       db:
         condition: service_healthy
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.seanceservice.rule=Host(`seanceservice.cinecontrol.local`)"
-      - "traefik.http.routers.seanceservice.middlewares=cors@docker"
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.http.routers.seanceservice.rule=Host(`seanceservice.cinecontrol.local`)"
+    #   - "traefik.http.routers.seanceservice.middlewares=cors@docker"
 
   cinecontrol:
     build:
@@ -59,29 +73,29 @@ services:
     build:
       context: .
       dockerfile: src/CineControl.BookingService.API/Dockerfile
-    ports:
-      - "8086:8080"
+    # ports:
+    #   - "8086:8080"
     depends_on:
       db:
         condition: service_healthy
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.bookingservice.rule=Host(`bookingservice.cinecontrol.local`)"
-      - "traefik.http.routers.bookingservice.middlewares=cors@docker"
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.http.routers.bookingservice.rule=Host(`bookingservice.cinecontrol.local`)"
+    #   - "traefik.http.routers.bookingservice.middlewares=cors@docker"
 
   tenantservice:
     build:
       context: .
       dockerfile: src/CineControl.TenantService.API/Dockerfile
-    ports:
-      - "8085:8080"
+    # ports:
+    #   - "8085:8080"
     depends_on:
       db:
         condition: service_healthy
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.tenantservice.rule=Host(`tenantservice.cinecontrol.local`)"
-      - "traefik.http.routers.tenantservice.middlewares=cors@docker"
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.http.routers.tenantservice.rule=Host(`tenantservice.cinecontrol.local`)"
+    #   - "traefik.http.routers.tenantservice.middlewares=cors@docker"
 
   websitegateway:
     build: 
@@ -99,11 +113,6 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.gateway.rule=Host(`gateway.cinecontrol.local`)"
       - "traefik.http.routers.gateway.middlewares=cors@docker"
-      # - "traefik.http.middlewares.cors.headers.accesscontrolallowmethods=*"
-      # - "traefik.http.middlewares.cors.headers.accesscontrolallowheaders=*"
-      # - "traefik.http.middlewares.cors.headers.accesscontrolalloworiginlist=http://cinecontrol.local,http://gateway.cinecontrol.local"
-      # - "traefik.http.middlewares.cors.headers.accesscontrolmaxage=100"
-      # - "traefik.http.middlewares.cors.headers.addvaryheader=true"
 
   db:
     image: postgres:16.3

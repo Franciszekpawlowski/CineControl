@@ -17,7 +17,7 @@ public class SeatService(CinemaContext dbContext, ITenantProvider tenantProvider
 
     public async Task<Result> AddSeat(int theaterId, Seat seat)
     {
-        if (!_tenantProvider.HasTenant)
+        if (!_tenantProvider.HasTenant())
         {
             return CinemaErrors.MissingTenantHeader();
         }
@@ -31,7 +31,7 @@ public class SeatService(CinemaContext dbContext, ITenantProvider tenantProvider
             return CinemaErrors.TheaterNotFound(theaterId);
         }
 
-        seat.TenantId = _tenantProvider.TenantId;
+        seat.TenantId = _tenantProvider.GetTenantId();
         seat.Id = theater.Seats.Any() ? theater.Seats.Max(s => s.Id) + 1 : 1;
         theater.Seats.Add(seat);
         await _context.SaveChangesAsync();
@@ -40,7 +40,7 @@ public class SeatService(CinemaContext dbContext, ITenantProvider tenantProvider
 
     public async Task<ResultT<IEnumerable<SeatResponse>>> GetSeatsByTheaterId(int theaterId)
     {
-        if (!_tenantProvider.HasTenant)
+        if (!_tenantProvider.HasTenant())
         {
             return CinemaErrors.MissingTenantHeader();
         }
@@ -56,7 +56,7 @@ public class SeatService(CinemaContext dbContext, ITenantProvider tenantProvider
 
     public async Task<Result> RemoveSeat(int theaterId, int seatId)
     {
-        if (!_tenantProvider.HasTenant)
+        if (!_tenantProvider.HasTenant())
         {
             return CinemaErrors.MissingTenantHeader();
         }

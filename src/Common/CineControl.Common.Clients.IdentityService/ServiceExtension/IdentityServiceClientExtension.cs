@@ -16,7 +16,7 @@ public static class IdentityServiceClientExtension
         }
 
     private static IConfiguration GetConfiguration(IConfiguration configuration) 
-        => configuration.GetSection("IdentityServiceClient") 
-        ?? throw new KeyNotFoundException("IdentityServiceClient");
+        => configuration.GetSection("IdentityServiceUrl") 
+        ?? throw new KeyNotFoundException("IdentityServiceUrl");
     
 }

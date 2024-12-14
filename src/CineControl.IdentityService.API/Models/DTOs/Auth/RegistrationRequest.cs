@@ -1,3 +1,5 @@
+using CineControl.Common.Enums;
+
 namespace CineControl.IdentityService.API.Models.DTOs.Auth
 {
     public class RegisterRequest
@@ -5,5 +7,7 @@ namespace CineControl.IdentityService.API.Models.DTOs.Auth
         public string Email { get; set; } = string.Empty;
         public string Username { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
+        public Roles Roles{ get; set; } = Roles.User;
+
     }
 }

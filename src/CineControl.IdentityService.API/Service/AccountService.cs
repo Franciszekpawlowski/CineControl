@@ -28,12 +28,14 @@ namespace CineControl.IdentityService.API.Service
         public async Task<ResultT<LoginResponse>> LoginAsync(LoginRequest loginRequest)
         {
             ApplicationUser? user = await _userManager.FindByNameAsync(loginRequest.Username);
-            if (user is null)
+            if (user == null)
             {
                 return AuthErrors.AccessUnauthorized();
             }
+            var claimsList = await _userManager.GetClaimsAsync(user);
+            var role = claimsList.FirstOrDefault(claim => claim.Type == CustomClaims.Role);
 
-            if (user.TenantId != _tenantProvider.TenantId)
+            if (user.TenantId != _tenantProvider.GetTenantId() && role?.Value == Roles.User.ToString())
             {
                 return AuthErrors.AccessUnauthorized();
             }
@@ -56,8 +58,8 @@ namespace CineControl.IdentityService.API.Service
         public async Task<Result> RegisterAsync(RegisterRequest registerRequest)
         {
             //todo validate tenantId
-            var tenantIdExist = await _tenantServiceClient.GetAsync(_tenantProvider.TenantId);
-            if (tenantIdExist is null)
+            var tenantIdExist = await _tenantServiceClient.GetAsync(_tenantProvider.GetTenantId());
+            if (!tenantIdExist.IsSuccess)
             {
                 return AuthErrors.NotFound();
             }
@@ -69,7 +71,7 @@ namespace CineControl.IdentityService.API.Service
                 return AuthErrors.Conflict();
             }
 
-            var addClaimResult = await AddClaimsAsync(user);
+            var addClaimResult = await AddClaimsAsync(user, registerRequest.Roles);
             if (!addClaimResult.Succeeded)
             {
                 return addClaimResult.MapToCustomErrors();
@@ -109,11 +111,12 @@ namespace CineControl.IdentityService.API.Service
             };
         }
 
-        private async Task<IdentityResult> AddClaimsAsync(ApplicationUser user)
+        private async Task<IdentityResult> AddClaimsAsync(ApplicationUser user, Roles roles)
         {
             var claims = new List<Claim>
             {
-                new Claim(CustomClaims.Role, Roles.User.ToString()),
+                // new Claim(CustomClaims.Role, Roles.User.ToString()),
+                new Claim(CustomClaims.Role, roles.ToString()),
                 new Claim(CustomClaims.UserId, user.Id.ToString()),
                 new Claim(CustomClaims.TenantId, user.TenantId.ToString())
             };

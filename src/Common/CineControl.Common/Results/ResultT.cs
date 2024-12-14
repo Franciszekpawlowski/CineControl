@@ -1,14 +1,14 @@
 namespace CineControl.Common.Results
 {
-    public class ResultT<TValue> : Result
+    public sealed class ResultT<TValue> : Result
     {
         private readonly TValue? _value;
-        protected ResultT(TValue value): base()
+        private ResultT(TValue value): base()
         {
             _value = value;
         }
 
-        protected ResultT(Error error): base(error)
+        private ResultT(Error error): base(error)
         {
             _value = default;
         }

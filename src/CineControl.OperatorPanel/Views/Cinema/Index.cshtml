@@ -1,0 +1,30 @@
+﻿@using CineControl.OperatorPanel.Models.DTOs.Cinemas
+@model IEnumerable<GetCinemaResponse>
+@{
+    ViewData["Title"] = "Cinema Page";
+}
+
+<table> 
+    <thead> 
+        <tr> 
+            <th>@Html.DisplayNameFor(m => m.First().Name)</th>
+            <th>@Html.DisplayNameFor(m => m.First().Address)</th> 
+            <th>@Html.DisplayNameFor(m => m.First().City)</th> 
+            <th>@Html.DisplayNameFor(m => m.First().State)</th> 
+            <th>@Html.DisplayNameFor(m => m.First().ZipCode)</th> 
+        </tr> 
+    </thead> 
+    <tbody> 
+        @foreach (var cinema in Model) 
+        { 
+            <tr> 
+                <td>@cinema.Name</td> 
+                <td>@cinema.Address</td> 
+                <td>@cinema.City</td> 
+                <td>@cinema.State</td> 
+                <td>@cinema.ZipCode</td> 
+            </tr> 
+        } 
+    </tbody>
+
+    <a asp-controller="Cinema" asp-action="AddCinema">Add Cinema</a>

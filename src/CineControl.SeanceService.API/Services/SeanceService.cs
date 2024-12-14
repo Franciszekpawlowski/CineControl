@@ -22,7 +22,7 @@ namespace CineControl.SeanceService.API.Service
 
         public async Task<ResultT<IEnumerable<Seance>>> GetAllSeances()
         {
-            if (!_tenantProvider.HasTenant)
+            if (!_tenantProvider.HasTenant())
             {
                 return SeanceErrors.AccessUnauthorized("No tenant specified");
             }
@@ -35,7 +35,7 @@ namespace CineControl.SeanceService.API.Service
 
         public async Task<ResultT<Seance>> GetSeanceById(int id)
         {
-            if (!_tenantProvider.HasTenant)
+            if (!_tenantProvider.HasTenant())
             {
                 return SeanceErrors.AccessUnauthorized("No tenant specified");
             }
@@ -50,7 +50,7 @@ namespace CineControl.SeanceService.API.Service
 
         public async Task<ResultT<IEnumerable<Seance>>> GetSeancesByCinemaAndDate(int cinemaId, DateTime date)
         {
-            if (!_tenantProvider.HasTenant)
+            if (!_tenantProvider.HasTenant())
             {
                 return SeanceErrors.AccessUnauthorized("No tenant specified");
             }
@@ -67,7 +67,7 @@ namespace CineControl.SeanceService.API.Service
 
         public async Task<ResultT<Seance>> AddSeance(SeanceCreateDto seanceCreateDto)
         {
-            if (!_tenantProvider.HasTenant)
+            if (!_tenantProvider.HasTenant())
             {
                 return SeanceErrors.AccessUnauthorized("No tenant specified");
             }
@@ -82,7 +82,7 @@ namespace CineControl.SeanceService.API.Service
             var seance = new Seance
             {
                 MovieId = seanceCreateDto.MovieId,
-                TenantId = _tenantProvider.TenantId,
+                TenantId = _tenantProvider.GetTenantId(),
                 TheaterId = seanceCreateDto.TheaterId,
                 CinemaId = seanceCreateDto.CinemaId,
                 StartTime = DateTime.SpecifyKind(seanceCreateDto.StartTime, DateTimeKind.Utc),
@@ -107,7 +107,7 @@ namespace CineControl.SeanceService.API.Service
 
         public async Task<Result> UpdateSeance(int id, SeanceDto seanceDto)
         {
-            if (!_tenantProvider.HasTenant)
+            if (!_tenantProvider.HasTenant())
             {
                 return SeanceErrors.AccessUnauthorized("No tenant specified");
             }
@@ -122,7 +122,7 @@ namespace CineControl.SeanceService.API.Service
             {
                 return SeanceErrors.NotFound($"Seance with id {id} not found.");
             }
-            if(seance.TenantId != _tenantProvider.TenantId){
+            if(seance.TenantId != _tenantProvider.GetTenantId()){
                 return SeanceErrors.UnprocessableEntity("Tenant ID mismatch.");
             }
 
@@ -172,7 +172,7 @@ namespace CineControl.SeanceService.API.Service
 
         public async Task<Result> DeleteSeance(int id)
         {
-            if (!_tenantProvider.HasTenant)
+            if (!_tenantProvider.HasTenant())
             {
                 return SeanceErrors.AccessUnauthorized("No tenant specified");
             }

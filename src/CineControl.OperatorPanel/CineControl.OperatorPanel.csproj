@@ -7,7 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="../Common/CineControl.Common.Clients.CinemaService/CineControl.Common.Clients.CinemaService.csproj" />
     <ProjectReference Include="../Common/CineControl.Common.Clients.IdentityService/CineControl.Common.Clients.IdentityService.csproj" />
+    <ProjectReference Include="../Common/CineControl.Common.Clients.TenantService/CineControl.Common.Clients.TenantService.csproj" />
+    <ProjectReference Include="../Common/CineControl.Common.JWTProvider/CineControl.Common.JWTProvider.csproj" />
     <ProjectReference Include="../Common/CineControl.Common.ServiceDefaults/CineControl.Common.ServiceDefaults.csproj" />
   </ItemGroup>
 
