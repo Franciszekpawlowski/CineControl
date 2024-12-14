@@ -4,9 +4,9 @@ namespace CineControl.Common.Clients.IdentityService.Models.Login;
 
 public class LoginResponseModel
 {
-    [JsonPropertyName("accessToken")]
+    [JsonPropertyName("AccessToken")]
     public required string Token { get; init; } = string.Empty;
-    [JsonPropertyName("refreshToken")]
+    [JsonPropertyName("RefreshToken")]
     public required string RefreshToken { get; init; } = string.Empty;
     // public int ExpiresIn { get; init; } = 0;
 

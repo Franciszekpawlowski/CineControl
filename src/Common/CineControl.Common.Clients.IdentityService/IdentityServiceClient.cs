@@ -2,9 +2,12 @@ using CineControl.Common.Clients.IdentityService.Errors;
 using CineControl.Common.Clients.IdentityService.IClients;
 using CineControl.Common.Clients.IdentityService.Models.GetUser;
 using CineControl.Common.Clients.IdentityService.Models.Login;
+using CineControl.Common.Clients.IdentityService.Options;
 using CineControl.Common.Results;
 using CineControl.Common.Tenant;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using RestSharp;
 using RestSharp.Authenticators;
 
@@ -12,11 +15,17 @@ namespace CineControl.Common.Clients.IdentityService;
 
 public partial class IdentityServiceClient : IIdentityServiceClient, IDisposable
 {
-    readonly string _baseUrl = "http://localhost:5093/api/v1";
+    readonly string _baseUrl;
     readonly RestClient _client;
     readonly IServiceScopeFactory _serviceScopeFactory;
-    public IdentityServiceClient(IServiceScopeFactory serviceScopeFactory)
+    readonly IdentityServiceClientOptions _identityOptions;
+    public IdentityServiceClient(
+        IServiceScopeFactory serviceScopeFactory,
+        IOptions<IdentityServiceClientOptions> identityOptions
+    )
     {
+        _identityOptions = identityOptions.Value;
+        _baseUrl = _identityOptions.BaseUrl;
         _serviceScopeFactory = serviceScopeFactory;
         var options = new RestClientOptions(_baseUrl);
         _client = new RestClient(options);
@@ -27,8 +36,7 @@ public partial class IdentityServiceClient : IIdentityServiceClient, IDisposable
     {
         using var scope = _serviceScopeFactory.CreateScope();
         var _tenantProvider = scope.ServiceProvider.GetRequiredService<ITenantProvider>();
-
-        var request = new RestRequest("/Account/Login");
+        var request = new RestRequest("/api/v1/Account/Login");
         request.AddJsonBody(loginRequestModel);
         request.AddHeader(TenantFieldNames.HeaderName, _tenantProvider.GetTenantId().ToString());
         LoginResponseModel responseModel;
@@ -36,7 +44,7 @@ public partial class IdentityServiceClient : IIdentityServiceClient, IDisposable
         {
             responseModel = await _client.PostAsync<LoginResponseModel>(request);
         }
-        catch
+        catch (Exception ex)
         {
             return ClientErrors.Failure;
         }
@@ -53,7 +61,7 @@ public partial class IdentityServiceClient : IIdentityServiceClient, IDisposable
         using var scope = _serviceScopeFactory.CreateScope();
         var _tenantProvider = scope.ServiceProvider.GetRequiredService<ITenantProvider>();
 
-        var request = new RestRequest("/Account/GetUser")
+        var request = new RestRequest("/api/v1/Account/GetUser")
         {
             Authenticator = new JwtAuthenticator(Token)
         };
