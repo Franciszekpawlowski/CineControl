@@ -59,7 +59,7 @@ namespace CineControl.IdentityService.API.Service
         {
             //todo validate tenantId
             var tenantIdExist = await _tenantServiceClient.GetAsync(_tenantProvider.GetTenantId());
-            if (!tenantIdExist.IsSuccess)
+            if (!tenantIdExist.IsSuccess && tenantIdExist.Value.Id == Guid.Empty)
             {
                 return AuthErrors.NotFound();
             }

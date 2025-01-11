@@ -1,5 +1,4 @@
-﻿using CineControl.Common.Clients.TenantService.Errors;
-using CineControl.Common.Clients.TenantService.IClients;
+﻿using CineControl.Common.Clients.TenantService.IClients;
 using CineControl.Common.Clients.TenantService.Models.Tenant;
 using CineControl.Common.Clients.TenantService.Options;
 using CineControl.Common.Results;
@@ -25,17 +24,9 @@ public class TenantServiceClient : ITenantServiceClient, IDisposable
     public async Task<ResultT<GetResponseModel>> GetAsync(Guid tenantId)
     {
         var request = new RestRequest($"/api/v1/Tenant/{tenantId}");   
-        var responseModel = await _client.GetAsync<GetResponseModel>(request);
+        var response = await _client.ExecuteGetAsync<GetResponseModel>(request);
 
-        if (responseModel == null)
-        {
-            return ClientErrors.Failure();
-        }
-        if (responseModel.Id == Guid.Empty)
-        {
-            return ClientErrors.NotFound();
-        }
-        return responseModel;
+        return response.ToResult();
     }
 
     public void Dispose()
@@ -47,47 +38,31 @@ public class TenantServiceClient : ITenantServiceClient, IDisposable
     public async Task<ResultT<IEnumerable<GetResponseModel>>> GetAllAsync()
     {
         var request = new RestRequest("/Tenant");
-        var responseModel = await _client.GetAsync<IEnumerable<GetResponseModel>>(request);
-        if (responseModel == null)
-        {
-            return ClientErrors.Failure();
-        }
-        return responseModel.ToList();
+        var response = await _client.ExecuteGetAsync<IEnumerable<GetResponseModel>>(request);
+        return response.ToResult();
     }
 
     public async Task<ResultT<GetResponseModel>> CreateAsync(CreateTenantRequestModel requestModel)
     {
         var request = new RestRequest("/Tenant/Create");
         request.AddJsonBody(requestModel);
-        var responseModel = await _client.PostAsync<GetResponseModel>(request);
-        if (responseModel == null)
-        {
-            return ClientErrors.Failure();
-        }
-        return responseModel;
+        var response = await _client.ExecutePostAsync<GetResponseModel>(request);
+        return response.ToResult();
     }
 
     public async Task<Result> UpdateAsync(Guid tenantId ,UpdateTenantRequestModel requestModel)
     {
         var request = new RestRequest($"/Tenant/{tenantId}");
         request.AddJsonBody(requestModel);
-        var responseModel = await _client.PutAsync(request);
-        if(responseModel == null)
-        {
-            return ClientErrors.Failure();
-        }
-        return Result.Success();
+        var response = await _client.ExecutePutAsync(request);
+        return response.ToResult();
         
     }
 
     public async Task<Result> DeleteAsync(Guid tenantId)
     {
         var requestModel = new RestRequest($"/Tenant/{tenantId}");
-        var responseModel = await _client.DeleteAsync(requestModel);
-        if (responseModel == null)
-        {
-            return ClientErrors.Failure();
-        }
-        return Result.Success();
+        var response = await _client.ExecuteDeleteAsync(requestModel);
+        return response.ToResult();
     }
 }

@@ -37,8 +37,8 @@ public partial class IdentityServiceClient : IIdentityServiceClient, IDisposable
         var request = new RestRequest("/api/v1/Account/Login");
         request.AddJsonBody(loginRequestModel);
         request.AddHeader(TenantFieldNames.HeaderName, _tenantProvider.GetTenantId().ToString());
-        var responseModel = await _client.ExecutePostAsync<LoginResponseModel>(request);
-        return responseModel.ToResult();
+        var response = await _client.ExecutePostAsync<LoginResponseModel>(request);
+        return response.ToResult();
     }
 
     public async Task<ResultT<GetUserResponseModel>> GetUserAsync(string Token)
@@ -52,8 +52,8 @@ public partial class IdentityServiceClient : IIdentityServiceClient, IDisposable
         };
         request.AddHeader(TenantFieldNames.HeaderName, _tenantProvider.GetTenantId().ToString());
 
-        var responseModel = await _client.ExecuteGetAsync<GetUserResponseModel>(request);
-        return responseModel.ToResult();
+        var response = await _client.ExecuteGetAsync<GetUserResponseModel>(request);
+        return response.ToResult();
 
     }
 
