@@ -1,23 +1,31 @@
-﻿using CineControl.Common.Clients.CinemaService.Errors;
 using CineControl.Common.Clients.CinemaService.IClients;
 using CineControl.Common.Clients.CinemaService.Models.AddCinema;
 using CineControl.Common.Clients.CinemaService.Models.GetCinemas;
 using CineControl.Common.Clients.CinemaService.Models.UpdateCinema;
+using CineControl.Common.Clients.CinemaService.Options;
 using CineControl.Common.Results;
 using CineControl.Common.Tenant;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using RestSharp;
 
 namespace CineControl.Common.Clients.CinemaService;
 
 public class CinemaServiceClient : ICinemaServiceClient, IDisposable
 {
-    readonly string _baseUrl = "http://localhost:5112/api/v1";
+    readonly string _baseUrl;
     readonly RestClient _client;
     readonly IServiceProvider  _serviceScopeFactory;
 
-    public CinemaServiceClient(IServiceProvider  serviceScopeFactory)
+    readonly CinemaServiceClientOptions _cinemaOptions;
+
+    public CinemaServiceClient(
+        IServiceProvider serviceScopeFactory,
+        IOptions<CinemaServiceClientOptions> cinemaOptions
+    )
     {
+        _cinemaOptions = cinemaOptions.Value;
+        _baseUrl = _cinemaOptions.BaseUrl;
         _serviceScopeFactory = serviceScopeFactory;
         var options = new RestClientOptions(_baseUrl);
         _client = new RestClient(options);
@@ -35,12 +43,9 @@ public class CinemaServiceClient : ICinemaServiceClient, IDisposable
         var request = new RestRequest("/Cinemas");
         request.AddHeader(TenantFieldNames.HeaderName, TenantId);
 
-        var responseModel = await _client.GetAsync<IEnumerable<GetCinemasResponseModel>>(request);
-        if (responseModel == null)
-        {
-            return ClientErrors.Failure;
-        }
-        return responseModel.ToList();
+        var responseModel = await _client.ExecuteGetAsync<IEnumerable<GetCinemasResponseModel>>(request);
+
+        return responseModel.ToResult();
     }
 
     public void Dispose()
@@ -60,12 +65,9 @@ public class CinemaServiceClient : ICinemaServiceClient, IDisposable
 
         var request = new RestRequest($"/Cinemas/{id}");
         request.AddHeader(TenantFieldNames.HeaderName, TenantId);
-        var responseModel = await _client.GetAsync<GetCinemasResponseModel>(request);
-        if (responseModel == null)
-        {
-            return ClientErrors.Failure;
-        }
-        return responseModel;
+        var responseModel = await _client.ExecuteGetAsync<GetCinemasResponseModel>(request);
+
+        return responseModel.ToResult();
     }
 
     public async Task<ResultT<GetCinemasResponseModel>> GetCinemaByCity(string city,string TenantId = null)
@@ -79,12 +81,8 @@ public class CinemaServiceClient : ICinemaServiceClient, IDisposable
 
         var request = new RestRequest($"/Cinemas/ByCity/{city}");
         request.AddHeader(TenantFieldNames.HeaderName, TenantId);
-        var responseModel = await _client.GetAsync<GetCinemasResponseModel>(request);
-        if(responseModel == null)
-        {
-            return ClientErrors.Failure;
-        }
-        return responseModel;
+        var responseModel = await _client.ExecuteGetAsync<GetCinemasResponseModel>(request);
+        return responseModel.ToResult();
     }
 
     public async Task<Result> AddCinemaAsync(AddCinemaRequestModel model,string TenantId = null)
@@ -98,12 +96,9 @@ public class CinemaServiceClient : ICinemaServiceClient, IDisposable
         var request = new RestRequest("/Cinemas/AddCinema");
         request.AddHeader(TenantFieldNames.HeaderName, TenantId);
         request.AddJsonBody(model);
-        var response = await _client.PostAsync(request);
-        if (response == null)
-        {
-            return ClientErrors.Failure;
-        }
-        return Result.Success();
+        var response = await _client.ExecutePostAsync(request);
+
+        return response.ToResult();
     }
 
     public async Task<Result> UpdateCinemaAsync(int id, UpdateCinemaRequestModel model,string TenantId = null)
@@ -118,12 +113,8 @@ public class CinemaServiceClient : ICinemaServiceClient, IDisposable
         var request = new RestRequest($"/Cinemas/{id}");
         request.AddHeader(TenantFieldNames.HeaderName, TenantId);
         request.AddJsonBody(model);
-        var response = await _client.PutAsync(request);
-        if (response == null)
-        {
-            return ClientErrors.Failure;
-        }
-        return Result.Success();
+        var response = await _client.ExecutePutAsync(request);
+        return response.ToResult();
     }
 
     public async Task<Result> DeleteCinemaAsync(int id,string TenantId = null)
@@ -136,11 +127,7 @@ public class CinemaServiceClient : ICinemaServiceClient, IDisposable
         }
         var request = new RestRequest($"/Cinemas/{id}");
         request.AddHeader(TenantFieldNames.HeaderName, TenantId);
-        var response = await _client.DeleteAsync(request);
-        if (response == null)
-        {
-            return ClientErrors.Failure;
-        }
-        return Result.Success();
+        var response = await _client.ExecuteDeleteAsync(request);
+        return response.ToResult();
     }
 }

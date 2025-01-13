@@ -1,4 +1,3 @@
-using CineControl.Common.Clients.IdentityService.Errors;
 using CineControl.Common.Clients.IdentityService.IClients;
 using CineControl.Common.Clients.IdentityService.Models.GetUser;
 using CineControl.Common.Clients.IdentityService.Models.Login;
@@ -6,7 +5,6 @@ using CineControl.Common.Clients.IdentityService.Options;
 using CineControl.Common.Results;
 using CineControl.Common.Tenant;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RestSharp;
 using RestSharp.Authenticators;
@@ -39,21 +37,8 @@ public partial class IdentityServiceClient : IIdentityServiceClient, IDisposable
         var request = new RestRequest("/api/v1/Account/Login");
         request.AddJsonBody(loginRequestModel);
         request.AddHeader(TenantFieldNames.HeaderName, _tenantProvider.GetTenantId().ToString());
-        LoginResponseModel responseModel;
-        try
-        {
-            responseModel = await _client.PostAsync<LoginResponseModel>(request);
-        }
-        catch (Exception ex)
-        {
-            return ClientErrors.Failure;
-        }
-
-        if (responseModel == null)
-        {
-            return ClientErrors.Failure;
-        }
-        return responseModel;
+        var response = await _client.ExecutePostAsync<LoginResponseModel>(request);
+        return response.ToResult();
     }
 
     public async Task<ResultT<GetUserResponseModel>> GetUserAsync(string Token)
@@ -67,12 +52,9 @@ public partial class IdentityServiceClient : IIdentityServiceClient, IDisposable
         };
         request.AddHeader(TenantFieldNames.HeaderName, _tenantProvider.GetTenantId().ToString());
 
-        var responseModel = await _client.GetAsync<GetUserResponseModel>(request);
-        if (responseModel == null)
-        {
-            return ClientErrors.AccessUnauthorized;
-        }
-        return responseModel;
+        var response = await _client.ExecuteGetAsync<GetUserResponseModel>(request);
+        return response.ToResult();
+
     }
 
     public void Dispose()
