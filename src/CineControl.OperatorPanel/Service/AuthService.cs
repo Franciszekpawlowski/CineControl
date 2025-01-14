@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using CineControl.Common.Clients.IdentityService.Errors;
 using CineControl.Common.Clients.IdentityService.IClients;
 using CineControl.Common.Clients.IdentityService.Models.Login;
 using CineControl.Common.Results;
@@ -60,13 +59,13 @@ public class AuthService(IIdentityServiceClient authServiceClient, IHttpContextA
         
         if (string.IsNullOrEmpty(token))
         {
-            return ClientErrors.AccessUnauthorized;
+            return AuthServiceErrors.AccessUnauthorized();
         }
 
         var result = await _authServiceClient.GetUserAsync(token);
         if (!result.IsSuccess)
         {
-            return ClientErrors.NotFound;
+            return AuthServiceErrors.NotFound();
         }
         return new GetUserResult(result.Value);
     }
