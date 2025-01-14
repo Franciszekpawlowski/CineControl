@@ -22,5 +22,7 @@ public class JWTProvider : IJWTProvider
     public string GetTenantId() 
         => GetClaims().FirstOrDefault(c => c.Type == CustomClaims.TenantId).Value;
 
+    public string GetUserId() 
+        => GetClaims().FirstOrDefault(c => c.Type == CustomClaims.UserId).Value;
 
 }
