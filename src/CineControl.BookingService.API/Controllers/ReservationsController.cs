@@ -23,6 +23,19 @@ namespace CineControl.BookingService.API.Controllers
             _reservationService = reservationService;
             _jwtProvider = jWTProvider;
         }
+        [HttpGet("MyReservations")]
+        public async Task<IActionResult> GetUserReservations()
+        {
+            string token = await HttpContext.GetTokenAsync("access_token");
+            _jwtProvider.SetToken(token);
+
+            var result = await _reservationService.GetUserReservationsAsync();
+            return result.Match(
+                onSuccess: (List<ReservationResponse> reservations) => Ok(reservations),
+                onFailure: Problem
+            );
+        }
+        
 
         [HttpPost]
         public async Task<IActionResult> CreateReservation([FromBody] ReservationRequest request)

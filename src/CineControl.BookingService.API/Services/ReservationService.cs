@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CineControl.Common.JWTProvider;
+using BookingService.API.Models.DTOs;
 
 namespace CineControl.BookingService.API.Services
 {
@@ -135,6 +136,26 @@ namespace CineControl.BookingService.API.Services
                 _logger.LogError(ex, "Wystąpił błąd podczas tworzenia rezerwacji.");
                 return BookingErrors.Failure("Wystąpił błąd podczas tworzenia rezerwacji.");
             }
+        }
+        public async Task<ResultT<List<ReservationResponse>>> GetUserReservationsAsync()
+        {
+            var userId = _jwtProvider.GetUserId();
+
+            if (!_tenantProvider.HasTenant())
+            {
+                return BookingErrors.AccessUnauthorized("Brak określonego tenant.");
+            }
+
+            var tenantId = _tenantProvider.GetTenantId();
+            var reservations = await _context.Reservations
+                .Include(r => r.Tickets)
+                .Where(r => r.TenantId == tenantId && r.UserId == userId)
+                .ToListAsync();
+            var reservationResponses = reservations
+                .Select(r => r.ToResponse()) 
+                .ToList();
+
+            return reservationResponses;
         }
 
     }
