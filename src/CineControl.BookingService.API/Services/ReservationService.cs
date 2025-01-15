@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CineControl.Common.JWTProvider;
 
 namespace CineControl.BookingService.API.Services
 {
@@ -18,15 +19,18 @@ namespace CineControl.BookingService.API.Services
         private readonly AppDbContext _context;
         private readonly ILogger<ReservationService> _logger;
         private readonly ITenantProvider _tenantProvider;
+        private readonly IJWTProvider _jwtProvider;
 
         public ReservationService(
             AppDbContext context,
             ILogger<ReservationService> logger,
-            ITenantProvider tenantProvider)
+            ITenantProvider tenantProvider,
+            IJWTProvider jWTProvider)
         {
             _context = context;
             _logger = logger;
             _tenantProvider = tenantProvider;
+            _jwtProvider = jWTProvider;
         }
 
         public async Task<bool> AreSeatsAvailableAsync(int seanceId, List<int> seatIds)
@@ -53,10 +57,14 @@ namespace CineControl.BookingService.API.Services
 
         public async Task<ResultT<ReservationResponse>> CreateReservationAsync(ReservationRequest request)
         {
+            
+
+
             if (!_tenantProvider.HasTenant())
             {
                 return BookingErrors.AccessUnauthorized("Brak określonego tenant.");
             }
+            
 
             using var transaction = await _context.Database.BeginTransactionAsync();
 
@@ -81,11 +89,13 @@ namespace CineControl.BookingService.API.Services
                     TenantId = _tenantProvider.GetTenantId(),
                     SeanceId = request.SeanceId,
                     ReservationTime = DateTime.UtcNow,
+                    UserId = _jwtProvider.GetUserId(),
                     Tickets = request.SeatIds.Select(seatId => new Ticket
                     {
                         TenantId = _tenantProvider.GetTenantId(),
                         SeanceId = request.SeanceId,
-                        SeatId = seatId
+                        SeatId = seatId,
+                        UserId = _jwtProvider.GetUserId(),
                     }).ToList()
                 };
 

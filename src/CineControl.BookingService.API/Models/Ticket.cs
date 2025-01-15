@@ -5,6 +5,7 @@ namespace CineControl.BookingService.API.Models
         public int Id { get; set; }
         public Guid TenantId { get; set; } 
         public int SeanceId { get; set; }
+        public string UserId { get; set; }
         public int SeatId { get; set; }
         public int ReservationId { get; set; }
         public Reservation Reservation { get; set; }
