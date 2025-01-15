@@ -1,7 +1,6 @@
 using CineControl.CinemaService.API.Data;
 using CineControl.CinemaService.API.Errors;
 using CineControl.CinemaService.API.Models;
-using CineControl.CinemaService.API.Models.DTOs;
 using CineControl.CinemaService.API.Models.DTOs.Theaters;
 using CineControl.CinemaService.API.Service.IService;
 using CineControl.Common.Results;
@@ -15,11 +14,18 @@ public class TheaterServices(CinemaContext context, ITenantProvider tenantProvid
     private readonly ITenantProvider _tenantProvider = tenantProvider;
     private readonly CinemaContext _context = context;
 
-    public async Task<ResultT<TheaterResponse>> GetTheaterById(int theaterId)
+    public async Task<ResultT<TheaterResponse>> GetTheaterById(int cinemaId,int theaterId)
     {
         if (!_tenantProvider.HasTenant())
         {
             return CinemaErrors.MissingTenantHeader();
+        }
+
+        var cinema = await _context.Cinemas.FirstOrDefaultAsync(c => c.Id == cinemaId);
+
+        if (cinema is null)
+        {
+            return CinemaErrors.CinemaNotFound(cinemaId);
         }
 
         var theater = await _context.Theaters
@@ -67,14 +73,30 @@ public class TheaterServices(CinemaContext context, ITenantProvider tenantProvid
         var theater = new Theater
         {
             TenantId = _tenantProvider.GetTenantId(),
+            CinemaId = cinemaId,
             Name = request.Name,
-            SeatingCapacity = request.SeatingCapacity,
-            Seats = CinemaFactory.GenerateSeats(_tenantProvider.GetTenantId(), request.SeatingCapacity, request.SeatsPerRow)
+            // Seats = CinemaFactory.GenerateSeats(_tenantProvider.GetTenantId(),theaterid, request.SeatingCapacity, request.SeatsPerRow)
         };
 
-        cinema.Theaters.Add(theater);
-        await _context.SaveChangesAsync();
-        return Result.Success();
+        using var transaction = await _context.Database.BeginTransactionAsync();
+        try
+        {
+            await _context.SaveChangesAsync();
+            var theaterId = theater.Id;
+
+            theater.Seats = CinemaFactory.GenerateSeats(_tenantProvider.GetTenantId(), theaterId, request.SeatingCapacity, request.SeatsPerRow);
+
+            _context.Theaters.Update(theater);
+
+            await _context.SaveChangesAsync();
+            return Result.Success();
+        }
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync();
+            return CinemaErrors.UnprocessableEntity(ex.Message);
+            throw;
+        }
     }
 
     public async Task<Result> RemoveTheater(int cinemaId, int theaterId)
@@ -104,4 +126,45 @@ public class TheaterServices(CinemaContext context, ITenantProvider tenantProvid
         return Result.Success();
     }
 
+    public async Task<Result> UpdateTheater(int cinemaId, int theaterId, UpdateTheaterRequest request)
+    {
+        if (!_tenantProvider.HasTenant())
+        {
+            return CinemaErrors.MissingTenantHeader();
+        }
+
+        var cinema = await _context.Cinemas
+            .Include(c => c.Theaters)
+            .FirstOrDefaultAsync(c => c.Id == cinemaId);
+
+        if (cinema is null)
+        {
+            return CinemaErrors.CinemaNotFound(cinemaId);
+        }
+
+        var theater = cinema.Theaters.FirstOrDefault(t => t.Id == theaterId);
+        if (theater == null)
+        {
+            return CinemaErrors.TheaterNotFound(theaterId);
+        }
+
+        theater.Name = request.Name;
+        theater.Seats.Clear();
+        theater.Seats = CinemaFactory.GenerateSeats(_tenantProvider.GetTenantId(), theaterId, request.SeatingCapacity, request.SeatsPerRow);
+
+        using var transaction = await _context.Database.BeginTransactionAsync();
+        try
+        {
+            _context.Theaters.Update(theater);
+
+            await _context.SaveChangesAsync();
+            return Result.Success();
+        }
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync();
+            return CinemaErrors.UnprocessableEntity(ex.Message);
+            throw;
+        }
+    }
 }

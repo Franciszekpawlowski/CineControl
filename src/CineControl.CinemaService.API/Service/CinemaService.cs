@@ -9,16 +9,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CineControl.CinemaService.API.Service
 {
-    public class CinemaService : ICinemaService
+    public class CinemaService(CinemaContext context, ITenantProvider tenantProvider) : ICinemaService
     {
-        private readonly CinemaContext _context;
-        private readonly ITenantProvider _tenantProvider;
-
-        public CinemaService(CinemaContext context, ITenantProvider tenantProvider)
-        {
-            _context = context;
-            _tenantProvider = tenantProvider;
-        }
+        private readonly CinemaContext _context = context;
+        private readonly ITenantProvider _tenantProvider = tenantProvider;
 
         public async Task<ResultT<IEnumerable<CinemaResponse>>> GetAllCinemas()
         {
@@ -28,8 +22,6 @@ namespace CineControl.CinemaService.API.Service
             }
 
             var cinemas = await _context.Cinemas
-                .Include(c => c.Theaters)
-                .ThenInclude(t => t.Seats)
                 .ToListAsync();
 
             return cinemas.ToResponse();
@@ -43,8 +35,6 @@ namespace CineControl.CinemaService.API.Service
             }
 
             var cinema = await _context.Cinemas
-                .Include(c => c.Theaters)
-                .ThenInclude(t => t.Seats)
                 .FirstOrDefaultAsync(c => c.Id == id);
 
             return cinema is not null
@@ -76,20 +66,33 @@ namespace CineControl.CinemaService.API.Service
             return cinemas.ToResponse();
         }
 
-        public async Task<ResultT<CinemaResponse>> AddCinema(AddCinemaRequest request)
+        public async Task<Result> AddCinema(AddCinemaRequest request)
         {
             if (!_tenantProvider.HasTenant())
             {
                 return CinemaErrors.MissingTenantHeader();
             }
 
-            var cinema = CinemaFactory.CreateCinema(_tenantProvider.GetTenantId(), request);
+            // var cinema = CinemaFactory.CreateCinema(_tenantProvider.GetTenantId(), request);
+            var cinema = request.ToEntity(_tenantProvider.GetTenantId());
+
             await _context.Cinemas.AddAsync(cinema);
-            await _context.SaveChangesAsync();
-            return cinema.ToResponse();
+
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+                return Result.Success();
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                return CinemaErrors.UnprocessableEntity(ex.Message);
+                throw;
+            }
         }
 
-        public async Task<Result> UpdateCinema(Cinema cinema)
+        public async Task<Result> UpdateCinema(UpdateCinemaRequest updatedCinema, int cinemaId)
         {
             if (!_tenantProvider.HasTenant())
             {
@@ -97,22 +100,33 @@ namespace CineControl.CinemaService.API.Service
             }
 
             var existing = await _context.Cinemas
-                .FirstOrDefaultAsync(c => c.Id == cinema.Id);
+                .FirstOrDefaultAsync(c => c.Id == cinemaId);
 
             if (existing is null)
             {
-                return CinemaErrors.CinemaNotFound(cinema.Id);
+                return CinemaErrors.CinemaNotFound(cinemaId);
             }
 
-            existing.Name = cinema.Name;
-            existing.Address = cinema.Address;
-            existing.City = cinema.City;
-            existing.State = cinema.State;
-            existing.ZipCode = cinema.ZipCode;
+            existing.Name = updatedCinema.Name;
+            existing.Address = updatedCinema.Address;
+            existing.City = updatedCinema.City;
+            existing.State = updatedCinema.State;
+            existing.ZipCode = updatedCinema.ZipCode;
 
             _context.Cinemas.Update(existing);
-            await _context.SaveChangesAsync();
-            return Result.Success();
+
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+                return Result.Success();
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                return CinemaErrors.UnprocessableEntity(ex.Message);
+                throw;
+            }
         }
 
         public async Task<Result> DeleteCinema(int id)
@@ -130,8 +144,19 @@ namespace CineControl.CinemaService.API.Service
             }
 
             _context.Cinemas.Remove(cinema);
-            await _context.SaveChangesAsync();
-            return Result.Success();
+            
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+                return Result.Success();
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                return CinemaErrors.UnprocessableEntity(ex.Message);
+                throw;
+            }
         }
     }
 }

@@ -9,14 +9,9 @@ namespace CineControl.CinemaService.API.Controllers
     [Route("api/v1/[controller]")]
     [ApiController]
     //[Authorize(Policy = nameof(CustomPolicies.Operator))]
-    public class CinemasController : BaseController
+    public class CinemasController(ICinemaService cinemaService) : BaseController
     {
-        private readonly ICinemaService _cinemaService;
-
-        public CinemasController(ICinemaService cinemaService)
-        {
-            _cinemaService = cinemaService;
-        }
+        private readonly ICinemaService _cinemaService = cinemaService;
 
         [HttpGet]
         [AllowAnonymous]
@@ -31,7 +26,7 @@ namespace CineControl.CinemaService.API.Controllers
 
         [HttpGet("{id:int}")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetCinema(int id)
+        public async Task<IActionResult> GetCinema([FromRoute]int id)
         {
             var result = await _cinemaService.GetCinemaById(id);
             return result.Match(
@@ -72,20 +67,10 @@ namespace CineControl.CinemaService.API.Controllers
             );
         }
 
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateCinema(int id, [FromBody] CinemaResponse updatedCinema)
+        [HttpPut("{cinemaId:int}")]
+        public async Task<IActionResult> UpdateCinema(int cinemaId, [FromBody] UpdateCinemaRequest updatedCinema)
         {
-            var cinema = new Models.Cinema
-            {
-                Id = id,
-                Name = updatedCinema.Name,
-                Address = updatedCinema.Address,
-                City = updatedCinema.City,
-                State = updatedCinema.State,
-                ZipCode = updatedCinema.ZipCode
-            };
-
-            var result = await _cinemaService.UpdateCinema(cinema);
+            var result = await _cinemaService.UpdateCinema(updatedCinema,cinemaId);
             return result.Match(
                 onSuccess: Ok,
                 onFailure: Problem

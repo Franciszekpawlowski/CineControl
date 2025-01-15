@@ -30,4 +30,17 @@ public static class CinemaMappingExtensions
             Cities = cities
         };
     }
+
+    public static Cinema ToEntity(this AddCinemaRequest request, Guid tenantId)
+    {
+        return new Cinema
+        {
+            TenantId = tenantId,
+            Name = request.Name,
+            Address = request.Address,
+            City = request.City,
+            State = request.State,
+            ZipCode = request.ZipCode
+        };
+    }
 }
