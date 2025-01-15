@@ -15,7 +15,7 @@ public static class TheaterMappingExtensions
         };
     }
 
-    public static List<TheaterResponse> ToResponse(this List<Theater> theaters)
+    public static List<TheaterResponse> ToResponse(this ICollection<Theater> theaters)
     {
         return theaters.Select(ToResponse).ToList();
     }

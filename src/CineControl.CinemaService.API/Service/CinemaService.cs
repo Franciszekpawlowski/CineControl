@@ -1,6 +1,5 @@
 using CineControl.CinemaService.API.Data;
 using CineControl.CinemaService.API.Errors;
-using CineControl.CinemaService.API.Models;
 using CineControl.CinemaService.API.Models.DTOs.Cinemas;
 using CineControl.CinemaService.API.Service.IService;
 using CineControl.Common.Results;
@@ -144,7 +143,7 @@ namespace CineControl.CinemaService.API.Service
             }
 
             _context.Cinemas.Remove(cinema);
-            
+
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {

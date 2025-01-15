@@ -8,6 +8,8 @@ namespace CineControl.CinemaService.API.Models
         public int Row { get; set; }
         public int Number { get; set; }
         public SeatType Type { get; set; }
+
+        public virtual Theater Theater { get; set; } = null!;
     }
 
     public enum SeatType

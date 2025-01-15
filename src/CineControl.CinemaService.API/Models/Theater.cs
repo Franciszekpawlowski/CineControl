@@ -3,12 +3,14 @@ namespace CineControl.CinemaService.API.Models
     public class Theater
     {
         public int Id { get; set; }
-        public int CinemaId { get; set;}
         public Guid TenantId { get; set; }
         public string Name { get; set; }
-        // public int SeatingCapacity { get; set; }
-        public List<Seat> Seats { get; set; } = new List<Seat>();
 
-        public int SeatingCapacity  => Seats.Count;
+        public ICollection<Seat> Seats { get; set; } = new List<Seat>();
+
+        public int CinemaId { get; set;}
+        public Cinema Cinema{ get; set; } = null!;
+
+        public int SeatingCapacity => Seats.Count;
     }
 }
