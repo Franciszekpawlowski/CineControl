@@ -4,11 +4,13 @@ using CineControl.CinemaService.API.Service.IService;
 using CineControl.Common.ServiceDefaults;
 using CineControl.Common.Tenant;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Rejestracja usług
 builder.AddServiceDefaults("CineControl.CinemaService.API");
+builder.AddLogger();
 builder.Services.AddControllers();
 builder.Services.AddDbContext<CinemaContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -22,6 +24,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.UseSerilogRequestLogging();
 
 // Konfiguracja middleware
 app.UseSwagger();

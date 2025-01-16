@@ -1,23 +1,112 @@
-# @CineControl.CinemaService.API_HostAddress = http://localhost:5112
-@CineControl.CinemaService.API_HostAddress = http://gateway.cinecontrol.local/cinema
+@CineControl.CinemaService.API_HostAddress = http://localhost:5112
+# @CineControl.CinemaService.API_HostAddress = http://gateway.cinecontrol.local/cinema
 
 
-POST  {{CineControl.CinemaService.API_HostAddress}}/api/v1/Cinemas
+POST {{CineControl.CinemaService.API_HostAddress}}/api/v1/Cinemas
 Content-Type: application/json
 X-TenantId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
 
 {
-  "tenantId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
   "name": "test",
   "address": "testowa2",
   "city": "test",
   "state": "test",
-  "zipCode": "21-902",
-  "theaterConfigs": [
-    {
-      "name": "SuperDuper",
-      "seatingCapacity": 20,
-      "seatsPerRow": 5
-    }
-  ]
+  "zipCode": "21-902"
 }
+
+###
+# @name GetCinemas
+GET {{CineControl.CinemaService.API_HostAddress}}/api/v1/Cinemas
+Content-Type: application/json
+X-TenantId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+
+###
+@cinemaId = {{GetCinemas.response.body.$.[0].id}}
+GET {{CineControl.CinemaService.API_HostAddress}}/api/v1/Cinemas/{{cinemaId}}
+Content-Type: application/json
+X-TenantId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+
+###
+# @name cities
+GET {{CineControl.CinemaService.API_HostAddress}}/api/v1/Cinemas/cities
+Content-Type: application/json
+X-TenantId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+
+###
+@city = {{cities.response.body.$.cities.[0]}}
+GET {{CineControl.CinemaService.API_HostAddress}}/api/v1/Cinemas/ByCity/{{city}}
+Content-Type: application/json
+X-TenantId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+
+###
+
+PUT {{CineControl.CinemaService.API_HostAddress}}/api/v1/Cinemas/{{cinemaId}}
+Content-Type: application/json
+X-TenantId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+
+{
+  "name": "test",
+  "address": "testowa14",
+  "city": "test",
+  "state": "test",
+  "zipCode": "21-902"
+}
+
+###
+
+DELETE {{CineControl.CinemaService.API_HostAddress}}/api/v1/Cinemas/{{cinemaId}}
+Content-Type: application/json
+X-TenantId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+
+###
+# 
+###
+
+# @name GetTheaters
+GET {{CineControl.CinemaService.API_HostAddress}}/api/v1/Cinemas/{{cinemaId}}/theaters
+Content-Type: application/json
+X-TenantId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+
+###
+
+POST {{CineControl.CinemaService.API_HostAddress}}/api/v1/Cinemas/{{cinemaId}}/theaters
+Content-Type: application/json
+X-TenantId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+
+{
+  "name": "test",
+  "SeatingCapacity": 80,
+  "SeatsPerRow": 10
+}
+
+###
+@theaterId = {{GetTheaters.response.body.$.[0].id}}
+GET {{CineControl.CinemaService.API_HostAddress}}/api/v1/Cinemas/{{cinemaId}}/theaters/{{theaterId}}
+Content-Type: application/json
+X-TenantId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+
+###
+
+PUT {{CineControl.CinemaService.API_HostAddress}}/api/v1/Cinemas/{{cinemaId}}/theaters/{{theaterId}}
+Content-Type: application/json
+X-TenantId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+
+{
+  "name": "test",
+  "SeatingCapacity": 40,
+  "SeatsPerRow": 10
+}
+
+###
+
+DELETE {{CineControl.CinemaService.API_HostAddress}}/api/v1/Cinemas/{{cinemaId}}/theaters/{{theaterId}}
+Content-Type: application/json
+X-TenantId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+
+###
+# 
+###
+
+GET {{CineControl.CinemaService.API_HostAddress}}/api/v1/Cinemas/{{cinemaId}}/theaters/{{theaterId}}/seats
+Content-Type: application/json
+X-TenantId: 3fa85f64-5717-4562-b3fc-2c963f66afa6

@@ -5,7 +5,12 @@ namespace CineControl.CinemaService.API.Models
         public int Id { get; set; }
         public Guid TenantId { get; set; }
         public string Name { get; set; }
-        public int SeatingCapacity { get; set; }
-        public List<Seat> Seats { get; set; } = new List<Seat>();
+
+        public ICollection<Seat> Seats { get; set; } = new List<Seat>();
+
+        public int CinemaId { get; set;}
+        public Cinema Cinema{ get; set; } = null!;
+
+        public int SeatingCapacity => Seats.Count;
     }
 }

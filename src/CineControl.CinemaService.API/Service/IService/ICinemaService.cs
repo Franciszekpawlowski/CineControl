@@ -11,8 +11,8 @@ namespace CineControl.CinemaService.API.Service.IService
         Task<ResultT<GetCinemasByCityResponse>> GetAllCities();
         Task<ResultT<IEnumerable<CinemaResponse>>> GetCinemasByCity(string city);
 
-        Task<ResultT<CinemaResponse>> AddCinema(AddCinemaRequest request);
-        Task<Result> UpdateCinema(Cinema cinema);
+        Task<Result> AddCinema(AddCinemaRequest request);
+        Task<Result> UpdateCinema(UpdateCinemaRequest updatedCinema, int cinemaId);
         Task<Result> DeleteCinema(int id);
     }
 }

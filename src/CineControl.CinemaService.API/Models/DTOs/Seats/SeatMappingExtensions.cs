@@ -13,7 +13,7 @@ public static class SeatMappingExtensions
         };
     }
 
-    public static List<SeatResponse> ToResponse(this List<Seat> seats)
+    public static List<SeatResponse> ToResponse(this ICollection<Seat> seats)
     {
         return seats.Select(ToResponse).ToList();
     }

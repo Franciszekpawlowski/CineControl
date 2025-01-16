@@ -1,4 +1,3 @@
-
 namespace CineControl.CinemaService.API.Models
 {
     public class Cinema
@@ -10,6 +9,6 @@ namespace CineControl.CinemaService.API.Models
         public string City { get; set; }
         public string State { get; set; }
         public string ZipCode { get; set; }
-        public List<Theater> Theaters { get; set; } = new List<Theater>();
+        public ICollection<Theater> Theaters { get; set; } = new List<Theater>();
     }
 }

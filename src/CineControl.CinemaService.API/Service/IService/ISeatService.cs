@@ -6,8 +6,5 @@ namespace CineControl.CinemaService.API.Service.IService;
 
 public interface ISeatService
 {
-    Task<ResultT<IEnumerable<SeatResponse>>> GetSeatsByTheaterId(int theaterId);
-    Task<Result> AddSeat(int theaterId, Seat seat);
-    Task<Result> RemoveSeat(int theaterId, int seatId);
-    
+    Task<ResultT<IEnumerable<SeatResponse>>> GetSeatsByTheaterId(int cinemaId,int theaterId);    
 }

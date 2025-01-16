@@ -11,11 +11,11 @@ public static class TheaterMappingExtensions
             Id = theater.Id,
             Name = theater.Name,
             SeatingCapacity = theater.SeatingCapacity,
-            Seats = theater.Seats.Select(s => s.ToResponse()).ToList()
+            // Seats = theater.Seats.Select(s => s.ToResponse()).ToList()
         };
     }
 
-    public static List<TheaterResponse> ToResponse(this List<Theater> theaters)
+    public static List<TheaterResponse> ToResponse(this ICollection<Theater> theaters)
     {
         return theaters.Select(ToResponse).ToList();
     }

@@ -3,6 +3,7 @@ using System;
 using CineControl.CinemaService.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CineControl.CinemaService.API.Migrations
 {
     [DbContext(typeof(CinemaContext))]
-    partial class CinemaContextModelSnapshot : ModelSnapshot
+    [Migration("20250115200122_refactorCinemaService")]
+    partial class refactorCinemaService
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -115,24 +118,20 @@ namespace CineControl.CinemaService.API.Migrations
 
             modelBuilder.Entity("CineControl.CinemaService.API.Models.Seat", b =>
                 {
-                    b.HasOne("CineControl.CinemaService.API.Models.Theater", "Theater")
+                    b.HasOne("CineControl.CinemaService.API.Models.Theater", null)
                         .WithMany("Seats")
                         .HasForeignKey("TheaterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Theater");
                 });
 
             modelBuilder.Entity("CineControl.CinemaService.API.Models.Theater", b =>
                 {
-                    b.HasOne("CineControl.CinemaService.API.Models.Cinema", "Cinema")
+                    b.HasOne("CineControl.CinemaService.API.Models.Cinema", null)
                         .WithMany("Theaters")
                         .HasForeignKey("CinemaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Cinema");
                 });
 
             modelBuilder.Entity("CineControl.CinemaService.API.Models.Cinema", b =>

@@ -1,39 +1,10 @@
 using CineControl.CinemaService.API.Models;
-using CineControl.CinemaService.API.Models.DTOs.Cinemas;
 
 namespace CineControl.CinemaService.API.Service
 {
     public static class CinemaFactory
     {
-        public static Cinema CreateCinema(Guid tenantId, AddCinemaRequest request)
-        {
-            var cinema = new Cinema
-            {
-                TenantId = tenantId,
-                Name = request.Name,
-                Address = request.Address,
-                City = request.City,
-                State = request.State,
-                ZipCode = request.ZipCode,
-            };
-
-            foreach (var config in request.TheaterConfigs)
-            {
-                var theater = new Theater
-                {
-                    TenantId = tenantId,
-                    Name = config.Name ?? "Theater",
-                    SeatingCapacity = config.SeatingCapacity,
-                    Seats = GenerateSeats(tenantId, config.SeatingCapacity, config.SeatsPerRow)
-                };
-
-                cinema.Theaters.Add(theater);
-            }
-
-            return cinema;
-        }
-
-        public static List<Seat> GenerateSeats(Guid tenantId, int seatingCapacity, int seatsPerRow)
+        public static List<Seat> GenerateSeats(Guid tenantId,int cinemaId, int seatingCapacity, int seatsPerRow)
         {
             var seats = new List<Seat>();
             int rows = (int)Math.Ceiling(seatingCapacity / (double)seatsPerRow);
@@ -43,6 +14,7 @@ namespace CineControl.CinemaService.API.Service
                 {
                     seats.Add(new Seat
                     {
+                        TheaterId = cinemaId,
                         TenantId = tenantId,
                         Row = row,
                         Number = number,

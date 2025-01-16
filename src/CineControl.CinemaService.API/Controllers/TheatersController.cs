@@ -25,11 +25,11 @@ namespace CineControl.CinemaService.API.Controllers
             );
         }
 
-        [HttpGet("~/api/theaters/{theaterId:int}")]
+        [HttpGet("{theaterId:int}")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetTheaterById(int theaterId)
+        public async Task<IActionResult> GetTheaterById(int cinemaid,int theaterId)
         {
-            var result = await _theaterService.GetTheaterById(theaterId);
+            var result = await _theaterService.GetTheaterById(cinemaid,theaterId);
             return result.Match(
                 onSuccess: Ok,
                 onFailure: Problem
@@ -41,7 +41,17 @@ namespace CineControl.CinemaService.API.Controllers
         {
             var result = await _theaterService.AddTheater(cinemaId, request);
             return result.Match(
-                onSuccess: NoContent,
+                onSuccess: Created,
+                onFailure: Problem
+            );
+        }
+
+        [HttpPut("{theaterId:int}")]
+        public async Task<IActionResult> UpdateTheater(int cinemaId, int theaterId, [FromBody] UpdateTheaterRequest request)
+        {
+            var result = await _theaterService.UpdateTheater(cinemaId, theaterId, request);
+            return result.Match(
+                onSuccess: Created,
                 onFailure: Problem
             );
         }
