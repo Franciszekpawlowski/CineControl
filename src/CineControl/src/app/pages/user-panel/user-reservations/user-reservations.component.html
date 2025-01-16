@@ -1,0 +1,33 @@
+<div class="reservations-panel">
+    <h2>Twoje rezerwacje</h2>
+  
+    <!-- Loader -->
+    <div *ngIf="isLoading" class="loading">
+      Ładowanie rezerwacji...
+    </div>
+  
+    <!-- Obsługa błędów -->
+    <div *ngIf="error" class="error">
+      {{ error }}
+    </div>
+  
+    <!-- Lista rezerwacji -->
+    <div *ngIf="!isLoading && !error && reservations.length > 0">
+      <ul>
+        <li *ngFor="let reservation of reservations">
+          <div class="reservation-item">
+            <p><strong>Film:</strong> {{ reservation.seanceData?.movieTitle }}</p>
+            <p><strong>Data:</strong> {{ reservation.seanceData?.startTime | date: 'dd.MM.yyyy HH:mm'}}</p>
+            <p><strong>Czas rezerwacji:</strong> {{ reservation.reservationTime | date: 'dd.MM.yyyy HH:mm'}}</p>
+            <!-- Dodaj inne pola, np. czas rezerwacji, status etc. -->
+          </div>
+        </li>
+      </ul>
+    </div>
+  
+    <!-- Gdy nie ma rezerwacji -->
+    <div *ngIf="!isLoading && !error && reservations.length === 0">
+      Brak rezerwacji do wyświetlenia.
+    </div>
+  </div>
+  

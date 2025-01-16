@@ -6,6 +6,7 @@ import { CinemaService } from './cinema.service';
 import { ErrorResponse } from '../models/Response/error-response.model';
 import { ReservationResponse } from '../models/Response/get-reserved-seats-response';
 import { environment } from '../../environments/environment.prod';
+import { MyReservations } from '../models/Response/get-my-reservations.mode';
 
 @Injectable({
   providedIn: 'root',
@@ -50,6 +51,19 @@ export class BookingService {
         catchError((error: HttpErrorResponse) => this.handleHttpError(error))
       );
   }
+
+
+  getUserReservations(): Observable<ReservationResponse[]> {
+    const url = `${this.reservationsApiUrl}/MyReservations`;
+    return this.http
+      .get<ReservationResponse[]>(url, {
+        headers: this.getHeaders(),
+      })
+      .pipe(
+        catchError((error: HttpErrorResponse) => this.handleHttpError(error))
+      );
+  }  
+  
 
   /**
    * Łączy dane o miejscach w sali i miejscach zajętych.

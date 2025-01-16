@@ -4,11 +4,12 @@ import { GetUserResponseModel } from '../../models/Response/get-user-response.mo
 import { CommonModule } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { MatIconModule } from '@angular/material/icon';
+import { UserReservationsComponent } from "./user-reservations/user-reservations.component";
 
 
 @Component({
   selector: 'app-user-panel',
-  imports: [CommonModule, MatIcon, MatIconModule],
+  imports: [CommonModule, MatIcon, MatIconModule, UserReservationsComponent],
   templateUrl: './user-panel.component.html',
   styleUrls: ['./user-panel.component.scss'],
   standalone: true,
