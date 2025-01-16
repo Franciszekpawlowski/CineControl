@@ -1,13 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { PromotionsComponent } from '../../shared/promotions/promotions.component';
-
-import { CinemaService } from '../../services/cinema.service';
-import { SeanceService } from '../../services/seance.service';
-
-import { Cinema } from '../../models/cinema.model';
-import { Seance } from '../../models/seance.model';
-
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 
@@ -21,6 +13,14 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 
+import { PromotionsComponent } from '../../shared/promotions/promotions.component';
+import { CinemaService } from '../../services/cinema.service';
+import { SeanceService } from '../../services/seance.service';
+import { GeoService } from '../../services/geo.service'; 
+
+import { Cinema } from '../../models/cinema.model';
+import { Seance } from '../../models/seance.model';
+
 interface ShowTime {
   time: string;
   seanceId: number;
@@ -31,7 +31,6 @@ interface GroupedSeances {
   posterUrl: string;
   shows: ShowTime[];
 }
-
 
 @Component({
   selector: 'app-repertoire',
@@ -66,7 +65,8 @@ export class RepertoireComponent implements OnInit {
     private fb: FormBuilder,
     private cinemaService: CinemaService,
     private seanceService: SeanceService,
-    private router: Router
+    private router: Router,
+    private geoService: GeoService 
   ) {
     this.scheduleForm = this.fb.group({
       city: [''],
@@ -78,11 +78,41 @@ export class RepertoireComponent implements OnInit {
   ngOnInit(): void {
     this.cinemaService.getCities().subscribe((cities) => {
       this.cities = cities;
+      this.filteredCities = cities.slice(); 
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          
+          this.geoService.getCityFromCoords(latitude, longitude).subscribe(
+            (cityName) => {
+              if (this.cities.includes(cityName)) {
+                this.setCityAndLoadCinemas(cityName);
+              } else {
+                const fallbackCity = this.cities[0];
+                this.setCityAndLoadCinemas(fallbackCity);
+              }
+            },
+            (err) => {
+              const fallbackCity = this.cities[0];
+              this.setCityAndLoadCinemas(fallbackCity);
+            }
+          );
+        },
+        (error) => {
+          const fallbackCity = this.cities[0];
+          this.setCityAndLoadCinemas(fallbackCity);
+        }
+      );
     });
 
     this.scheduleForm.get('city')?.valueChanges.subscribe((value) => {
       this.filterCities(value);
     });
+  }
+
+  private setCityAndLoadCinemas(cityName: string) {
+    this.scheduleForm.get('city')?.setValue(cityName);
+    this.loadCinemas(cityName, true); 
   }
 
   filterCities(value: string) {
@@ -91,9 +121,7 @@ export class RepertoireComponent implements OnInit {
       city.toLowerCase().includes(filterValue)
     );
 
-    if (this.cities.includes(value)) {
-      this.loadCinemas(value);
-    } else {
+    if (!this.cities.includes(value)) {
       this.cinemas = [];
       this.scheduleForm.get('cinema')?.setValue(null);
     }
@@ -103,21 +131,26 @@ export class RepertoireComponent implements OnInit {
     this.loadCinemas(city);
   }
 
-  loadCinemas(city: string) {
+  loadCinemas(city: string, autoSelectFirst = false) {
     this.cinemaService.getCinemasByCity(city).subscribe({
       next: (cinemas) => {
         this.cinemas = cinemas;
-        console.log("Cinemas loaded:", this.cinemas); // Debug
+        console.log("Cinemas loaded:", this.cinemas); 
+
+        if (autoSelectFirst && this.cinemas.length > 0) {
+          this.scheduleForm.get('cinema')?.setValue(this.cinemas[0].id);
+          this.scheduleForm.get('date')?.setValue(new Date());
+        }
       },
       error: (err) => {
         console.error("Error loading cinemas:", err);
-        this.cinemas = []; // Upewnij się, że zmienna cinemas jest zainicjalizowana
+        this.cinemas = [];
       },
     });
   }
-  
 
   onCinemaSelected() {
+    // Gdy user zmieni kino manualnie, czyścimy datę i seanse
     this.scheduleForm.get('date')?.setValue(null);
     this.groupedSeances = [];
   }
@@ -129,7 +162,7 @@ export class RepertoireComponent implements OnInit {
     if (cinemaId && date) {
       this.loadSeances(cinemaId, date);
     }
-  }  
+  }
 
   loadSeances(cinemaId: number, date: Date) {
     const utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
@@ -163,8 +196,8 @@ export class RepertoireComponent implements OnInit {
     }, []);
     this.groupedSeances = grouped;
   }
+
   goToBooking(seanceId: number) {
     this.router.navigate(['/booking', seanceId]);
   }
-  
 }

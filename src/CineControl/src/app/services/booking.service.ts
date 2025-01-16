@@ -6,6 +6,7 @@ import { CinemaService } from './cinema.service';
 import { ErrorResponse } from '../models/Response/error-response.model';
 import { ReservationResponse } from '../models/Response/get-reserved-seats-response';
 import { environment } from '../../environments/environment.prod';
+import { MyReservations } from '../models/Response/get-my-reservations.mode';
 
 @Injectable({
   providedIn: 'root',
@@ -46,6 +47,26 @@ export class BookingService {
 
     return this.http
       .post<ReservationResponse>(url, body, { headers: this.getHeaders() })
+      .pipe(
+        catchError((error: HttpErrorResponse) => this.handleHttpError(error))
+      );
+  }
+
+
+  getUserReservations(): Observable<ReservationResponse[]> {
+    const url = `${this.reservationsApiUrl}/MyReservations`;
+    return this.http
+      .get<ReservationResponse[]>(url, {
+        headers: this.getHeaders(),
+      })
+      .pipe(
+        catchError((error: HttpErrorResponse) => this.handleHttpError(error))
+      );
+  }  
+  cancelUserReservation(reservationId: number): Observable<void> {
+    const url = `${this.reservationsApiUrl}/${reservationId}`;
+    return this.http
+      .delete<void>(url, { headers: this.getHeaders() })
       .pipe(
         catchError((error: HttpErrorResponse) => this.handleHttpError(error))
       );

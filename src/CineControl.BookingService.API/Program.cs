@@ -3,6 +3,7 @@ using CineControl.Common.Tenant;
 using CineControl.BookingService.API.Data;
 using CineControl.BookingService.API.Services;
 using Microsoft.EntityFrameworkCore;
+using CineControl.Common.JWTProvider.Extension;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +23,8 @@ builder.Services.AddScoped<IReservationService, ReservationService>();
 // Dodanie HttpClient, jeśli potrzebne
 builder.Services.AddHttpClient();
 
-builder.Services.AddTenantProvider();
+builder.Services.AddTenantProvider()
+                .AddJWTProvider();
 
 // Budowanie aplikacji
 var app = builder.Build();

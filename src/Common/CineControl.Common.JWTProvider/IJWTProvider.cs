@@ -8,4 +8,5 @@ public interface IJWTProvider
     public IEnumerable<Claim> GetClaims();
     void SetToken(string token);
     public string GetTenantId();
+    public string GetUserId();
 }
