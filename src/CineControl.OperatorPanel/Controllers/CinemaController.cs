@@ -15,13 +15,13 @@ namespace CineControl.OperatorPanel.Controllers
             return View(model.Value);
         }
 
-        public async Task<ActionResult> AddCinema()
+        public ActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddCinema(AddCinemaRequest request)
+        public async Task<ActionResult> Create(AddCinemaRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -34,6 +34,37 @@ namespace CineControl.OperatorPanel.Controllers
                 return View(request);
             }
             return View();
+        }
+
+        public async Task<ActionResult> Edit(int id)
+        {
+            var result = await _cinemaService.GetCinemasByIdAsync(id);
+            if (!result.IsSuccess)
+            {
+                ModelState.AddModelError("Error", result.Error.ToString());
+                return RedirectToAction("Index");
+            }
+            return View(result.Value);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Edit(int id, UpdateCinemaRequest request)
+        {
+            if (id != request.Id)
+            {
+                return NotFound();
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(request);
+            }
+            var result = await _cinemaService.UpdateCinemaAsync(id, request);
+            if (!result.IsSuccess)
+            {
+                ModelState.AddModelError("Error", result.Error.ToString());
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("Index");
         }
     }
 }

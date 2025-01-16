@@ -36,7 +36,7 @@ public class CinemaService(ICinemaServiceClient cinemaServiceClients,
         return GetCinema.Value.ToResponse();
     }
 
-    public async Task<ResultT<GetCinemaResponse>> GetCinemaAsync(int id)
+    public async Task<ResultT<GetCinemaResponse>> GetCinemasByIdAsync(int id)
     {
         _jwtProvider.SetToken(_httpContextAccessor.GetTokenValue());
         var TenantId = _jwtProvider.GetTenantId();
@@ -66,5 +66,21 @@ public class CinemaService(ICinemaServiceClient cinemaServiceClients,
             return CinemaServiceErrors.Failure();
         }
         return Result.Success();   
+    }
+
+    public async Task<Result> UpdateCinemaAsync(int id, UpdateCinemaRequest request)
+    {
+        _jwtProvider.SetToken(_httpContextAccessor.GetTokenValue());
+        var TenantId = _jwtProvider.GetTenantId();
+
+        _tenantProvider.SetTenant(Guid.Parse(TenantId));
+
+        var UpdateCinema = await _cinemaServiceClients.UpdateCinemaAsync(id, request.ToRequest(),TenantId);
+
+        if (!UpdateCinema.IsSuccess )
+        {
+            return CinemaServiceErrors.Failure();
+        }
+        return Result.Success();
     }
 }

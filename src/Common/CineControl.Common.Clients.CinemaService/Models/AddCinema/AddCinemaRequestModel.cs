@@ -7,12 +7,4 @@ public class AddCinemaRequestModel
     public string City { get; set; }
     public string State { get; set; }
     public string ZipCode { get; set; }
-    public List<TheaterConfig> TheaterConfigs { get; set; }
-}
-
-public class TheaterConfig 
-{
-    public string Name { get; set; }
-    public int SeatingCapacity { get; set; } = 75;
-    public int SeatsPerRow { get; set; } = 15;
 }

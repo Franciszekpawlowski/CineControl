@@ -2,8 +2,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CineControl.OperatorPanel.Models.DTOs.Cinemas;
 
-public class AddCinemaRequest
+public class UpdateCinemaRequest
 {
+    public int Id { get; set; }
     [Required]
     [StringLength(25)]
     public string Name { get; set; }
