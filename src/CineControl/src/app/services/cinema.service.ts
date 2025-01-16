@@ -50,7 +50,9 @@ export class CinemaService {
     return this.http
       .get<GetCitiesResponse>(url, { headers: this.getHeaders() })
       .pipe(
-        map(response => response.cities),
+        map((response) => 
+          response.cities.filter((city) => city)
+        ),
         catchError(this.handleError)
       );
   }
