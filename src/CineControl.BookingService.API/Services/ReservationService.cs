@@ -36,13 +36,11 @@ namespace CineControl.BookingService.API.Services
 
         public async Task<bool> AreSeatsAvailableAsync(int seanceId, List<int> seatIds)
         {
-            // Pobierz aktualne rezerwacje dla danego seansu
             var reservedSeats = await _context.Tickets
                 .Where(t => t.SeanceId == seanceId && seatIds.Contains(t.SeatId))
                 .Select(t => t.SeatId)
                 .ToListAsync();
 
-            // Sprawdź, czy żadne z żądanych siedzeń nie są już zarezerwowane
             return !reservedSeats.Any();
         }
 
@@ -71,7 +69,6 @@ namespace CineControl.BookingService.API.Services
 
             try
             {
-                // Sprawdzenie dostępności siedzeń
                 var areAvailable = await AreSeatsAvailableAsync(request.SeanceId, request.SeatIds);
                 if (!areAvailable)
                 {
@@ -83,8 +80,6 @@ namespace CineControl.BookingService.API.Services
                     var unavailableSeats = request.SeatIds.Intersect(reservedSeats).ToList();
                     return BookingErrors.Conflict($"Siedzenia o ID {string.Join(", ", unavailableSeats)} są już zarezerwowane.");
                 }
-
-                // Utworzenie rezerwacji
                 var reservation = new Reservation
                 {
                     TenantId = _tenantProvider.GetTenantId(),
@@ -105,7 +100,6 @@ namespace CineControl.BookingService.API.Services
 
                 await transaction.CommitAsync();
 
-                // Przygotowanie odpowiedzi
                 var response = new ReservationResponse
                 {
                     ReservationId = reservation.Id,
@@ -119,11 +113,9 @@ namespace CineControl.BookingService.API.Services
             catch (DbUpdateException dbEx)
             {
                 await transaction.RollbackAsync();
-                // Sprawdzenie, czy błąd wynika z naruszenia unikalnego indeksu
                 if (dbEx.InnerException != null && dbEx.InnerException.Message.Contains("IX_Ticket_SeanceId_SeatId"))
                 {
-                    // Pobierz siedzenia, które spowodowały konflikt
-                    var conflictingSeats = request.SeatIds.ToList(); // Można bardziej precyzyjnie pobrać ID
+                    var conflictingSeats = request.SeatIds.ToList(); 
                     return BookingErrors.Conflict($"Siedzenia o ID {string.Join(", ", conflictingSeats)} są już zarezerwowane.");
                 }
 
@@ -156,6 +148,44 @@ namespace CineControl.BookingService.API.Services
                 .ToList();
 
             return reservationResponses;
+        }
+
+        public async Task<Result> CancelReservationAsync(int reservationId)
+        {
+            if (!_tenantProvider.HasTenant())
+            {
+                return BookingErrors.AccessUnauthorized("Brak określonego tenant.");
+            }
+
+            var tenantId = _tenantProvider.GetTenantId();
+            var userId = _jwtProvider.GetUserId();
+
+            var reservation = await _context.Reservations
+                .Where(r => r.TenantId == tenantId && r.Id == reservationId)
+                .Include(r => r.Tickets) 
+                .FirstOrDefaultAsync();
+            if (reservation == null)
+            {
+                return BookingErrors.NotFound($"Rezerwacja o id {reservationId} nie została znaleziona.");
+            }
+            if (reservation.UserId != userId)
+            {
+                return BookingErrors.Forbidden($"Brak uprawnień do anulowania tej rezerwacji.");
+            }
+
+            try
+            {
+                _context.Tickets.RemoveRange(reservation.Tickets);
+                _context.Reservations.Remove(reservation);
+                await _context.SaveChangesAsync();
+
+                return Result.Success();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Wystąpił błąd podczas anulowania rezerwacji.");
+                return BookingErrors.Failure("Wystąpił błąd podczas anulowania rezerwacji.");
+            }
         }
 
     }

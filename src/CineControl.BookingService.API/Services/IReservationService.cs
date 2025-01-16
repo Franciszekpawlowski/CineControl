@@ -11,5 +11,6 @@ namespace CineControl.BookingService.API.Services
         Task<ResultT<List<int>>> GetReservedSeatsAsync(int seanceId);
         Task<bool> AreSeatsAvailableAsync(int seanceId, List<int> seatIds);
         Task<ResultT<List<ReservationResponse>>> GetUserReservationsAsync();
+        Task<Result> CancelReservationAsync(int reservationId);
     }
 }

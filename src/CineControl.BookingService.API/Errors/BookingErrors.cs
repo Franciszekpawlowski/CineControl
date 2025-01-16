@@ -8,6 +8,7 @@ namespace CineControl.BookingService.Errors
         public static Error Conflict(string message) => Error.Conflict(message);
         public static Error UnprocessableEntity(string message) => Error.UnprocessableEntity(message);
         public static Error AccessUnauthorized(string message) => Error.AccessUnauthorized(message);
+        public static Error Forbidden(string message) => Error.AccessUnauthorized(message);
         public static Error Failure(string message) => Error.Failure(message);
     }
 }

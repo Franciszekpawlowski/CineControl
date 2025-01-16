@@ -48,5 +48,17 @@ namespace CineControl.BookingService.API.Controllers
                 onFailure: Problem
             );
         }
+
+        [HttpDelete("{reservationId}")]
+        public async Task<IActionResult> CancelReservation(int reservationId)
+        {
+            string token = await HttpContext.GetTokenAsync("access_token");
+            _jwtProvider.SetToken(token);
+            var result = await _reservationService.CancelReservationAsync(reservationId);
+            return result.Match(
+                onSuccess: () => NoContent(),
+                onFailure: Problem
+            );
+        }
     }
 }
