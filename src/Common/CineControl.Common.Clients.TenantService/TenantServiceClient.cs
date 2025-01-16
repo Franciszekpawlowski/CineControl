@@ -16,14 +16,14 @@ public class TenantServiceClient : ITenantServiceClient, IDisposable
     {
         _tenantOptions = tenantOptions.Value;
         _baseUrl = _tenantOptions.BaseUrl;
-        var options = new RestClientOptions(_baseUrl);
+        var options = new RestClientOptions($"{_baseUrl}/api/v1");
         _client = new RestClient(options);
     }
 
 
     public async Task<ResultT<GetResponseModel>> GetAsync(Guid tenantId)
     {
-        var request = new RestRequest($"/api/v1/Tenant/{tenantId}");   
+        var request = new RestRequest($"/Tenant/{tenantId}");   
         var response = await _client.ExecuteGetAsync<GetResponseModel>(request);
 
         return response.ToResult();

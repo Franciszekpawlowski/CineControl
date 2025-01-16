@@ -27,7 +27,7 @@ public class CinemaServiceClient : ICinemaServiceClient, IDisposable
         _cinemaOptions = cinemaOptions.Value;
         _baseUrl = _cinemaOptions.BaseUrl;
         _serviceScopeFactory = serviceScopeFactory;
-        var options = new RestClientOptions(_baseUrl);
+        var options = new RestClientOptions($"{_baseUrl}/api/v1");
         _client = new RestClient(options);
     }
 
