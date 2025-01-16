@@ -63,7 +63,14 @@ export class BookingService {
         catchError((error: HttpErrorResponse) => this.handleHttpError(error))
       );
   }  
-  
+  cancelUserReservation(reservationId: number): Observable<void> {
+    const url = `${this.reservationsApiUrl}/${reservationId}`;
+    return this.http
+      .delete<void>(url, { headers: this.getHeaders() })
+      .pipe(
+        catchError((error: HttpErrorResponse) => this.handleHttpError(error))
+      );
+  }
 
   /**
    * Łączy dane o miejscach w sali i miejscach zajętych.

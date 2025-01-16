@@ -19,7 +19,12 @@
             <p><strong>Film:</strong> {{ reservation.seanceData?.movieTitle }}</p>
             <p><strong>Data:</strong> {{ reservation.seanceData?.startTime | date: 'dd.MM.yyyy HH:mm'}}</p>
             <p><strong>Czas rezerwacji:</strong> {{ reservation.reservationTime | date: 'dd.MM.yyyy HH:mm'}}</p>
-            <!-- Dodaj inne pola, np. czas rezerwacji, status etc. -->
+  
+            <!-- Przycisk anulowania -->
+            <button mat-icon-button color="warn"
+                    (click)="cancelReservation(reservation.reservationId)">
+              <mat-icon>delete</mat-icon>
+            </button>
           </div>
         </li>
       </ul>
