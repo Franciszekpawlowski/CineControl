@@ -9,11 +9,11 @@ public static class Logger
     public static IHostApplicationBuilder AddLogger(this IHostApplicationBuilder builder)
     {
         Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Warning()
-            .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-            .MinimumLevel.Override("Microsoft.AspNetCore.Mvc", LogEventLevel.Warning)
-            .MinimumLevel.Override("Microsoft.AspNetCore.Routing", LogEventLevel.Warning)
-            .MinimumLevel.Override("Microsoft.AspNetCore.Hosting", LogEventLevel.Warning)
+            .MinimumLevel.Information()
+            .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+            .MinimumLevel.Override("Microsoft.AspNetCore.Mvc", LogEventLevel.Information)
+            .MinimumLevel.Override("Microsoft.AspNetCore.Routing", LogEventLevel.Information)
+            .MinimumLevel.Override("Microsoft.AspNetCore.Hosting", LogEventLevel.Information)
             .WriteTo.Console()
             .CreateLogger();
 

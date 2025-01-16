@@ -6,5 +6,5 @@ public class TheaterResponse
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public int SeatingCapacity { get; set; }
-    public List<SeatResponse> Seats { get; set; } = [];
+    // public List<SeatResponse> Seats { get; set; } = [];
 }

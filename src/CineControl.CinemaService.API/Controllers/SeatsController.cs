@@ -1,6 +1,4 @@
-using CineControl.CinemaService.API.Models;
 using CineControl.CinemaService.API.Service.IService;
-using CineControl.CinemaService.API.Models.DTOs;
 using CineControl.Common.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

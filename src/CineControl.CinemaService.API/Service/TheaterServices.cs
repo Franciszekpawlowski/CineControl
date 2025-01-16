@@ -89,6 +89,7 @@ public class TheaterServices(CinemaContext context, ITenantProvider tenantProvid
             _context.Theaters.Update(theater);
 
             await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
             return Result.Success();
         }
         catch (Exception ex)
@@ -134,7 +135,6 @@ public class TheaterServices(CinemaContext context, ITenantProvider tenantProvid
         }
 
         var cinema = await _context.Cinemas
-            .Include(c => c.Theaters)
             .FirstOrDefaultAsync(c => c.Id == cinemaId);
 
         if (cinema is null)
@@ -142,22 +142,32 @@ public class TheaterServices(CinemaContext context, ITenantProvider tenantProvid
             return CinemaErrors.CinemaNotFound(cinemaId);
         }
 
-        var theater = cinema.Theaters.FirstOrDefault(t => t.Id == theaterId);
+        var theater = await _context.Theaters
+            .Include(t => t.Seats)
+            .FirstOrDefaultAsync(t => t.Id == theaterId);
+
         if (theater == null)
         {
             return CinemaErrors.TheaterNotFound(theaterId);
         }
 
         theater.Name = request.Name;
-        theater.Seats.Clear();
-        theater.Seats = CinemaFactory.GenerateSeats(_tenantProvider.GetTenantId(), theaterId, request.SeatingCapacity, request.SeatsPerRow);
 
         using var transaction = await _context.Database.BeginTransactionAsync();
         try
         {
+            theater.Seats.Clear();
+            theater.Seats = CinemaFactory.GenerateSeats(_tenantProvider.GetTenantId(), theaterId, request.SeatingCapacity, request.SeatsPerRow);
+
+            // _context.Seats.RemoveRange(theater.Seats);
+            // _context.SaveChanges();
+
+            // theater.Seats = CinemaFactory.GenerateSeats(_tenantProvider.GetTenantId(), theaterId, request.SeatingCapacity, request.SeatsPerRow);
+
             _context.Theaters.Update(theater);
 
             await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
             return Result.Success();
         }
         catch (Exception ex)

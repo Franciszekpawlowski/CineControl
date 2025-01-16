@@ -81,6 +81,7 @@ namespace CineControl.CinemaService.API.Service
             try
             {
                 await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
                 return Result.Success();
             }
             catch (Exception ex)
@@ -118,6 +119,7 @@ namespace CineControl.CinemaService.API.Service
             try
             {
                 await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
                 return Result.Success();
             }
             catch (Exception ex)
@@ -148,6 +150,7 @@ namespace CineControl.CinemaService.API.Service
             try
             {
                 await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
                 return Result.Success();
             }
             catch (Exception ex)
