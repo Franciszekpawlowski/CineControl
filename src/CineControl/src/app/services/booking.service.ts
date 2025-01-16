@@ -75,8 +75,8 @@ export class BookingService {
   /**
    * Łączy dane o miejscach w sali i miejscach zajętych.
    */
-  getAgrigatedSeats(seanceId: number, theaterId: number): Observable<any[]> {
-    const seats$ = this.cinemaService.getTheaterSeats(theaterId);
+  getAgrigatedSeats(seanceId: number, cinemaId: number, theaterId: number): Observable<any[]> {
+    const seats$ = this.cinemaService.getTheaterSeats(cinemaId, theaterId);
     const reservedSeats$ = this.getReservedSeats(seanceId);
 
     return forkJoin([seats$, reservedSeats$]).pipe(

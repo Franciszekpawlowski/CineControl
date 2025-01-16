@@ -32,7 +32,7 @@ export class BookingComponent implements OnInit {
     this.seanceService.getSeanceById(id).subscribe({
       next: (data) => {
         this.seance = data;
-        this.bookingService.getAgrigatedSeats(this.seance.id, this.seance.theaterId).subscribe({
+        this.bookingService.getAgrigatedSeats(this.seance.id, this.seance.cinemaId, this.seance.theaterId).subscribe({
           next: (seatsData) => {
             this.seats = seatsData;
             console.log(this.seats);

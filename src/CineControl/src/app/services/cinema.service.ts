@@ -17,7 +17,6 @@ import { environment } from '../../environments/environment.prod';
 })
 export class CinemaService {
   private cinemasApiUrl = environment.CinemasApiUrl; 
-  private theatersApiUrl = environment.TheatersApiUrl; 
   private tenantId: string = environment.tenantId;
 
   constructor(private http: HttpClient) {}
@@ -57,8 +56,8 @@ export class CinemaService {
       );
   }
 
-  getTheaterSeats(theaterId: number): Observable<Seat[]> {
-    const url = `${this.theatersApiUrl}/${theaterId}/seats`;
+  getTheaterSeats(cinemaId: number, theaterId: number): Observable<Seat[]> {
+    const url = `${this.cinemasApiUrl}/${cinemaId}/theaters/${theaterId}/seats`;
     return this.http
       .get<Seat[]>(url, { headers: this.getHeaders() })
       .pipe(catchError(this.handleError));
