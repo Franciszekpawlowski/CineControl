@@ -4,15 +4,21 @@
     ViewData["Title"] = "Login Page";
 }
 
-<div class="text-center">
+<div class="text-center login-container">
     <h1 class="display-4">Welcome</h1>
     <p>Login into OperatorPanel.</p>
     <form asp-action="Login" asp-controller="Auth" method="post">
         @Html.AntiForgeryToken()
-        <label asp-for="Username"></label>
-        <input asp-for="Username"><br>
-        <label asp-for="Password"></label>
-        <input asp-for="Password"><br>
-        <button type="submit">Login in s</button>
+        <div>
+            <label asp-for="Username"></label>
+            <input asp-for="Username"><br>
+            <span asp-validation-for="Username" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="Password"></label>
+            <input asp-for="Password"><br>
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <button type="submit">Login in</button>
     </form>
 </div>
