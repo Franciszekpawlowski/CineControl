@@ -24,7 +24,6 @@ namespace CineControl.SeanceService.API.Data
                 .WithMany()
                 .HasForeignKey(s => s.MovieId);
 
-            // Konfiguracja multi-tenancy
             modelBuilder.Entity<Movie>().HasQueryFilter(m => m.TenantID == _tenantProvider.GetTenantId());
             modelBuilder.Entity<Seance>().HasQueryFilter(s => s.TenantId == _tenantProvider.GetTenantId());
 
