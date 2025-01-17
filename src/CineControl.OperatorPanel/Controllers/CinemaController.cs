@@ -33,7 +33,7 @@ namespace CineControl.OperatorPanel.Controllers
                 ModelState.AddModelError("Error", result.Error.ToString());
                 return View(request);
             }
-            return View();
+            return RedirectToAction("Index");
         }
 
         public async Task<ActionResult> Edit(int id)
@@ -65,6 +65,17 @@ namespace CineControl.OperatorPanel.Controllers
                 return RedirectToAction("Index");
             }
             return RedirectToAction("Index");
+        }
+
+        public async Task<ActionResult> Details(int id)
+        {
+            var result = await _cinemaService.GetCinemasByIdAsync(id);
+            if (!result.IsSuccess)
+            {
+                ModelState.AddModelError("Error", result.Error.ToString());
+                return RedirectToAction("Index");
+            }
+            return View(result.Value);
         }
     }
 }

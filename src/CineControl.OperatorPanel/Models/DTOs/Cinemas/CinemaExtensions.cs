@@ -1,6 +1,4 @@
-using CineControl.Common.Clients.CinemaService.Models.AddCinema;
-using CineControl.Common.Clients.CinemaService.Models.GetCinemas;
-using CineControl.Common.Clients.CinemaService.Models.UpdateCinema;
+using CineControl.Common.Clients.CinemaService.Models.CinemaClient;
 
 namespace CineControl.OperatorPanel.Models.DTOs.Cinemas;
 
