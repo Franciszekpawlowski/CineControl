@@ -13,7 +13,7 @@ public static class CinemaServiceClientsExtension
         IConfiguration configuration)
     {
         services.Configure<CinemaServiceClientOptions>(GetConfiguration(configuration));
-        services.AddSingleton<ICinemaServiceClient, CinemaServiceClient>();
+        services.AddSingleton<ICinemaClient, CinemaClient>();
         return services;
     }
 

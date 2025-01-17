@@ -9,13 +9,13 @@ using CineControl.OperatorPanel.Service.IService;
 
 namespace CineControl.OperatorPanel.Service;
 
-public class CinemaService(ICinemaServiceClient cinemaServiceClients,
+public class CinemaService(ICinemaClient cinemaServiceClients,
     IHttpContextAccessor httpContextAccessor,
     ITenantProvider tenantProvider,
     IJWTProvider jwtProvider
 ) : ICinemaService
 {
-    private readonly ICinemaServiceClient _cinemaServiceClients = cinemaServiceClients;
+    private readonly ICinemaClient _cinemaServiceClients = cinemaServiceClients;
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
     private readonly ITenantProvider _tenantProvider = tenantProvider;
     private readonly IJWTProvider _jwtProvider = jwtProvider;

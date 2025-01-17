@@ -11,7 +11,7 @@ using RestSharp;
 
 namespace CineControl.Common.Clients.CinemaService;
 
-public class CinemaServiceClient : ICinemaServiceClient, IDisposable
+public class CinemaClient : ICinemaClient, IDisposable
 {
     readonly string _baseUrl;
     readonly RestClient _client;
@@ -19,7 +19,7 @@ public class CinemaServiceClient : ICinemaServiceClient, IDisposable
 
     readonly CinemaServiceClientOptions _cinemaOptions;
 
-    public CinemaServiceClient(
+    public CinemaClient(
         IServiceProvider serviceScopeFactory,
         IOptions<CinemaServiceClientOptions> cinemaOptions
     )
@@ -93,7 +93,7 @@ public class CinemaServiceClient : ICinemaServiceClient, IDisposable
             var _tenantProvider = scope.ServiceProvider.GetRequiredService<ITenantProvider>();
             TenantId = _tenantProvider.GetTenantId().ToString();
         }
-        var request = new RestRequest("/Cinemas/AddCinema");
+        var request = new RestRequest("/Cinemas");
         request.AddHeader(TenantFieldNames.HeaderName, TenantId);
         request.AddJsonBody(model);
         var response = await _client.ExecutePostAsync(request);
