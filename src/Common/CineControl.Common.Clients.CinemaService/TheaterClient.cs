@@ -1,5 +1,5 @@
 using CineControl.Common.Clients.CinemaService.IClients;
-using CineControl.Common.Clients.CinemaService.Models.CinemaClient;
+using CineControl.Common.Clients.CinemaService.Models.TheaterClient;
 using CineControl.Common.Clients.CinemaService.Options;
 using CineControl.Common.Results;
 using CineControl.Common.Tenant;
@@ -9,7 +9,7 @@ using RestSharp;
 
 namespace CineControl.Common.Clients.CinemaService;
 
-public class CinemaClient : ICinemaClient, IDisposable
+public class TheaterClient : ITheaterClient, IDisposable
 {
     readonly string _baseUrl;
     readonly RestClient _client;
@@ -17,7 +17,7 @@ public class CinemaClient : ICinemaClient, IDisposable
 
     readonly CinemaServiceClientOptions _cinemaOptions;
 
-    public CinemaClient(
+    public TheaterClient(
         IServiceProvider serviceScopeFactory,
         IOptions<CinemaServiceClientOptions> cinemaOptions
     )
@@ -29,7 +29,7 @@ public class CinemaClient : ICinemaClient, IDisposable
         _client = new RestClient(options);
     }
 
-    public async Task<ResultT<IEnumerable<GetCinemasResponseModel>>> GetCinemasAsync(string TenantId = null)
+    public async Task<ResultT<IEnumerable<GetTheaterResponseModel>>> GetTheatersAsync(int cinemaId,string? TenantId = null)
     {
         if (TenantId == null)
         {
@@ -38,21 +38,13 @@ public class CinemaClient : ICinemaClient, IDisposable
             TenantId = _tenantProvider.GetTenantId().ToString();
         }
 
-        var request = new RestRequest("/Cinemas");
+        var request = new RestRequest($"/Cinemas/{cinemaId}/Theaters");
         request.AddHeader(TenantFieldNames.HeaderName, TenantId);
-
-        var responseModel = await _client.ExecuteGetAsync<IEnumerable<GetCinemasResponseModel>>(request);
-
+        var responseModel = await _client.ExecuteGetAsync<IEnumerable<GetTheaterResponseModel>>(request);
         return responseModel.ToResult();
     }
 
-    public void Dispose()
-    {
-        _client?.Dispose();
-        GC.SuppressFinalize(this);
-    }
-
-    public async Task<ResultT<GetCinemasResponseModel>> GetCinemaAsync(int id, string TenantId = null)
+    public async Task<ResultT<GetTheaterResponseModel>> GetTheaterByIdAsync(int cinemaId,int theaterId,string? TenantId = null)
     {
         if (TenantId == null)
         {
@@ -61,14 +53,13 @@ public class CinemaClient : ICinemaClient, IDisposable
             TenantId = _tenantProvider.GetTenantId().ToString();
         }
 
-        var request = new RestRequest($"/Cinemas/{id}");
+        var request = new RestRequest($"/Cinemas/{cinemaId}/Theaters/{theaterId}");
         request.AddHeader(TenantFieldNames.HeaderName, TenantId);
-        var responseModel = await _client.ExecuteGetAsync<GetCinemasResponseModel>(request);
-
+        var responseModel = await _client.ExecuteGetAsync<GetTheaterResponseModel>(request);
         return responseModel.ToResult();
     }
 
-    public async Task<ResultT<GetCinemasResponseModel>> GetCinemaByCity(string city,string TenantId = null)
+    public async Task<Result> AddTheaterAsync(int cinemaId, AddTheaterRequestModel model,string? TenantId = null)
     {
         if (TenantId == null)
         {
@@ -76,30 +67,14 @@ public class CinemaClient : ICinemaClient, IDisposable
             var _tenantProvider = scope.ServiceProvider.GetRequiredService<ITenantProvider>();
             TenantId = _tenantProvider.GetTenantId().ToString();
         }
-
-        var request = new RestRequest($"/Cinemas/ByCity/{city}");
-        request.AddHeader(TenantFieldNames.HeaderName, TenantId);
-        var responseModel = await _client.ExecuteGetAsync<GetCinemasResponseModel>(request);
-        return responseModel.ToResult();
-    }
-
-    public async Task<Result> AddCinemaAsync(AddCinemaRequestModel model,string TenantId = null)
-    {
-        if (TenantId == null)
-        {
-            using var scope = _serviceScopeFactory.CreateScope();
-            var _tenantProvider = scope.ServiceProvider.GetRequiredService<ITenantProvider>();
-            TenantId = _tenantProvider.GetTenantId().ToString();
-        }
-        var request = new RestRequest("/Cinemas");
+        var request = new RestRequest($"/Cinemas/{cinemaId}/Theaters");
         request.AddHeader(TenantFieldNames.HeaderName, TenantId);
         request.AddJsonBody(model);
         var response = await _client.ExecutePostAsync(request);
-
         return response.ToResult();
     }
 
-    public async Task<Result> UpdateCinemaAsync(int id, UpdateCinemaRequestModel model,string TenantId = null)
+    public async Task<Result> UpdateTheaterAsync(int cinemaId, int theaterId, UpdateTheaterRequestModel model,string? TenantId = null)
     {
         if (TenantId == null)
         {
@@ -107,15 +82,20 @@ public class CinemaClient : ICinemaClient, IDisposable
             var _tenantProvider = scope.ServiceProvider.GetRequiredService<ITenantProvider>();
             TenantId = _tenantProvider.GetTenantId().ToString();
         }
-
-        var request = new RestRequest($"/Cinemas/{id}");
+        var request = new RestRequest($"/Cinemas/{cinemaId}/Theaters/{theaterId}");
         request.AddHeader(TenantFieldNames.HeaderName, TenantId);
         request.AddJsonBody(model);
         var response = await _client.ExecutePutAsync(request);
         return response.ToResult();
     }
 
-    public async Task<Result> DeleteCinemaAsync(int id,string TenantId = null)
+
+    public void Dispose()
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<Result> DeleteTheaterAsync(int cinemaId, int theaterId, string? TenantId)
     {
         if (TenantId == null)
         {
@@ -123,7 +103,7 @@ public class CinemaClient : ICinemaClient, IDisposable
             var _tenantProvider = scope.ServiceProvider.GetRequiredService<ITenantProvider>();
             TenantId = _tenantProvider.GetTenantId().ToString();
         }
-        var request = new RestRequest($"/Cinemas/{id}");
+        var request = new RestRequest($"/Cinemas/{cinemaId}/Theaters/{theaterId}");
         request.AddHeader(TenantFieldNames.HeaderName, TenantId);
         var response = await _client.ExecuteDeleteAsync(request);
         return response.ToResult();

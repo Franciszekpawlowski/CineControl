@@ -1,4 +1,4 @@
-namespace CineControl.Common.Clients.CinemaService.Models.GetCinemas;
+namespace CineControl.Common.Clients.CinemaService.Models.CinemaClient;
 
 public class GetCinemasResponseModel
 {   

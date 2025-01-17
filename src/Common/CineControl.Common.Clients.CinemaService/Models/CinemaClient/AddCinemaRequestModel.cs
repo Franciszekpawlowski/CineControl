@@ -1,4 +1,4 @@
-namespace CineControl.Common.Clients.CinemaService.Models.AddCinema;
+namespace CineControl.Common.Clients.CinemaService.Models.CinemaClient;
 
 public class AddCinemaRequestModel
 {   
