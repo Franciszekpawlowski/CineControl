@@ -24,6 +24,7 @@ builder.Services.AddIdentityServiceClient(builder.Configuration)
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICinemaService, CinemaService>();
+builder.Services.AddScoped<ITheaterService, TheaterService>();
 
 builder.Services.AddDataProtection()
                 .PersistKeysToFileSystem(new DirectoryInfo("./keys"));

@@ -44,7 +44,7 @@ public class TheaterClient : ITheaterClient, IDisposable
         return responseModel.ToResult();
     }
 
-    public async Task<ResultT<GetTheaterResponseModel>> GetTheaterByIdAsync(int cinemaId,int theaterId,string? TenantId = null)
+    public async Task<ResultT<GetTheaterResponseModel>> GetTheaterByIdAsync(int cinemaId,Guid theaterId,string? TenantId = null)
     {
         if (TenantId == null)
         {
@@ -74,7 +74,7 @@ public class TheaterClient : ITheaterClient, IDisposable
         return response.ToResult();
     }
 
-    public async Task<Result> UpdateTheaterAsync(int cinemaId, int theaterId, UpdateTheaterRequestModel model,string? TenantId = null)
+    public async Task<Result> UpdateTheaterAsync(int cinemaId, Guid theaterId, UpdateTheaterRequestModel model,string? TenantId = null)
     {
         if (TenantId == null)
         {
@@ -95,7 +95,7 @@ public class TheaterClient : ITheaterClient, IDisposable
         throw new NotImplementedException();
     }
 
-    public async Task<Result> DeleteTheaterAsync(int cinemaId, int theaterId, string? TenantId)
+    public async Task<Result> DeleteTheaterAsync(int cinemaId, Guid theaterId, string? TenantId)
     {
         if (TenantId == null)
         {

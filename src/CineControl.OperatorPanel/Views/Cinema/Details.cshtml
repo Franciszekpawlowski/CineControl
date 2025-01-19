@@ -1,0 +1,81 @@
+@using CineControl.OperatorPanel.Models.DTOs
+@model CinemaViewModel
+@{
+    ViewData["Title"] = "Cinema Page";
+}
+
+<h1>Index</h1>
+<p>
+    <a asp-controller="Cinema" asp-action="Index" class="button">Return</a>
+</p>
+<dl class="row">
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(m => m.Cinema.Id)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(m => m.Cinema.Id)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(m => m.Cinema.Name)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(m => m.Cinema.Name)
+    </dd>
+        <dt class="col-sm-2">
+        @Html.DisplayNameFor(m => m.Cinema.Address)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(m => m.Cinema.Address)
+    </dd>
+        <dt class="col-sm-2">
+        @Html.DisplayNameFor(m => m.Cinema.City)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(m => m.Cinema.City)
+    </dd>
+        <dt class="col-sm-2">
+        @Html.DisplayNameFor(m => m.Cinema.State)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(m => m.Cinema.State)
+    </dd>
+        <dt class="col-sm-2">
+        @Html.DisplayNameFor(m => m.Cinema.ZipCode)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(m => m.Cinema.ZipCode)
+    </dd>
+</dl>
+
+<table> 
+    <thead> 
+        <tr> 
+            <th>@Html.DisplayNameFor(m => m.Theaters.First().Id)</th>
+            <th>@Html.DisplayNameFor(m => m.Theaters.First().Name)</th> 
+            <th>@Html.DisplayNameFor(m => m.Theaters.First().SeatingCapacity)</th>
+            <th>options</th>
+        </tr> 
+    </thead> 
+    <tbody> 
+        @foreach (var theater in Model.Theaters) 
+        { 
+            <tr> 
+                <td>
+                    @Html.DisplayFor(m => theater.Id )
+                </td> 
+                <td>
+                    @Html.DisplayFor(m => theater.Name)
+                </td> 
+                <td>
+                    @Html.DisplayFor(m => theater.SeatingCapacity)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-controller="theater" asp-route-id="@theater.Id">Edit</a>
+                    <a asp-action="Details" asp-controller="theater" asp-route-id="@theater.Id">Details</a>
+                    <a asp-action="Delete" asp-controller="theater" asp-route-id="@theater.Id">Delete</a>
+                </td> 
+
+            </tr> 
+        } 
+    </tbody>
+</table>
