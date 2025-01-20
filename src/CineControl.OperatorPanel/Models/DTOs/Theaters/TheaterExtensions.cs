@@ -8,11 +8,13 @@ public static class TheaterExtensions
         => new(){
             Id = getTheaterResponseModel.Id,
             Name = getTheaterResponseModel.Name,
-            SeatingCapacity = getTheaterResponseModel.SeatingCapacity
+            SeatingCapacity = getTheaterResponseModel.SeatingCapacity,
+            SeatsPerRow = getTheaterResponseModel.SeatsPerRow
         };
 
     public static List<GetTheaterResponse> ToResponse(this IEnumerable<GetTheaterResponseModel> getTheaterResponseModels)
         => getTheaterResponseModels.Select(x => x.ToResponse()).ToList();
+
 
     public static AddTheaterRequestModel ToRequest(this AddTheaterRequest addTheaterRequest)
         => new()
@@ -25,7 +27,7 @@ public static class TheaterExtensions
         => new()
         {
             Name = addTheaterRequest.Name,
-            SeatingCapacity = addTheaterRequest.SeatingCapacity
+            SeatingCapacity = addTheaterRequest.SeatingCapacity,
+            SeatsPerRow = addTheaterRequest.SeatsPerRow
         };
-
 }

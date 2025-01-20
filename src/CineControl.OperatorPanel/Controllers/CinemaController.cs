@@ -25,6 +25,7 @@ namespace CineControl.OperatorPanel.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(AddCinemaRequest request)
         {
             if (!ModelState.IsValid)
@@ -52,6 +53,7 @@ namespace CineControl.OperatorPanel.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(int id, UpdateCinemaRequest request)
         {
             if (id != request.Id)
@@ -80,6 +82,11 @@ namespace CineControl.OperatorPanel.Controllers
                 return RedirectToAction("Index");
             }
             var theaterResult = await _theaterService.GetTheatersAsync(id);
+            if (!theaterResult.IsSuccess)
+            {
+                ModelState.AddModelError("Error", theaterResult.Error.ToString());
+                return RedirectToAction("Index");
+            }
             var ViewModel = new CinemaViewModel {
                 Cinema = cinemaResult.Value,
                 Theaters = theaterResult.Value

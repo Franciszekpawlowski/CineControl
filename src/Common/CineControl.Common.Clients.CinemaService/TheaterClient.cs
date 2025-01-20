@@ -38,13 +38,13 @@ public class TheaterClient : ITheaterClient, IDisposable
             TenantId = _tenantProvider.GetTenantId().ToString();
         }
 
-        var request = new RestRequest($"/Cinemas/{cinemaId}/Theaters");
+        var request = new RestRequest($"/Cinemas/{cinemaId}/theaters");
         request.AddHeader(TenantFieldNames.HeaderName, TenantId);
         var responseModel = await _client.ExecuteGetAsync<IEnumerable<GetTheaterResponseModel>>(request);
         return responseModel.ToResult();
     }
 
-    public async Task<ResultT<GetTheaterResponseModel>> GetTheaterByIdAsync(int cinemaId,Guid theaterId,string? TenantId = null)
+    public async Task<ResultT<GetTheaterResponseModel>> GetTheaterByIdAsync(int cinemaId,int theaterId,string? TenantId = null)
     {
         if (TenantId == null)
         {
@@ -53,7 +53,7 @@ public class TheaterClient : ITheaterClient, IDisposable
             TenantId = _tenantProvider.GetTenantId().ToString();
         }
 
-        var request = new RestRequest($"/Cinemas/{cinemaId}/Theaters/{theaterId}");
+        var request = new RestRequest($"/Cinemas/{cinemaId}/theaters/{theaterId}");
         request.AddHeader(TenantFieldNames.HeaderName, TenantId);
         var responseModel = await _client.ExecuteGetAsync<GetTheaterResponseModel>(request);
         return responseModel.ToResult();
@@ -67,14 +67,14 @@ public class TheaterClient : ITheaterClient, IDisposable
             var _tenantProvider = scope.ServiceProvider.GetRequiredService<ITenantProvider>();
             TenantId = _tenantProvider.GetTenantId().ToString();
         }
-        var request = new RestRequest($"/Cinemas/{cinemaId}/Theaters");
+        var request = new RestRequest($"/Cinemas/{cinemaId}/theaters");
         request.AddHeader(TenantFieldNames.HeaderName, TenantId);
         request.AddJsonBody(model);
         var response = await _client.ExecutePostAsync(request);
         return response.ToResult();
     }
 
-    public async Task<Result> UpdateTheaterAsync(int cinemaId, Guid theaterId, UpdateTheaterRequestModel model,string? TenantId = null)
+    public async Task<Result> UpdateTheaterAsync(int cinemaId, int theaterId, UpdateTheaterRequestModel model,string? TenantId = null)
     {
         if (TenantId == null)
         {
@@ -82,7 +82,7 @@ public class TheaterClient : ITheaterClient, IDisposable
             var _tenantProvider = scope.ServiceProvider.GetRequiredService<ITenantProvider>();
             TenantId = _tenantProvider.GetTenantId().ToString();
         }
-        var request = new RestRequest($"/Cinemas/{cinemaId}/Theaters/{theaterId}");
+        var request = new RestRequest($"/Cinemas/{cinemaId}/theaters/{theaterId}");
         request.AddHeader(TenantFieldNames.HeaderName, TenantId);
         request.AddJsonBody(model);
         var response = await _client.ExecutePutAsync(request);
@@ -95,7 +95,7 @@ public class TheaterClient : ITheaterClient, IDisposable
         throw new NotImplementedException();
     }
 
-    public async Task<Result> DeleteTheaterAsync(int cinemaId, Guid theaterId, string? TenantId)
+    public async Task<Result> DeleteTheaterAsync(int cinemaId, int theaterId, string? TenantId)
     {
         if (TenantId == null)
         {
@@ -103,7 +103,7 @@ public class TheaterClient : ITheaterClient, IDisposable
             var _tenantProvider = scope.ServiceProvider.GetRequiredService<ITenantProvider>();
             TenantId = _tenantProvider.GetTenantId().ToString();
         }
-        var request = new RestRequest($"/Cinemas/{cinemaId}/Theaters/{theaterId}");
+        var request = new RestRequest($"/Cinemas/{cinemaId}/theaters/{theaterId}");
         request.AddHeader(TenantFieldNames.HeaderName, TenantId);
         var response = await _client.ExecuteDeleteAsync(request);
         return response.ToResult();

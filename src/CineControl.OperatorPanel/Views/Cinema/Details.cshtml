@@ -7,6 +7,7 @@
 <h1>Index</h1>
 <p>
     <a asp-controller="Cinema" asp-action="Index" class="button">Return</a>
+    <a asp-controller="Theater" asp-action="Create" asp-route-cinemaId="@Model.Cinema.Id">Add Theater</a>
 </p>
 <dl class="row">
     <dt class="col-sm-2">
@@ -70,9 +71,12 @@
                     @Html.DisplayFor(m => theater.SeatingCapacity)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-controller="theater" asp-route-id="@theater.Id">Edit</a>
-                    <a asp-action="Details" asp-controller="theater" asp-route-id="@theater.Id">Details</a>
-                    <a asp-action="Delete" asp-controller="theater" asp-route-id="@theater.Id">Delete</a>
+                    <a asp-action="Edit" asp-controller="theater" 
+                        asp-route-id="@theater.Id"
+                        asp-route-cinemaId="@Model.Cinema.Id">Edit</a>
+                    <a asp-action="Delete" asp-controller="theater"
+                        asp-route-id="@theater.Id"
+                        asp-route-cinemaId="@Model.Cinema.Id">Delete</a>
                 </td> 
 
             </tr> 

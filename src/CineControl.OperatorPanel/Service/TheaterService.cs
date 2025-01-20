@@ -27,7 +27,7 @@ public class TheaterService(ITheaterClient theaterServiceClients,
 
         _tenantProvider.SetTenant(Guid.Parse(TenantId));
 
-        var response = await _theaterServiceClients.AddTheaterAsync(cinemaId, request.ToRequest());
+        var response = await _theaterServiceClients.AddTheaterAsync(cinemaId, request.ToRequest(),TenantId);
 
         if (!response.IsSuccess)
         {
@@ -36,14 +36,30 @@ public class TheaterService(ITheaterClient theaterServiceClients,
         return Result.Success();
     }
 
-    public async Task<ResultT<GetTheaterResponse>> GetTheaterByIdAsync(int cinemaId, Guid id)
+    public async Task<Result> DeleteTheaterAsync(int cinemaId, int id)
     {
         _jwtProvider.SetToken(_httpContextAccessor.GetTokenValue());
         var TenantId = _jwtProvider.GetTenantId();
 
         _tenantProvider.SetTenant(Guid.Parse(TenantId));
 
-        var GetTheater = await _theaterServiceClients.GetTheaterByIdAsync(cinemaId,id);
+        var response = await _theaterServiceClients.DeleteTheaterAsync(cinemaId,id,TenantId);
+
+        if (!response.IsSuccess)
+        {
+            return CinemaServiceErrors.Failure();
+        }
+        return Result.Success();
+    }
+
+    public async Task<ResultT<GetTheaterResponse>> GetTheaterByIdAsync(int cinemaId, int id)
+    {
+        _jwtProvider.SetToken(_httpContextAccessor.GetTokenValue());
+        var TenantId = _jwtProvider.GetTenantId();
+
+        _tenantProvider.SetTenant(Guid.Parse(TenantId));
+
+        var GetTheater = await _theaterServiceClients.GetTheaterByIdAsync(cinemaId,id,TenantId);
 
         if (!GetTheater.IsSuccess)
         {
@@ -59,7 +75,7 @@ public class TheaterService(ITheaterClient theaterServiceClients,
 
         _tenantProvider.SetTenant(Guid.Parse(TenantId));
 
-        var GetTheaters = await _theaterServiceClients.GetTheatersAsync(cinemaId);
+        var GetTheaters = await _theaterServiceClients.GetTheatersAsync(cinemaId,TenantId);
 
         if (!GetTheaters.IsSuccess)
         {
@@ -68,14 +84,14 @@ public class TheaterService(ITheaterClient theaterServiceClients,
         return GetTheaters.Value.ToResponse();
     }
 
-    public async Task<Result> UpdateTheaterAsync(int cinemaId, Guid id, UpdateTheaterRequest request)
+    public async Task<Result> UpdateTheaterAsync(int cinemaId, int id, UpdateTheaterRequest request)
     {
         _jwtProvider.SetToken(_httpContextAccessor.GetTokenValue());
         var TenantId = _jwtProvider.GetTenantId();
 
         _tenantProvider.SetTenant(Guid.Parse(TenantId));
 
-        var GetTheater = await _theaterServiceClients.UpdateTheaterAsync(cinemaId,id,request.ToRequest());
+        var GetTheater = await _theaterServiceClients.UpdateTheaterAsync(cinemaId,id,request.ToRequest(),TenantId);
 
         if (!GetTheater.IsSuccess)
         {

@@ -18,6 +18,7 @@ namespace CineControl.OperatorPanel.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(int cinemaId,AddTheaterRequest request)
         {
             if (!ModelState.IsValid)
@@ -33,7 +34,8 @@ namespace CineControl.OperatorPanel.Controllers
             return RedirectToAction("Index");
         }
 
-        public async Task<ActionResult> Edit(int cinemaId,Guid id)
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult> Edit(int cinemaId,int id)
         {
             var result = await _theaterService.GetTheaterByIdAsync(cinemaId,id);
             if (!result.IsSuccess)
@@ -41,13 +43,26 @@ namespace CineControl.OperatorPanel.Controllers
                 ModelState.AddModelError("Error", result.Error.ToString());
                 return RedirectToAction("Index");
             }
-            return View(result.Value);
+            UpdateTheaterRequest updateTheaterRequest = new()
+            {
+                Id = result.Value.Id,
+                CinemaId = cinemaId,
+                Name = result.Value.Name,
+                SeatingCapacity = result.Value.SeatingCapacity,
+                SeatsPerRow = result.Value.SeatsPerRow,
+            };
+            return View(updateTheaterRequest);
         }
 
-        [HttpPost]
-        public async Task<ActionResult> Edit(int cinemaId, Guid id, UpdateTheaterRequest request)
+        [HttpPost("{id:int}")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(int cinemaId, int id, UpdateTheaterRequest request)
         {
             if (id != request.Id)
+            {
+                return NotFound();
+            }
+            if (cinemaId != request.CinemaId)
             {
                 return NotFound();
             }
@@ -63,5 +78,30 @@ namespace CineControl.OperatorPanel.Controllers
             }
             return RedirectToAction("Index");
         }
+
+        [HttpGet("{id:int}/Delete")]
+        public async Task<ActionResult> Delete(int cinemaId, int id)
+        {
+            var result = await _theaterService.GetTheaterByIdAsync(cinemaId,id);
+            if (!result.IsSuccess)
+            {
+                ModelState.AddModelError("Error", result.Error.ToString());
+                return RedirectToAction("Index");
+            }
+            result.Value.CinemaId = cinemaId;
+            return View(result.Value);
+        }
+
+        [HttpDelete("{id:int}/Delete")]
+        public async Task<ActionResult> DeleteConfirmed(int cinemaId, int id)
+        {
+            var result = await _theaterService.DeleteTheaterAsync(cinemaId,id);
+            if (!result.IsSuccess)
+            {
+                ModelState.AddModelError("Error", result.Error.ToString());
+            }
+            return RedirectToAction("Details","Cinema");
+        }
+
     }
 }
