@@ -1,0 +1,9 @@
+namespace CineControl.Common.Clients.SeanceService.Models.Seances;
+
+public class AddSeanceRequestModel
+{
+    public int MovieId { get; set; }
+    public int TheaterId { get; set; }
+    public int CinemaId { get; set; }
+    public DateTime StartTime { get; set; }
+}
