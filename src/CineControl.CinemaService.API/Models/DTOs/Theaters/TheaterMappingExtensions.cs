@@ -11,6 +11,7 @@ public static class TheaterMappingExtensions
             Id = theater.Id,
             Name = theater.Name,
             SeatingCapacity = theater.SeatingCapacity,
+            SeatsPerRow = theater.SeatsPerRow
             // Seats = theater.Seats.Select(s => s.ToResponse()).ToList()
         };
     }
