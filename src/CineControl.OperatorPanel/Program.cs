@@ -8,6 +8,7 @@ using CineControl.OperatorPanel.Service.IService;
 using CineControl.Common.JWTProvider.Extension;
 using Microsoft.AspNetCore.DataProtection;
 using Serilog;
+using CineControl.Common.Clients.SeanceService.ServiceExtension;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,11 +21,13 @@ builder.Services.AddTenantProvider()
 
 builder.Services.AddIdentityServiceClient(builder.Configuration)
                 .AddTenantServiceClient(builder.Configuration)
-                .AddCinemaServiceClient(builder.Configuration);
+                .AddCinemaServiceClient(builder.Configuration)
+                .AddSeanceServiceClient(builder.Configuration);
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICinemaService, CinemaService>();
 builder.Services.AddScoped<ITheaterService, TheaterService>();
+builder.Services.AddScoped<IMovieService, MovieService>();
 
 builder.Services.AddDataProtection()
                 .PersistKeysToFileSystem(new DirectoryInfo("./keys"));

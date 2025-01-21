@@ -1,0 +1,53 @@
+@using CineControl.OperatorPanel.Models.DTOs.Movie
+@model IEnumerable<GetMovieResponse>
+@{
+    ViewData["Title"] = "Movie Page";
+}
+
+<h1>Movie</h1>
+<p>
+    <a asp-controller="Movie" asp-action="Create" class="button">Add Movie</a>
+</p>
+<table> 
+    <thead> 
+        <tr> 
+            <th>@Html.DisplayNameFor(m => m.First().Title)</th>
+            <th>@Html.DisplayNameFor(m => m.First().ShortDescription)</th> 
+            <th>@Html.DisplayNameFor(m => m.First().ReleaseDate)</th> 
+            <th>@Html.DisplayNameFor(m => m.First().Duration)</th> 
+            <th>@Html.DisplayNameFor(m => m.First().Genre)</th>
+            <th>@Html.DisplayNameFor(m => m.First().Rating)</th> 
+            <th>Options</th>
+        </tr> 
+    </thead> 
+    <tbody> 
+        @foreach (var movie in Model) 
+        { 
+            <tr> 
+                <td>
+                    @Html.DisplayFor(movieitem => movie.Title)
+                </td> 
+                <td>
+                    @Html.DisplayFor(movieitem => movie.ShortDescription)
+                </td> 
+                <td>
+                    @Html.DisplayFor(movieitem => movie.ReleaseDate)
+                </td> 
+                <td>
+                    @Html.DisplayFor(movieitem => movie.Duration)
+                </td> 
+                <td>
+                    @Html.DisplayFor(movieitem => movie.Genre)
+                </td> 
+                <td>
+                    @Html.DisplayFor(movieitem => movie.Rating)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@movie.Id">Edit</a>
+                    <a asp-action="Details" asp-route-id="@movie.Id">Details</a>
+                    <a asp-action="Delete" asp-route-id="@movie.Id">Delete</a>
+                </td> 
+            </tr> 
+        } 
+    </tbody>
+</table>

@@ -1,0 +1,71 @@
+@using CineControl.OperatorPanel.Models.DTOs.Movie;
+@model GetMovieResponse
+@{
+    ViewData["Title"] = "Movie Page";
+}
+<h1>Index</h1>
+<p>
+    <a asp-action="Index" class="button">Return</a>
+</p>
+<dl class="row">
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(m => m.Id)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(m => m.Id)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(m => m.Title)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(m => m.Title)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(m => m.Description)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(m => m.Description)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(m => m.ShortDescription)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(m => m.ShortDescription)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(m => m.ReleaseDate)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(m => m.ReleaseDate)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(m => m.Duration)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(m => m.Duration)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(m => m.PosterUrl)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(m => m.PosterUrl)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(m => m.PanoramicPosterUrl)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(m => m.PanoramicPosterUrl)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(m => m.Genre)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(m => m.Genre)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(m => m.Rating)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(m => m.Rating)
+    </dd>
+</dl>

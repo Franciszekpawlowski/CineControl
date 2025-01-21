@@ -1,4 +1,5 @@
 using CineControl.Common.Clients.SeanceService.IClients;
+using CineControl.Common.Clients.SeanceService.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,7 +11,7 @@ public static class SeanceServiceExtensions
         this IServiceCollection services,
         IConfiguration configuration)
         {
-            services.Configure<SeanceClient>(GetConfiguration(configuration));
+            services.Configure<SeanceServiceClientOptions>(GetConfiguration(configuration));
             services.AddSingleton<ISeanceClient, SeanceClient>()
                     .AddSingleton<IMoviesClient, MoviesClient>();
 

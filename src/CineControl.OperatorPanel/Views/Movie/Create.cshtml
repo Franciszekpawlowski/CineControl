@@ -1,0 +1,35 @@
+@using CineControl.OperatorPanel.Models.DTOs.Movie
+@model AddMovieRequest
+@{
+    ViewData["Title"] = "Add Movie";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Add new Movie</h1>
+    <form asp-action="Create" method="post">
+        @Html.AntiForgeryToken()
+        <label asp-for="Title"></label>
+        <input asp-for="Title"><br>
+        <label asp-for="Description"></label>
+        <input asp-for="Description"><br>
+        <label asp-for="ShortDescription"></label>
+        <input asp-for="ShortDescription"><br>
+        <label asp-for="ReleaseDate"></label>
+        <input asp-for="ReleaseDate"><br>
+        <label asp-for="Duration"></label>
+        <input asp-for="Duration"><br>
+        <label asp-for="PosterUrl"></label>
+        <input asp-for="PosterUrl"><br>
+        <label asp-for="PanoramicPosterUrl"></label>
+        <input asp-for="PanoramicPosterUrl"><br>
+        <label asp-for="Genre"></label>
+        <input asp-for="Genre"><br>
+        <label asp-for="Rating"></label>
+        <input asp-for="Rating"><br>
+        <button type="submit">Add Movie</button>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
