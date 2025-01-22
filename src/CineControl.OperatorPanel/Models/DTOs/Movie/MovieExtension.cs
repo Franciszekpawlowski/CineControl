@@ -1,4 +1,6 @@
+using System.Threading.Tasks;
 using CineControl.Common.Clients.SeanceService.Models.Movies;
+using CineControl.OperatorPanel.Providers;
 
 namespace CineControl.OperatorPanel.Models.DTOs.Movie;
 
@@ -29,7 +31,9 @@ public static class MovieExtensions
             ReleaseDate = addMovieRequest.ReleaseDate,
             Duration = addMovieRequest.Duration,
             PosterUrl = addMovieRequest.PosterUrl,
+            PosterB64 = FileProvider.ConvertToBase64(addMovieRequest.PosterFile),
             PanoramicPosterUrl = addMovieRequest.PanoramicPosterUrl,
+            PanoramicPosterB64 = FileProvider.ConvertToBase64(addMovieRequest.PanoramicPosterFile),
             Genre = addMovieRequest.Genre,
             Rating = addMovieRequest.Rating
         };

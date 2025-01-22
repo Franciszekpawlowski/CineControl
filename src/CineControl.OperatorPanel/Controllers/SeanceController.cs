@@ -96,7 +96,7 @@ public class SeanceController(
 
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Delete(int id)
+    public async Task<ActionResult> DeleteConfirmed(int id)
     {
         var result = await _seanceService.DeleteSeanceAsync(id);
         if (!result.IsSuccess)

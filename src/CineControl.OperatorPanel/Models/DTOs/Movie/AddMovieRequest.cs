@@ -21,7 +21,9 @@ public class AddMovieRequest
     [Range(0, int.MaxValue, ErrorMessage = "Duration must be a positive number")]
     public int Duration { get; set; } // W minutach
     public string PosterUrl { get; set; }
+    public IFormFile PosterFile { get; set; }
     public string PanoramicPosterUrl { get; set; }
+    public IFormFile PanoramicPosterFile { get; set; }
     public string Genre { get; set; }
     [Range(0, 10, ErrorMessage = "Rating must be between 0 and 10")]
     public double Rating { get; set; }

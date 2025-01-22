@@ -60,7 +60,9 @@ namespace CineControl.SeanceService.API.Service
                 ReleaseDate = request.ReleaseDate,
                 Duration = request.Duration,
                 PosterUrl = request.PosterUrl,
+                PosterB64 = request.PosterB64,
                 PanoramicPosterUrl = request.PanoramicPosterUrl,
+                PanoramicPosterB64 = request.PanoramicPosterB64,
                 Genre = request.Genre,
                 Rating = request.Rating
             };

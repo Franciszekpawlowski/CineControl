@@ -54,6 +54,7 @@ public class MovieService(
         return GetMovie.Value.ToResponse();
     }
 
+
     public async Task<Result> AddMovieAsync(AddMovieRequest request)
     {
         _jwtProvider.SetToken(_httpContextAccessor.GetTokenValue());
@@ -82,6 +83,22 @@ public class MovieService(
         var GetMovie = await _moviesClient.UpdateMovieAsync(id,request.ToRequest(),TenantId);
 
         if (!GetMovie.IsSuccess)
+        {
+            return CinemaServiceErrors.Failure();
+        }
+        return Result.Success();
+    }
+
+    public async Task<Result> DeleteMovieAsync(int id)
+    {
+        _jwtProvider.SetToken(_httpContextAccessor.GetTokenValue());
+        var TenantId = _jwtProvider.GetTenantId();
+
+        _tenantProvider.SetTenant(Guid.Parse(TenantId));
+
+        var GetMovies = await _moviesClient.DeleteMovieAsync(id,TenantId);
+
+        if (!GetMovies.IsSuccess)
         {
             return CinemaServiceErrors.Failure();
         }
