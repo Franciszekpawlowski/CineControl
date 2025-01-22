@@ -9,4 +9,5 @@ public interface IMovieService
     Task<ResultT<GetMovieResponse>> GetMovieByIdAsync(int id);
     Task<Result> AddMovieAsync(AddMovieRequest request);
     Task<Result> UpdateMovieAsync(int id, UpdateMovieRequest request);
+    Task<Result> DeleteMovieAsync(int id);
 }

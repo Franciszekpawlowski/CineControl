@@ -83,4 +83,20 @@ public class CinemaService(ICinemaClient cinemaServiceClients,
         }
         return Result.Success();
     }
+
+    public async Task<Result> DeleteCinemaAsync(int id)
+    {
+        _jwtProvider.SetToken(_httpContextAccessor.GetTokenValue());
+        var TenantId = _jwtProvider.GetTenantId();
+
+        _tenantProvider.SetTenant(Guid.Parse(TenantId));
+
+        var GetCinema = await _cinemaServiceClients.DeleteCinemaAsync(id,TenantId);
+        
+        if ( !GetCinema.IsSuccess )
+        {
+            return CinemaServiceErrors.Failure();
+        }
+        return Result.Success();
+    }
 }

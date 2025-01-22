@@ -83,4 +83,27 @@ public class SeanceController(
         return RedirectToAction("Index");
     }
 
+    public async Task<ActionResult> Delete(int id)
+    {
+        var result = await _seanceService.GetSeancesByIdAsync(id);
+        if (!result.IsSuccess)
+        {
+            ModelState.AddModelError("Error", result.Error.ToString());
+            return RedirectToAction("Index");
+        }
+        return View(result.Value);
+    }
+
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<ActionResult> Delete(int id)
+    {
+        var result = await _seanceService.DeleteSeanceAsync(id);
+        if (!result.IsSuccess)
+        {
+            ModelState.AddModelError("Error", result.Error.ToString());
+            return View();
+        }
+        return RedirectToAction("Index");
+    }
 }

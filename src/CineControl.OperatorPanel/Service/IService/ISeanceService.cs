@@ -9,4 +9,5 @@ public interface ISeanceService
     Task<ResultT<GetSeanceResponse>> GetSeancesByIdAsync(int Id);
     Task<Result> AddSeanceAsync(AddSeanceRequest addSeanceRequest);
     Task<Result> UpdateSeanceAsync(int id, UpdateSeanceRequest request);
+    Task<Result> DeleteSeanceAsync(int id);
 }

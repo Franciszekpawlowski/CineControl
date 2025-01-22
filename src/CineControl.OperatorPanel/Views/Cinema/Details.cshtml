@@ -6,8 +6,10 @@
 
 <h1>Index</h1>
 <p>
-    <a asp-controller="Cinema" asp-action="Index" class="button">Return</a>
-    <a asp-controller="Theater" asp-action="Create" asp-route-cinemaId="@Model.Cinema.Id">Add Theater</a>
+    <a asp-action="Index" class="btn btn-primary">Return</a>
+    <a asp-controller="Theater" 
+        asp-action="Create" 
+        asp-route-cinemaId="@Model.Cinema.Id">Add Theater</a>
 </p>
 <dl class="row">
     <dt class="col-sm-2">
@@ -77,8 +79,7 @@
                     <a asp-action="Delete" asp-controller="theater"
                         asp-route-id="@theater.Id"
                         asp-route-cinemaId="@Model.Cinema.Id">Delete</a>
-                </td> 
-
+                </td>
             </tr> 
         } 
     </tbody>

@@ -36,6 +36,22 @@ public class SeanceService(ISeanceClient seanceClient,
         return Result.Success();
     }
 
+    public async Task<Result> DeleteSeanceAsync(int id)
+    {
+        _jwtProvider.SetToken(_httpContextAccessor.GetTokenValue());
+        var TenantId = _jwtProvider.GetTenantId();
+
+        _tenantProvider.SetTenant(Guid.Parse(TenantId));
+
+        var GetMovie = await _seanceClient.DeleteSeanceAsync(id,TenantId);
+
+        if (!GetMovie.IsSuccess)
+        {
+            return CinemaServiceErrors.Failure();
+        }
+        return Result.Success();
+    }
+
     public async Task<ResultT<IEnumerable<GetSeanceResponse>>> GetSeancesAsync()
     {
         _jwtProvider.SetToken(_httpContextAccessor.GetTokenValue());

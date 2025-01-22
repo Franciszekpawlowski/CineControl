@@ -3,17 +3,41 @@
 @{
     ViewData["Title"] = "Add Theater";
 }
+<h1>Add</h1>
 
-<div class="text-center">
-    <h1 class="display-4">Add new Theater</h1>
-    <form asp-action="Create" asp-controller="Theater" method="post">
-        @Html.AntiForgeryToken()
-        <label asp-for="Name"></label>
-        <input asp-for="Name"><br>
-        <label asp-for="SeatingCapacity"></label>
-        <input asp-for="SeatingCapacity"><br>
-        <label asp-for="SeatsPerRow"></label>
-        <input asp-for="SeatsPerRow"><br>
-        <button type="submit">Add Theater</button>
-    </form>
+<h4>Theater</h4>
+<hr>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control"/>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SeatingCapacity" class="control-label"></label>
+                <input asp-for="SeatingCapacity" class="form-control"/>
+                <span asp-validation-for="SeatingCapacity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SeatsPerRow" class="control-label"></label>
+                <input asp-for="SeatsPerRow" class="form-control"/>
+                <span asp-validation-for="SeatsPerRow" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+               <button type="submit" value="Create" class="btn btn-primary"/>
+            </div>
+        </form>
+    </div>
 </div>
+
+<div>
+    <a asp-action="Index" class="btn btn-primary">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

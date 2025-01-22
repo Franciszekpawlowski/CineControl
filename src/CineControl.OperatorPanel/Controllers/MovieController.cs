@@ -93,5 +93,29 @@ namespace CineControl.OperatorPanel.Controllers
             }
             return RedirectToAction("Index");
         }
+
+        public async Task<ActionResult> Delete(int id)
+        {
+            var result = await _movieService.GetMovieByIdAsync(id);
+            if (!result.IsSuccess)
+            {
+                ModelState.AddModelError("Error", result.Error.ToString());
+                return RedirectToAction("Index");
+            }
+            return View(result.Value);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteConfirmed(int id)
+        {
+            var result = await _movieService.DeleteMovieAsync(id);
+            if (!result.IsSuccess)
+            {
+                ModelState.AddModelError("Error", result.Error.ToString());
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("Index");
+        }
     }
 }
