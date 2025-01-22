@@ -68,7 +68,7 @@ public class SeanceClient : ISeanceClient, IDisposable
         GC.SuppressFinalize(this);
     }
 
-    public async Task<ResultT<IEnumerable<GetSeancesResponseModel>>> GetMoviesAsync(string TenantId = null)
+    public async Task<ResultT<IEnumerable<GetSeancesResponseModel>>> GetSeancesAsync(string TenantId = null)
     {
         if (TenantId == null)
         {
@@ -85,7 +85,7 @@ public class SeanceClient : ISeanceClient, IDisposable
         return responseModel.ToResult();
     }
 
-    public async Task<ResultT<GetSeancesResponseModel>> GetMoviesByIdAsync(int id, string TenantId = null)
+    public async Task<ResultT<GetSeancesResponseModel>> GetSeancesByIdAsync(int id, string TenantId = null)
     {
         if (TenantId == null)
         {

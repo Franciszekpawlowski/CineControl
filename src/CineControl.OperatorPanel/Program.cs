@@ -28,6 +28,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICinemaService, CinemaService>();
 builder.Services.AddScoped<ITheaterService, TheaterService>();
 builder.Services.AddScoped<IMovieService, MovieService>();
+builder.Services.AddScoped<ISeanceService, SeanceService>();
 
 builder.Services.AddDataProtection()
                 .PersistKeysToFileSystem(new DirectoryInfo("./keys"));
