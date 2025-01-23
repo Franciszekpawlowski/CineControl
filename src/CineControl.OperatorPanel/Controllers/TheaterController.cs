@@ -6,18 +6,19 @@ using Microsoft.AspNetCore.Mvc;
 namespace CineControl.OperatorPanel.Controllers
 {
     [Authorize]
-    [Route("Cinema/{cinemaId:int}/theater")]
+    [Route("Cinema/{cinemaId}/[controller]")]
     public class TheaterController(
         ITheaterService theaterService) : Controller
     {
         private readonly ITheaterService _theaterService = theaterService;
 
+        [HttpGet("Create")]
         public ActionResult Create()
         {
             return View();
         }
 
-        [HttpPost]
+        [HttpPost("Create")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(int cinemaId,AddTheaterRequest request)
         {
@@ -34,7 +35,7 @@ namespace CineControl.OperatorPanel.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("Edit/{id}")]
         public async Task<ActionResult> Edit(int cinemaId,int id)
         {
             var result = await _theaterService.GetTheaterByIdAsync(cinemaId,id);
@@ -54,7 +55,7 @@ namespace CineControl.OperatorPanel.Controllers
             return View(updateTheaterRequest);
         }
 
-        [HttpPost("{id:int}")]
+        [HttpPost("Edit/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(int cinemaId, int id, UpdateTheaterRequest request)
         {
@@ -79,7 +80,7 @@ namespace CineControl.OperatorPanel.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpGet("{id:int}/Delete")]
+        [HttpGet("Delete/{id}")]
         public async Task<ActionResult> Delete(int cinemaId, int id)
         {
             var result = await _theaterService.GetTheaterByIdAsync(cinemaId,id);
@@ -92,7 +93,7 @@ namespace CineControl.OperatorPanel.Controllers
             return View(result.Value);
         }
 
-        [HttpDelete("{id:int}/Delete")]
+        [HttpDelete("Delete/{id}")]
         public async Task<ActionResult> DeleteConfirmed(int cinemaId, int id)
         {
             var result = await _theaterService.DeleteTheaterAsync(cinemaId,id);

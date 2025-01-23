@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CineControl.OperatorPanel.Controllers
 {
     [Authorize]
+    [Route("[controller]")]
     public class MovieController(
         IMovieService movieServcie
     ) : Controller
@@ -20,6 +21,7 @@ namespace CineControl.OperatorPanel.Controllers
             return View(model.Value);
         }
 
+        [HttpGet("{id}")]
         public async Task<ActionResult> Details(int id)
         {
             var model = await _movieService.GetMovieByIdAsync(id);
@@ -27,12 +29,13 @@ namespace CineControl.OperatorPanel.Controllers
             return View(model.Value);
         }
 
+        [HttpGet("Create")]
         public ActionResult Create()
         {
             return View();
         }
 
-        [HttpPost]
+        [HttpPost("Create")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(AddMovieRequest request)
         {
@@ -49,6 +52,7 @@ namespace CineControl.OperatorPanel.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet("{id}/Edit")]
         public async Task<ActionResult> Edit(int id)
         {
             var result = await _movieService.GetMovieByIdAsync(id);
@@ -72,7 +76,7 @@ namespace CineControl.OperatorPanel.Controllers
             return View(UpdateMovieRequest);
         }
 
-        [HttpPost]
+        [HttpPost("{id}/Edit")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(int id, UpdateMovieRequest request)
         {
@@ -94,6 +98,8 @@ namespace CineControl.OperatorPanel.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet("{id}/Delete")]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(int id)
         {
             var result = await _movieService.GetMovieByIdAsync(id);
@@ -105,7 +111,7 @@ namespace CineControl.OperatorPanel.Controllers
             return View(result.Value);
         }
 
-        [HttpPost, ActionName("Delete")]
+        [HttpPost("{id}/Delete")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {

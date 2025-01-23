@@ -20,7 +20,7 @@ public class UpdateCinemaRequest
     [StringLength(25, ErrorMessage = "State must be between 3 and 25 characters", MinimumLength = 3)]
     public string State { get; set; }
     [Required]
-    [StringLength(5)]
+    [StringLength(6)]
     [RegularExpression(@"^\d{2}(-\d{3})?$", ErrorMessage = "Invalid Zip")]
     public string ZipCode { get; set; }
 

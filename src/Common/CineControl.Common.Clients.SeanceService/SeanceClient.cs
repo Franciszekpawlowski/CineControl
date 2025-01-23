@@ -85,6 +85,23 @@ public class SeanceClient : ISeanceClient, IDisposable
         return responseModel.ToResult();
     }
 
+    public async Task<ResultT<IEnumerable<GetSeancesResponseModel>>> GetSeancesByCinemaIdAsync(int cinemaId, string TenantId = null)
+    {
+        if (TenantId == null)
+        {
+            using var scope = _serviceScopeFactory.CreateScope();
+            var _tenantProvider = scope.ServiceProvider.GetRequiredService<ITenantProvider>();
+            TenantId = _tenantProvider.GetTenantId().ToString();
+        }
+
+        var request = new RestRequest($"/Seances/bycinema/{cinemaId}");
+        request.AddHeader(TenantFieldNames.HeaderName, TenantId);
+
+        var responseModel = await _client.ExecuteGetAsync<IEnumerable<GetSeancesResponseModel>>(request);
+
+        return responseModel.ToResult();
+    }
+
     public async Task<ResultT<GetSeancesResponseModel>> GetSeancesByIdAsync(int id, string TenantId = null)
     {
         if (TenantId == null)

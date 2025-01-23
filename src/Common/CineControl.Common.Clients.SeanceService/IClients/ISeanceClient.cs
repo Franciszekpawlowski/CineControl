@@ -6,6 +6,7 @@ namespace CineControl.Common.Clients.SeanceService.IClients;
 public interface ISeanceClient
 {
     public Task<ResultT<IEnumerable<GetSeancesResponseModel>>> GetSeancesAsync(string TenantId = null);
+    public Task<ResultT<IEnumerable<GetSeancesResponseModel>>> GetSeancesByCinemaIdAsync(int cinemaId,string TenantId = null);
     public Task<ResultT<GetSeancesResponseModel>> GetSeancesByIdAsync(int id, string TenantId = null);
     public Task<Result> AddSeanceAsync(AddSeanceRequestModel addSeanceRequestModel, string TenantId = null);
     public Task<Result> UpdateSeanceAsync(int id, UpdateSeanceRequestModel updateSeanceRequestModel, string TenantId = null);

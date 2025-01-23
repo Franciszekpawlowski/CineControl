@@ -1,29 +1,57 @@
+using System.Threading.Tasks;
 using CineControl.OperatorPanel.Models.DTOs.Seances;
 using CineControl.OperatorPanel.Service.IService;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CineControl.OperatorPanel.Controllers;
 
+[Route("Cinema/{cinemaId}/[controller]")]
 public class SeanceController(
-    ISeanceService seanceService
+    ISeanceService seanceService,
+    IMovieService movieServcie,
+    ITheaterService theaterService
 ) : Controller
 {
     private readonly ISeanceService _seanceService = seanceService;
+    private readonly IMovieService _movieService = movieServcie;
+    private readonly ITheaterService _theaterService = theaterService;
+    [HttpGet("Index")]
     public async Task<IActionResult> Index(
-        
+        [FromRoute]int cinemaId
     )
     {
-        var model = await _seanceService.GetSeancesAsync();
-
+        var model = await _seanceService.GetSeancesByCinemaIdAsync(cinemaId);
+        ViewBag.CinemaId = cinemaId;
         return View(model.Value);
     }
 
-    public ActionResult Create()
+    [HttpGet("Create")]
+    public async Task<ActionResult> Create(
+        [FromRoute]int cinemaId
+    )
     {
-        return View();
+        var selectListMovies = await _movieService.GetMoviesAsync();
+        var selectListTheaters = await _theaterService.GetTheatersAsync(cinemaId);
+        AddSeanceRequest req = new() {
+            Movies = selectListMovies.Value.Select(
+                x => new SelectListItem
+                {
+                    Text = x.Title,
+                    Value = x.Id.ToString()
+                }).ToList(),
+            CinemaId = cinemaId,
+            Theaters = selectListTheaters.Value.Select(
+                x => new SelectListItem
+                {
+                    Text = x.Name, 
+                    Value = x.Id.ToString()
+                }).ToList()
+        };
+        return View(req);
     }
 
-    [HttpPost]
+    [HttpPost("Create")]
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> Create(AddSeanceRequest request)
     {
@@ -40,9 +68,10 @@ public class SeanceController(
         return RedirectToAction("Index");
     }
 
+    [HttpGet("Edit/{id}")]
     public async Task<IActionResult> Edit(int id)
     {
-        var result = await _seanceService.GetSeancesByIdAsync(id);
+        var result = await _seanceService.GetSeanceByIdAsync(id);
         if (!result.IsSuccess)
         {
             ModelState.AddModelError("Error", result.Error.ToString());
@@ -61,7 +90,7 @@ public class SeanceController(
         return View(UpdateMovieRequest);
     }
 
-    [HttpPost]
+    [HttpPost("Edit/{id}")]
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> Edit(int id, UpdateSeanceRequest request)
     {
@@ -83,9 +112,10 @@ public class SeanceController(
         return RedirectToAction("Index");
     }
 
+    [HttpGet("Delete/{id}")]
     public async Task<ActionResult> Delete(int id)
     {
-        var result = await _seanceService.GetSeancesByIdAsync(id);
+        var result = await _seanceService.GetSeanceByIdAsync(id);
         if (!result.IsSuccess)
         {
             ModelState.AddModelError("Error", result.Error.ToString());
@@ -94,7 +124,7 @@ public class SeanceController(
         return View(result.Value);
     }
 
-    [HttpPost, ActionName("Delete")]
+    [HttpPost("Delete/{id}")]
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> DeleteConfirmed(int id)
     {

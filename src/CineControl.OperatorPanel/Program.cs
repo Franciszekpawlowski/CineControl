@@ -62,8 +62,14 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapControllers();
+
+app.MapControllerRoute(
+    name: "Cinema",
+    pattern: "Cinema/{cinemaId}/{controller}/{action}/{id?}");
+
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}");
+    pattern: "{controller=Cinema}/{action=Index}/{id?}");
 
 app.Run();

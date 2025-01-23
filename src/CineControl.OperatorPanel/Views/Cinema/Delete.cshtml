@@ -43,9 +43,11 @@
         </dd>
     </dl>
 
-    <form asp-action="Delete" method="post">
+    <form asp-action="DeleteConfirmed" method="post">
         <input type="hidden" asp-for="Id">
         <input type="submit" value="Delete" class="btn btn-danger">
-        <a asp-action="Index">Back to list</a>
     </form>
+    <a asp-action="Index"
+        asp-controller="Seance"
+        asp-route-cinemaId="@Model.Id">Back to list</a>
 </div>

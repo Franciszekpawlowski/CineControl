@@ -192,5 +192,20 @@ namespace CineControl.SeanceService.API.Service
         {
             return _context.Seances.Any(e => e.Id == id);
         }
+
+        public async Task<ResultT<IEnumerable<Seance>>> GetSeancesByCinema(int cinemaId)
+        {
+            if (!_tenantProvider.HasTenant())
+            {
+                return SeanceErrors.AccessUnauthorized("No tenant specified");
+            }
+
+            var seances = await _context.Seances
+                .Include(s => s.Movie)
+                .Where(s => s.CinemaId == cinemaId)
+                .ToListAsync();
+
+            return seances;
+        }
     }
 }

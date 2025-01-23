@@ -12,5 +12,6 @@ namespace CineControl.SeanceService.API.Service.IService
         Task<ResultT<Seance>> AddSeance(SeanceCreateDto seanceCreateDto);
         Task<Result> UpdateSeance(int id, SeanceDto seanceDto);
         Task<Result> DeleteSeance(int id);
+        Task<ResultT<IEnumerable<Seance>>> GetSeancesByCinema(int cinemaId);
     }
 }

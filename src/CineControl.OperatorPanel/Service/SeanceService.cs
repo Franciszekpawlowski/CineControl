@@ -68,7 +68,7 @@ public class SeanceService(ISeanceClient seanceClient,
         return GetCinema.Value.ToResponse();
     }
 
-    public async Task<ResultT<GetSeanceResponse>> GetSeancesByIdAsync(int Id)
+    public async Task<ResultT<GetSeanceResponse>> GetSeanceByIdAsync(int Id)
     {
         _jwtProvider.SetToken(_httpContextAccessor.GetTokenValue());
         var TenantId = _jwtProvider.GetTenantId();
@@ -98,5 +98,21 @@ public class SeanceService(ISeanceClient seanceClient,
             return CinemaServiceErrors.Failure();
         }
         return Result.Success();
+    }
+
+    public async Task<ResultT<IEnumerable<GetSeanceResponse>>> GetSeancesByCinemaIdAsync(int id)
+    {
+        _jwtProvider.SetToken(_httpContextAccessor.GetTokenValue());
+        var TenantId = _jwtProvider.GetTenantId();
+
+        _tenantProvider.SetTenant(Guid.Parse(TenantId));
+
+        var GetCinema = await _seanceClient.GetSeancesByCinemaIdAsync(id,TenantId);
+        
+        if ( !GetCinema.IsSuccess )
+        {
+            return CinemaServiceErrors.Failure();
+        }
+        return GetCinema.Value.ToResponse();
     }
 }
