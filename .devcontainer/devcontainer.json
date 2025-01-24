@@ -31,7 +31,8 @@
                 "Angular.ng-template",
                 "johnpapa.Angular2",
                 "dbaeumer.vscode-eslint",
-                "christian-kohler.path-intellisense"
+                "christian-kohler.path-intellisense",
+                "Murugaratham.vscode-dotnet-watch"
             ]
         }
     },

@@ -55,7 +55,16 @@ public class CinemaController(
             ModelState.AddModelError("Error", result.Error.ToString());
             return RedirectToAction("Index");
         }
-        return View(result.Value);
+        UpdateCinemaRequest updateCinemaRequest = new()
+        {
+            Id = result.Value.Id,
+            Name = result.Value.Name,
+            Address = result.Value.Address,
+            City = result.Value.City,
+            State = result.Value.State,
+            ZipCode = result.Value.ZipCode
+        };
+        return View(updateCinemaRequest);
     }
 
     [HttpPost("Edit/{id}")]
@@ -79,7 +88,8 @@ public class CinemaController(
         return RedirectToAction("Index");
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("Details/{id}")]
+    [HttpGet("Details")]
     public async Task<ActionResult> Details(int id)
     {
         var cinemaResult = await _cinemaService.GetCinemasByIdAsync(id);

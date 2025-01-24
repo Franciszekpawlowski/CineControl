@@ -35,7 +35,10 @@
 </div>
 
 <div>
-    <a asp-action="Index" class="btn btn-primary">Back to List</a>
+    <a asp-controller="Cinema"
+        asp-action="Details" 
+        asp-route-id="@ViewBag.cinemaId"
+        class="btn btn-primary">Back to List</a>
 </div>
 
 @section Scripts {

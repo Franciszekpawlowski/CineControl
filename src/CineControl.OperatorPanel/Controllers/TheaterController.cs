@@ -13,8 +13,11 @@ namespace CineControl.OperatorPanel.Controllers
         private readonly ITheaterService _theaterService = theaterService;
 
         [HttpGet("Create")]
-        public ActionResult Create()
+        public ActionResult Create(
+            int cinemaId
+        )
         {
+            ViewBag.cinemaId = cinemaId;
             return View();
         }
 

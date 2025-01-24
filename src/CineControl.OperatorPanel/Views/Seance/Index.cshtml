@@ -6,14 +6,17 @@
 
 <h1>Seance</h1>
 <p>
+    <a asp-action="Details" 
+        asp-controller="Cinema" 
+        asp-route-id=@ViewBag.cinemaId
+        class="btn btn-primary">Return</a>
     <a asp-action="Create" class="btn btn-primary">Add Seance</a>
-
 </p>
 <table> 
     <thead> 
         <tr> 
             <th>@Html.DisplayNameFor(m => m.First().MovieTitle)</th>
-            <th>@Html.DisplayNameFor(m => m.First().PosterUrl)</th> 
+            <th>@Html.DisplayNameFor(m => m.First().PosterBase64Thumbnail)</th> 
             <th>@Html.DisplayNameFor(m => m.First().StartTime)</th> 
             <th>@Html.DisplayNameFor(m => m.First().EndTime)</th> 
             <th>Options</th>
@@ -27,7 +30,8 @@
                     @Html.DisplayFor(seanceitem => seance.MovieTitle)
                 </td> 
                 <td>
-                    @Html.DisplayFor(seanceitem => seance.PosterUrl)
+                    @* @Html.DisplayFor(seanceitem => seance.PosterBase64Thumbnail) *@
+                    <img src="@seance.PosterBase64Thumbnail" alt="">
                 </td> 
                 <td>
                     @Html.DisplayFor(seanceitem => seance.StartTime)
@@ -37,7 +41,6 @@
                 </td> 
                 <td>
                     <a asp-action="Edit" asp-route-id="@seance.Id">Edit</a>
-                    <a asp-action="Details" asp-route-id="@seance.Id">Details</a>
                     <a asp-action="Delete" asp-route-id="@seance.Id">Delete</a>
                 </td> 
             </tr> 

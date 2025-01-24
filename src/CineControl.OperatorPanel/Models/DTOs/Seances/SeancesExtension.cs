@@ -12,6 +12,8 @@ public static class SeancesExtensions
             TheaterId = getSeancesResponseModel.TheaterId,
             CinemaId = getSeancesResponseModel.CinemaId,
             PosterUrl = getSeancesResponseModel.PosterUrl,
+            PosterBase64 = getSeancesResponseModel.PosterBase64,
+            PosterBase64Thumbnail = string.Format("data:image/jpg;base64, {0}", getSeancesResponseModel.PosterBase64),
             StartTime = getSeancesResponseModel.StartTime,
             EndTime = getSeancesResponseModel.EndTime
         };

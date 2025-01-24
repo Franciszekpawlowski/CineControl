@@ -22,7 +22,7 @@ public class SeanceController(
     )
     {
         var model = await _seanceService.GetSeancesByCinemaIdAsync(cinemaId);
-        ViewBag.CinemaId = cinemaId;
+        ViewBag.cinemaId = cinemaId;
         return View(model.Value);
     }
 
@@ -57,6 +57,20 @@ public class SeanceController(
     {
         if (!ModelState.IsValid)
         {
+            var selectListMovies = await _movieService.GetMoviesAsync();
+            var selectListTheaters = await _theaterService.GetTheatersAsync(request.CinemaId);
+            request.Movies = selectListMovies.Value.Select(
+                    x => new SelectListItem
+                    {
+                        Text = x.Title,
+                        Value = x.Id.ToString()
+                    }).ToList();
+            request.Theaters = selectListTheaters.Value.Select(
+                    x => new SelectListItem
+                    {
+                        Text = x.Name, 
+                        Value = x.Id.ToString()
+                    }).ToList();
             return View(request);
         }
         var result = await _seanceService.AddSeanceAsync(request);

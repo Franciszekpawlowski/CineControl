@@ -15,6 +15,7 @@ namespace CineControl.SeanceService.API.Models.DTOs
                 TheaterId = seance.TheaterId,
                 CinemaId = seance.CinemaId,
                 PosterUrl = seance.Movie?.PosterUrl ?? string.Empty,
+                PosterBase64 = seance.Movie?.PosterB64 ?? string.Empty,
                 StartTime = seance.StartTime,
                 EndTime = seance.EndTime
             };

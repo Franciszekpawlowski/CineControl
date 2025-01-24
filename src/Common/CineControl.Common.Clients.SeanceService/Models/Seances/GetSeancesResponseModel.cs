@@ -8,6 +8,7 @@ public class GetSeancesResponseModel
     public int TheaterId { get; set; }
     public int CinemaId { get; set; }
     public string PosterUrl { get; set; }
+    public string PosterBase64 { get; set; }
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }
 }
