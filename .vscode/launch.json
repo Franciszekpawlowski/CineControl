@@ -12,7 +12,8 @@
                 "C#: CineControl.SeanceService.API Debug",
                 "C#: CineControl.OperatorPanel Debug",
                 "C#: CineControl.BookingService.API Debug",
-                "C#: CineControl.TenantService.API Debug"
+                "C#: CineControl.TenantService.API Debug",
+                "C#: CineControl.AdminPanel Debug"
             ],
             "stopAll": true
         }
@@ -60,6 +61,12 @@
             "type": "dotnet",
             "request": "launch",
             "projectPath": "${workspaceFolder}/src/CineControl.TenantService.API/CineControl.TenantService.API.csproj"
+        },
+        {
+            "name": "C#: CineControl.AdminPanel Debug",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/src/CineControl.AdminPanel/CineControl.AdminPanel.csproj"
         },
         {
             "name": "Docker .NET Launch",

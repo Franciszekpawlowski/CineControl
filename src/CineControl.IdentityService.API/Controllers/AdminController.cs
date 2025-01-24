@@ -1,3 +1,4 @@
+using CineControl.Common.Enums;
 using CineControl.Common.Results;
 using CineControl.IdentityService.API.Models.DTOs.Auth;
 using CineControl.IdentityService.API.Service.IService;
@@ -9,7 +10,7 @@ namespace CineControl.IdentityService.API.Controllers
     [Route("api/v1/[controller]/[action]")]
     [ApiController]
     [Authorize]
-    public class AccountController(
+    public class AdminController(
         IAccountService accountService
         ) : BaseController
     {
@@ -21,7 +22,7 @@ namespace CineControl.IdentityService.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
         public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
         {
-            var result = await _accountService.LoginAsync(loginRequest);
+            var result = await _accountService.LoginAsync(loginRequest, Roles.Admin);
 
             return result.Match(
                 onSuccess: Ok,
@@ -30,29 +31,15 @@ namespace CineControl.IdentityService.API.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize(Policy = nameof(CustomPolicies.Admin))]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
         public async Task<IActionResult> Register([FromBody] RegistrationRequest registerRequest)
         {
-            var result = await _accountService.RegisterAsync(registerRequest);
+            var result = await _accountService.RegisterAsync(registerRequest, Roles.Admin);
 
             return result.Match(
                 onSuccess: Created,
-                onFailure: Problem
-            );
-        }
-
-
-
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RefreshTokenResponse))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-        public async Task<IActionResult> RefreshToken(RefreshTokenRequest refreshTokenRequest)
-        {
-            var result = await _accountService.RefreshTokenAsync(refreshTokenRequest);
-            return result.Match(
-                onSuccess: Ok,
                 onFailure: Problem
             );
         }

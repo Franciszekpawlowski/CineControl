@@ -25,7 +25,7 @@ namespace CineControl.IdentityService.API.Service
         private readonly ITenantServiceClient _tenantServiceClient = tenantServiceClient;
         private readonly ITenantProvider _tenantProvider = tenantProvider;
 
-        public async Task<ResultT<LoginResponse>> LoginAsync(LoginRequest loginRequest)
+        public async Task<ResultT<LoginResponse>> LoginAsync(LoginRequest loginRequest, Roles LoginRole = Roles.User)
         {
             ApplicationUser? user = await _userManager.FindByNameAsync(loginRequest.Username);
             if (user == null)
@@ -35,10 +35,16 @@ namespace CineControl.IdentityService.API.Service
             var claimsList = await _userManager.GetClaimsAsync(user);
             var role = claimsList.FirstOrDefault(claim => claim.Type == CustomClaims.Role);
 
-            if (user.TenantId != _tenantProvider.GetTenantId() && role?.Value == Roles.User.ToString())
+            if (role!.Value != LoginRole.ToString())
             {
                 return AuthErrors.AccessUnauthorized();
             }
+
+            if (role!.Value != Roles.Admin.ToString() && user.TenantId != _tenantProvider.GetTenantId())
+            {
+                return AuthErrors.AccessUnauthorized();
+            }
+
             bool isValid = await _userManager.CheckPasswordAsync(user, loginRequest.Password);
 
             if (!isValid)
@@ -55,9 +61,8 @@ namespace CineControl.IdentityService.API.Service
             };
         }
 
-        public async Task<Result> RegisterAsync(RegisterRequest registerRequest)
+        public async Task<Result> RegisterAsync(RegistrationRequest registerRequest, Roles RegisterRole = Roles.User)
         {
-            //todo validate tenantId
             var tenantIdExist = await _tenantServiceClient.GetAsync(_tenantProvider.GetTenantId());
             if (!tenantIdExist.IsSuccess && tenantIdExist.Value.Id == Guid.Empty)
             {
@@ -71,7 +76,7 @@ namespace CineControl.IdentityService.API.Service
                 return AuthErrors.Conflict();
             }
 
-            var addClaimResult = await AddClaimsAsync(user, registerRequest.Roles);
+            var addClaimResult = await AddClaimsAsync(user, RegisterRole);
             if (!addClaimResult.Succeeded)
             {
                 return addClaimResult.MapToCustomErrors();
@@ -121,6 +126,28 @@ namespace CineControl.IdentityService.API.Service
                 new Claim(CustomClaims.TenantId, user.TenantId.ToString())
             };
             return await _userManager.AddClaimsAsync(user, claims);
+        }
+
+        public async Task<Result> RegisterByAdminAsync(RegistrationRequestByAdmin registerRequest)
+        {
+            var tenantIdExist = await _tenantServiceClient.GetAsync(registerRequest.TenantId);
+            if (!tenantIdExist.IsSuccess && tenantIdExist.Value.Id == Guid.Empty)
+            {
+                return AuthErrors.NotFound();
+            }
+            var user = registerRequest.ToApplicationUser();
+            var createAsyncResult = await _userManager.CreateAsync(user, registerRequest.Password);
+            if (!createAsyncResult.Succeeded)
+            {
+                return AuthErrors.Conflict();
+            }
+
+            var addClaimResult = await AddClaimsAsync(user, Roles.Operator);
+            if (!addClaimResult.Succeeded)
+            {
+                return addClaimResult.MapToCustomErrors();
+            }
+            return Result.Success();
         }
     }
 }

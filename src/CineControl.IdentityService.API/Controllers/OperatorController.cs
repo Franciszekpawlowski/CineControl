@@ -1,3 +1,4 @@
+using CineControl.Common.Enums;
 using CineControl.Common.Results;
 using CineControl.IdentityService.API.Models.DTOs.Auth;
 using CineControl.IdentityService.API.Service.IService;
@@ -9,7 +10,7 @@ namespace CineControl.IdentityService.API.Controllers
     [Route("api/v1/[controller]/[action]")]
     [ApiController]
     [Authorize]
-    public class AccountController(
+    public class OperatorController(
         IAccountService accountService
         ) : BaseController
     {
@@ -21,7 +22,7 @@ namespace CineControl.IdentityService.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
         public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
         {
-            var result = await _accountService.LoginAsync(loginRequest);
+            var result = await _accountService.LoginAsync(loginRequest,Roles.Operator);
 
             return result.Match(
                 onSuccess: Ok,
@@ -30,12 +31,12 @@ namespace CineControl.IdentityService.API.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize(Policy = nameof(CustomPolicies.Operator))]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-        public async Task<IActionResult> Register([FromBody] RegistrationRequest registerRequest)
+        public async Task<IActionResult> Register([FromBody] RegistrationRequest registrationRequest)
         {
-            var result = await _accountService.RegisterAsync(registerRequest);
+            var result = await _accountService.RegisterAsync(registrationRequest,Roles.Operator);
 
             return result.Match(
                 onSuccess: Created,
@@ -43,16 +44,16 @@ namespace CineControl.IdentityService.API.Controllers
             );
         }
 
-
-
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RefreshTokenResponse))]
+        [Authorize(Policy = nameof(CustomPolicies.Admin))]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-        public async Task<IActionResult> RefreshToken(RefreshTokenRequest refreshTokenRequest)
+        public async Task<IActionResult> RegisterByAdmin([FromBody] RegistrationRequestByAdmin registrationRequestByAdmin)
         {
-            var result = await _accountService.RefreshTokenAsync(refreshTokenRequest);
+            var result = await _accountService.RegisterByAdminAsync(registrationRequestByAdmin);
+
             return result.Match(
-                onSuccess: Ok,
+                onSuccess: Created,
                 onFailure: Problem
             );
         }

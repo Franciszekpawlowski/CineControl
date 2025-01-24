@@ -1,6 +1,6 @@
-namespace CineControl.Common.Clients.TenantService.Models.Tenant;
+namespace CineControl.AdminPanel.Models.DTO.Tenant;
 
-public class GetTenantResponseModel
+public class GetTenantResponse
 {
     public Guid Id { get; set; }
     public string Name { get; set; }
