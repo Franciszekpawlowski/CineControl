@@ -1,5 +1,4 @@
-using CineControl.Common.Clients.CinemaService.Models.AddCinema;
-using CineControl.Common.Clients.CinemaService.Models.GetCinemas;
+using CineControl.Common.Clients.CinemaService.Models.CinemaClient;
 
 namespace CineControl.OperatorPanel.Models.DTOs.Cinemas;
 
@@ -25,5 +24,15 @@ public static class CinemaExtensions
             City = addCinemaRequest.City,
             State = addCinemaRequest.State,
             ZipCode = addCinemaRequest.ZipCode
+        };
+
+    public static UpdateCinemaRequestModel ToRequest (this UpdateCinemaRequest updateCinemaRequest)
+        => new()
+        {
+            Name = updateCinemaRequest.Name,
+            Address = updateCinemaRequest.Address,
+            City = updateCinemaRequest.City,
+            State = updateCinemaRequest.State,
+            ZipCode = updateCinemaRequest.ZipCode
         };
 }

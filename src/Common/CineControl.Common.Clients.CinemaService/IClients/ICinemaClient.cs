@@ -1,11 +1,9 @@
-using CineControl.Common.Clients.CinemaService.Models.AddCinema;
-using CineControl.Common.Clients.CinemaService.Models.GetCinemas;
-using CineControl.Common.Clients.CinemaService.Models.UpdateCinema;
+using CineControl.Common.Clients.CinemaService.Models.CinemaClient;
 using CineControl.Common.Results;
 
 namespace CineControl.Common.Clients.CinemaService.IClients;
 
-public interface ICinemaServiceClient
+public interface ICinemaClient
 {
     Task<ResultT<IEnumerable<GetCinemasResponseModel>>> GetCinemasAsync(string TenantId = null);
     Task<ResultT<GetCinemasResponseModel>> GetCinemaAsync(int id,string TenantId = null);

@@ -4,6 +4,11 @@
     ViewData["Title"] = "Cinema Page";
 }
 
+<h1>Cinemas</h1>
+<p>
+    <a asp-controller="Cinema" asp-action="Create" 
+        class="btn btn-primary">Add Cinema</a>
+</p>
 <table> 
     <thead> 
         <tr> 
@@ -12,19 +17,34 @@
             <th>@Html.DisplayNameFor(m => m.First().City)</th> 
             <th>@Html.DisplayNameFor(m => m.First().State)</th> 
             <th>@Html.DisplayNameFor(m => m.First().ZipCode)</th> 
+            <th>Options</th>
         </tr> 
     </thead> 
     <tbody> 
         @foreach (var cinema in Model) 
         { 
             <tr> 
-                <td>@cinema.Name</td> 
-                <td>@cinema.Address</td> 
-                <td>@cinema.City</td> 
-                <td>@cinema.State</td> 
-                <td>@cinema.ZipCode</td> 
+                <td>
+                    @Html.DisplayFor(cinemaitem => cinema.Name)
+                </td> 
+                <td>
+                    @Html.DisplayFor(cinemaitem => cinema.Address)
+                </td> 
+                <td>
+                    @Html.DisplayFor(cinemaitem => cinema.City)
+                </td> 
+                <td>
+                    @Html.DisplayFor(cinemaitem => cinema.State)
+                </td> 
+                <td>
+                    @Html.DisplayFor(cinemaitem => cinema.ZipCode)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@cinema.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@cinema.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@cinema.Id">Delete</a>
+                </td> 
             </tr> 
         } 
     </tbody>
-
-    <a asp-controller="Cinema" asp-action="AddCinema">Add Cinema</a>
+</table>

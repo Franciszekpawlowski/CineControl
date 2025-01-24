@@ -25,7 +25,7 @@ public partial class IdentityServiceClient : IIdentityServiceClient, IDisposable
         _identityOptions = identityOptions.Value;
         _baseUrl = _identityOptions.BaseUrl;
         _serviceScopeFactory = serviceScopeFactory;
-        var options = new RestClientOptions(_baseUrl);
+        var options = new RestClientOptions($"{_baseUrl}/api/v1");
         _client = new RestClient(options);
     }
 
@@ -34,7 +34,7 @@ public partial class IdentityServiceClient : IIdentityServiceClient, IDisposable
     {
         using var scope = _serviceScopeFactory.CreateScope();
         var _tenantProvider = scope.ServiceProvider.GetRequiredService<ITenantProvider>();
-        var request = new RestRequest("/api/v1/Account/Login");
+        var request = new RestRequest("/Account/Login");
         request.AddJsonBody(loginRequestModel);
         request.AddHeader(TenantFieldNames.HeaderName, _tenantProvider.GetTenantId().ToString());
         var response = await _client.ExecutePostAsync<LoginResponseModel>(request);
@@ -46,7 +46,7 @@ public partial class IdentityServiceClient : IIdentityServiceClient, IDisposable
         using var scope = _serviceScopeFactory.CreateScope();
         var _tenantProvider = scope.ServiceProvider.GetRequiredService<ITenantProvider>();
 
-        var request = new RestRequest("/api/v1/Account/GetUser")
+        var request = new RestRequest("/Account/GetUser")
         {
             Authenticator = new JwtAuthenticator(Token)
         };

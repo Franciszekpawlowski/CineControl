@@ -1,5 +1,5 @@
-# @CineControl.SeanceService.API_HostAddress = http://localhost:5222
-@CineControl.SeanceService.API_HostAddress = http://gateway.cinecontrol.local/seance
+@CineControl.SeanceService.API_HostAddress = http://localhost:5222
+# @CineControl.SeanceService.API_HostAddress = http://gateway.cinecontrol.local/seance
 
 POST  {{CineControl.SeanceService.API_HostAddress}}/api/v1/Movies
 Content-Type: application/json
@@ -47,8 +47,8 @@ X-TenantId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
 
 {
   "movieId": 1,
-  "theaterId": 1,
-  "cinemaId": 1,
+  "theaterId": 4,
+  "cinemaId": 6,
   "startTime": "2024-12-14T00:06:05.461Z"
 }
 

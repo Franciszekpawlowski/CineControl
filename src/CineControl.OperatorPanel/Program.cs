@@ -8,6 +8,7 @@ using CineControl.OperatorPanel.Service.IService;
 using CineControl.Common.JWTProvider.Extension;
 using Microsoft.AspNetCore.DataProtection;
 using Serilog;
+using CineControl.Common.Clients.SeanceService.ServiceExtension;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,10 +21,14 @@ builder.Services.AddTenantProvider()
 
 builder.Services.AddIdentityServiceClient(builder.Configuration)
                 .AddTenantServiceClient(builder.Configuration)
-                .AddCinemaServiceClient(builder.Configuration);
+                .AddCinemaServiceClient(builder.Configuration)
+                .AddSeanceServiceClient(builder.Configuration);
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICinemaService, CinemaService>();
+builder.Services.AddScoped<ITheaterService, TheaterService>();
+builder.Services.AddScoped<IMovieService, MovieService>();
+builder.Services.AddScoped<ISeanceService, SeanceService>();
 
 builder.Services.AddDataProtection()
                 .PersistKeysToFileSystem(new DirectoryInfo("./keys"));
@@ -57,8 +62,14 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapControllers();
+
+app.MapControllerRoute(
+    name: "Cinema",
+    pattern: "Cinema/{cinemaId}/{controller}/{action}/{id?}");
+
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}");
+    pattern: "{controller=Cinema}/{action=Index}/{id?}");
 
 app.Run();

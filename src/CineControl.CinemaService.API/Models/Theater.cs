@@ -12,5 +12,7 @@ namespace CineControl.CinemaService.API.Models
         public Cinema Cinema{ get; set; } = null!;
 
         public int SeatingCapacity => Seats.Count;
+
+        public int SeatsPerRow => Seats.Select(s => s.Row).Distinct().Count();
     }
 }

@@ -16,7 +16,9 @@ namespace CineControl.SeanceService.API.Models.DTOs
                 ReleaseDate = movie.ReleaseDate,
                 Duration = movie.Duration,
                 PosterUrl = movie.PosterUrl,
+                PosterB64 = movie.PosterB64,
                 PanoramicPosterUrl = movie.PanoramicPosterUrl,
+                PanoramicPosterB64 = movie.PanoramicPosterB64,
                 Genre = movie.Genre,
                 Rating = movie.Rating
             };

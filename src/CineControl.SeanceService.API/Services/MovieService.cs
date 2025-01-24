@@ -57,10 +57,12 @@ namespace CineControl.SeanceService.API.Service
                 Title = request.Title,
                 Description = request.Description,
                 ShortDescription = request.ShortDescription,
-                ReleaseDate = request.ReleaseDate,
+                ReleaseDate = DateTime.SpecifyKind(request.ReleaseDate, DateTimeKind.Utc),
                 Duration = request.Duration,
                 PosterUrl = request.PosterUrl,
+                PosterB64 = request.PosterB64,
                 PanoramicPosterUrl = request.PanoramicPosterUrl,
+                PanoramicPosterB64 = request.PanoramicPosterB64,
                 Genre = request.Genre,
                 Rating = request.Rating
             };
@@ -93,10 +95,12 @@ namespace CineControl.SeanceService.API.Service
             existing.Title = movie.Title;
             existing.Description = movie.Description;
             existing.ShortDescription = movie.ShortDescription;
-            existing.ReleaseDate = movie.ReleaseDate;
+            existing.ReleaseDate = DateTime.SpecifyKind(movie.ReleaseDate, DateTimeKind.Utc);
             existing.Duration = movie.Duration;
             existing.PosterUrl = movie.PosterUrl;
+            existing.PosterB64 = movie.PosterB64;
             existing.PanoramicPosterUrl = movie.PanoramicPosterUrl;
+            existing.PanoramicPosterB64 = movie.PanoramicPosterB64;
             existing.Genre = movie.Genre;
             existing.Rating = movie.Rating;
 

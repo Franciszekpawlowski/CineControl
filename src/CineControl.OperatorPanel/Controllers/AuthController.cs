@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CineControl.OperatorPanel.Controllers
 {
+    [Route("[controller]/[action]")]
     public class AuthController(IAuthService authService) : Controller
     {
         private readonly IAuthService _authService = authService;
@@ -34,7 +35,7 @@ namespace CineControl.OperatorPanel.Controllers
                 return View();
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Cinema");
         }
 
         public async Task<ActionResult> Logout()

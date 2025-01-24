@@ -1,7 +1,5 @@
 using CineControl.Common.Clients.CinemaService.IClients;
-using CineControl.Common.Clients.CinemaService.Models.AddCinema;
-using CineControl.Common.Clients.CinemaService.Models.GetCinemas;
-using CineControl.Common.Clients.CinemaService.Models.UpdateCinema;
+using CineControl.Common.Clients.CinemaService.Models.CinemaClient;
 using CineControl.Common.Clients.CinemaService.Options;
 using CineControl.Common.Results;
 using CineControl.Common.Tenant;
@@ -11,7 +9,7 @@ using RestSharp;
 
 namespace CineControl.Common.Clients.CinemaService;
 
-public class CinemaServiceClient : ICinemaServiceClient, IDisposable
+public class CinemaClient : ICinemaClient, IDisposable
 {
     readonly string _baseUrl;
     readonly RestClient _client;
@@ -19,7 +17,7 @@ public class CinemaServiceClient : ICinemaServiceClient, IDisposable
 
     readonly CinemaServiceClientOptions _cinemaOptions;
 
-    public CinemaServiceClient(
+    public CinemaClient(
         IServiceProvider serviceScopeFactory,
         IOptions<CinemaServiceClientOptions> cinemaOptions
     )
@@ -27,7 +25,7 @@ public class CinemaServiceClient : ICinemaServiceClient, IDisposable
         _cinemaOptions = cinemaOptions.Value;
         _baseUrl = _cinemaOptions.BaseUrl;
         _serviceScopeFactory = serviceScopeFactory;
-        var options = new RestClientOptions(_baseUrl);
+        var options = new RestClientOptions($"{_baseUrl}/api/v1");
         _client = new RestClient(options);
     }
 
@@ -93,7 +91,7 @@ public class CinemaServiceClient : ICinemaServiceClient, IDisposable
             var _tenantProvider = scope.ServiceProvider.GetRequiredService<ITenantProvider>();
             TenantId = _tenantProvider.GetTenantId().ToString();
         }
-        var request = new RestRequest("/Cinemas/AddCinema");
+        var request = new RestRequest("/Cinemas");
         request.AddHeader(TenantFieldNames.HeaderName, TenantId);
         request.AddJsonBody(model);
         var response = await _client.ExecutePostAsync(request);

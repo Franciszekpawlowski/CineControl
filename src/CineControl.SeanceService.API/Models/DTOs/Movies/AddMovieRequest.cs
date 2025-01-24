@@ -10,7 +10,9 @@ namespace CineControl.SeanceService.API.Models.DTOs.Movies
         public DateTime ReleaseDate { get; set; }
         public int Duration { get; set; } // W minutach
         public string PosterUrl { get; set; }
+        public string PosterB64 { get; set; }
         public string PanoramicPosterUrl { get; set; }
+        public string PanoramicPosterB64 { get; set; }
         public string Genre { get; set; }
         public double Rating { get; set; }
     }

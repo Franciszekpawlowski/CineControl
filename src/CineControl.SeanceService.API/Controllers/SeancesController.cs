@@ -53,6 +53,17 @@ namespace CineControl.SeanceService.API.Controllers
             );
         }
 
+        [HttpGet("bycinema/{cinemaId:int}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetSeancesByCinema(int cinemaId)
+        {
+            var result = await _seanceService.GetSeancesByCinema(cinemaId);
+            return result.Match(
+                onSuccess: seances => Ok(seances.Select(s => s.ToDto())),
+                onFailure: Problem
+            );
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddSeance([FromBody] SeanceCreateDto seanceCreateDto)
         {

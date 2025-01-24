@@ -1,0 +1,95 @@
+@using CineControl.OperatorPanel.Models.DTOs
+@model CinemaViewModel
+@{
+    ViewData["Title"] = "Cinema Page";
+}
+
+
+<div>
+    <p>
+        @* <a asp-action="Index" class="btn btn-primary">Return</a> *@
+        <a asp-controller="Theater" 
+            asp-action="Create" 
+            asp-route-cinemaId="@Model.Cinema.Id"
+            class="btn btn-primary">Add Theater</a>
+        <a asp-controller="Seance"
+            asp-action="Index"
+            asp-route-cinemaId="@Model.Cinema.Id"
+            class="btn btn-primary">List Seances</a>
+    </p>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(m => m.Cinema.Id)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(m => m.Cinema.Id)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(m => m.Cinema.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(m => m.Cinema.Name)
+        </dd>
+            <dt class="col-sm-2">
+            @Html.DisplayNameFor(m => m.Cinema.Address)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(m => m.Cinema.Address)
+        </dd>
+            <dt class="col-sm-2">
+            @Html.DisplayNameFor(m => m.Cinema.City)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(m => m.Cinema.City)
+        </dd>
+            <dt class="col-sm-2">
+            @Html.DisplayNameFor(m => m.Cinema.State)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(m => m.Cinema.State)
+        </dd>
+            <dt class="col-sm-2">
+            @Html.DisplayNameFor(m => m.Cinema.ZipCode)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(m => m.Cinema.ZipCode)
+        </dd>
+    </dl>
+
+    <hr>
+
+    <table class="table"> 
+        <thead> 
+            <tr> 
+                <th>@Html.DisplayNameFor(m => m.Theaters.First().Id)</th>
+                <th>@Html.DisplayNameFor(m => m.Theaters.First().Name)</th> 
+                <th>@Html.DisplayNameFor(m => m.Theaters.First().SeatingCapacity)</th>
+                <th>options</th>
+            </tr> 
+        </thead> 
+        <tbody> 
+            @foreach (var theater in Model.Theaters) 
+            { 
+                <tr> 
+                    <td>
+                        @Html.DisplayFor(m => theater.Id )
+                    </td> 
+                    <td>
+                        @Html.DisplayFor(m => theater.Name)
+                    </td> 
+                    <td>
+                        @Html.DisplayFor(m => theater.SeatingCapacity)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-controller="theater" 
+                            asp-route-id="@theater.Id"
+                            asp-route-cinemaId="@Model.Cinema.Id">Edit</a>
+                        <a asp-action="Delete" asp-controller="theater"
+                            asp-route-id="@theater.Id"
+                            asp-route-cinemaId="@Model.Cinema.Id">Delete</a>
+                    </td>
+                </tr> 
+            } 
+        </tbody>
+    </table>
+</div>

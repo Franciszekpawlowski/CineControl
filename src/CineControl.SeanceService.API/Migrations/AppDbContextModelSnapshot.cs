@@ -41,7 +41,15 @@ namespace CineControl.SeanceService.API.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("PanoramicPosterB64")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("PanoramicPosterUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PosterB64")
                         .IsRequired()
                         .HasColumnType("text");
 
