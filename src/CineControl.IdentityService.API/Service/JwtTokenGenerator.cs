@@ -39,13 +39,13 @@ namespace CineControl.IdentityService.API.Service
                 new Claim(ClaimTypes.Name,applicationUser.UserName),
                 new Claim(ClaimTypes.Email,applicationUser.Email)
             };
-            AdditionalClaimList.ForEach(UserClaims.Add);
+            AdditionalClaimList.AddRange(UserClaims);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Issuer = _jwtOptions.Issuer,
                 Audience = _jwtOptions.Audience,
-                Subject = new ClaimsIdentity(UserClaims),
+                Subject = new ClaimsIdentity(AdditionalClaimList),
                 Expires = DateTime.UtcNow.AddHours(2),
                 SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature)
             };

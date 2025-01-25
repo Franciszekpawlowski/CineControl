@@ -9,7 +9,7 @@ namespace CineControl.IdentityService.API.Controllers
 {
     [Route("api/v1/[controller]/[action]")]
     [ApiController]
-    [Authorize]
+    // [Authorize]
     public class AdminController(
         IAccountService accountService
         ) : BaseController
@@ -31,7 +31,7 @@ namespace CineControl.IdentityService.API.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = nameof(CustomPolicies.Admin))]
+        // [Authorize(Policy = nameof(CustomPolicies.Admin))]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
         public async Task<IActionResult> Register([FromBody] RegistrationRequest registerRequest)

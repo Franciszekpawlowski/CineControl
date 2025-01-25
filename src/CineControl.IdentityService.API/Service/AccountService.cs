@@ -1,15 +1,19 @@
 using System.Security.Claims;
+using System.Threading.Tasks;
 using CineControl.Common;
 using CineControl.Common.Clients.TenantService.IClients;
 using CineControl.Common.Enums;
 using CineControl.Common.Results;
 using CineControl.Common.Tenant;
+using CineControl.IdentityService.API.Data;
 using CineControl.IdentityService.API.Errors;
 using CineControl.IdentityService.API.Extensions;
 using CineControl.IdentityService.API.Models;
 using CineControl.IdentityService.API.Models.DTOs.Auth;
+using CineControl.IdentityService.API.Models.DTOs.User;
 using CineControl.IdentityService.API.Service.IService;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace CineControl.IdentityService.API.Service
 {
@@ -17,13 +21,15 @@ namespace CineControl.IdentityService.API.Service
         UserManager<ApplicationUser> userManager,
         IJwtTokenGenerator jwtTokenGenerator,
         ITenantProvider tenantProvider,
-        ITenantServiceClient tenantServiceClient
+        ITenantServiceClient tenantServiceClient,
+        appdbContext dbContext
         ) : IAccountService
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly IJwtTokenGenerator _jwtTokenGenerator = jwtTokenGenerator;
         private readonly ITenantServiceClient _tenantServiceClient = tenantServiceClient;
         private readonly ITenantProvider _tenantProvider = tenantProvider;
+        private readonly appdbContext _appdbContext = dbContext;
 
         public async Task<ResultT<LoginResponse>> LoginAsync(LoginRequest loginRequest, Roles LoginRole = Roles.User)
         {
@@ -40,7 +46,7 @@ namespace CineControl.IdentityService.API.Service
                 return AuthErrors.AccessUnauthorized();
             }
 
-            if (role!.Value != Roles.Admin.ToString() && user.TenantId != _tenantProvider.GetTenantId())
+            if (role!.Value == Roles.User.ToString() && user.TenantId != _tenantProvider.GetTenantId())
             {
                 return AuthErrors.AccessUnauthorized();
             }
@@ -146,6 +152,68 @@ namespace CineControl.IdentityService.API.Service
             if (!addClaimResult.Succeeded)
             {
                 return addClaimResult.MapToCustomErrors();
+            }
+            return Result.Success();
+        }
+
+        public async Task<ResultT<IEnumerable<GetUserResponse>>> GetTenantOperator(Guid id)
+        {
+            var users = await _appdbContext.Users
+                .Where(u => u.TenantId == id)
+                .ToListAsync();
+
+            var applicationUser = new List<GetUserResponse>();
+
+            if (users == null || !users.Any())
+            {
+                return applicationUser;
+            }
+
+
+            foreach (var u in users)
+            {
+                var claims = await _userManager.GetClaimsAsync(u);
+                var roleClaim = claims.FirstOrDefault(c => c.Type == CustomClaims.Role)?.Value;
+
+                applicationUser.Add(new GetUserResponse
+                {
+                    UserId = u.Id,
+                    Username = u.UserName,
+                    Email = u.Email,
+                    Role = roleClaim
+                });
+            }
+
+            return applicationUser;
+        }
+
+        public async Task<ResultT<GetUserResponse>> GetTenantOperatorAsync(Guid tenantId, string id)
+        {
+            var user = _appdbContext.applicationUsers.Where(u => u.TenantId == tenantId && u.Id == id).FirstOrDefault();
+            if (user is null)
+            {
+                return AuthErrors.NotFound();
+            }
+            List<Claim> claims = [.. await _userManager.GetClaimsAsync(user)];
+            var role = claims.FirstOrDefault(c => c.Type == CustomClaims.Role);
+            if (!Enum.TryParse(role?.Value, out Roles roleEnum))
+            {
+                return AuthErrors.UnprocessableEntity();
+            }
+            return user.ToResponse(roleEnum);
+        }
+
+        public async Task<Result> DeleteAsync(Guid tenantId, string id)
+        {
+            var user = _appdbContext.applicationUsers.Where(u => u.TenantId == tenantId && u.Id == id).FirstOrDefault();
+            if (user is null)
+            {
+                return AuthErrors.NotFound();
+            }
+            var result = await _userManager.DeleteAsync(user);
+            if (!result.Succeeded)
+            {
+                return AuthErrors.Conflict();
             }
             return Result.Success();
         }

@@ -57,5 +57,48 @@ namespace CineControl.IdentityService.API.Controllers
                 onFailure: Problem
             );
         }
+
+        [HttpPost("{tenantId}")]
+        [Authorize(Policy = nameof(CustomPolicies.Admin))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
+        public async Task<IActionResult> GetOperators(Guid TenantId)
+        {
+            var result = await _accountService.GetTenantOperator(TenantId);
+
+            return result.Match(
+                onSuccess: Ok,
+                onFailure: Problem
+            );
+        }
+
+        [HttpPost("{tenantId}/{id}")]
+        [Authorize(Policy = nameof(CustomPolicies.Admin))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
+        public async Task<IActionResult> GetOperatorById(Guid TenantId,string id)
+        {
+            var result = await _accountService.GetTenantOperatorAsync(TenantId,id);
+
+            return result.Match(
+                onSuccess: Ok,
+                onFailure: Problem
+            );
+        }
+
+        [HttpDelete("{tenantId}/{id}")]
+        [Authorize(Policy = nameof(CustomPolicies.Admin))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
+        public async Task<IActionResult> DeleteOperator(Guid TenantId,string id)
+        {
+            var result = await _accountService.DeleteAsync(TenantId,id);
+
+            return result.Match(
+                onSuccess: Ok,
+                onFailure: Problem
+            );
+        }
+
     }
 }
