@@ -1,4 +1,4 @@
-namespace CineControl.Common.Clients.IdentityService.Models.GetUser;
+namespace CineControl.Common.Clients.IdentityService.Models.Account;
 
 public class GetUserResponseModel
 {

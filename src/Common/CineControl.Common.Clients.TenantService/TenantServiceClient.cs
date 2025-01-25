@@ -42,11 +42,11 @@ public class TenantServiceClient : ITenantServiceClient, IDisposable
         return response.ToResult();
     }
 
-    public async Task<ResultT<GetTenantResponseModel>> CreateAsync(CreateTenantRequestModel requestModel)
+    public async Task<Result> CreateAsync(CreateTenantRequestModel requestModel)
     {
-        var request = new RestRequest("/Tenant/Create");
+        var request = new RestRequest("/Tenant");
         request.AddJsonBody(requestModel);
-        var response = await _client.ExecutePostAsync<GetTenantResponseModel>(request);
+        var response = await _client.ExecutePostAsync(request);
         return response.ToResult();
     }
 

@@ -1,23 +1,21 @@
 using CineControl.Common.Clients.IdentityService.IClients;
-using CineControl.Common.Clients.IdentityService.Models.GetUser;
-using CineControl.Common.Clients.IdentityService.Models.Login;
+using CineControl.Common.Clients.IdentityService.Models.Account;
 using CineControl.Common.Clients.IdentityService.Options;
 using CineControl.Common.Results;
 using CineControl.Common.Tenant;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using RestSharp;
-using RestSharp.Authenticators;
 
 namespace CineControl.Common.Clients.IdentityService;
 
-public partial class IdentityServiceClient : IIdentityServiceClient, IDisposable
+public class AdminClient : IAdminClient, IDisposable
 {
     readonly string _baseUrl;
     readonly RestClient _client;
     readonly IServiceScopeFactory _serviceScopeFactory;
     readonly IdentityServiceClientOptions _identityOptions;
-    public IdentityServiceClient(
+    public AdminClient(
         IServiceScopeFactory serviceScopeFactory,
         IOptions<IdentityServiceClientOptions> identityOptions
     )
@@ -34,27 +32,11 @@ public partial class IdentityServiceClient : IIdentityServiceClient, IDisposable
     {
         using var scope = _serviceScopeFactory.CreateScope();
         var _tenantProvider = scope.ServiceProvider.GetRequiredService<ITenantProvider>();
-        var request = new RestRequest("/Account/Login");
+        var request = new RestRequest("/Admin/Login");
         request.AddJsonBody(loginRequestModel);
-        request.AddHeader(TenantFieldNames.HeaderName, _tenantProvider.GetTenantId().ToString());
+        // request.AddHeader(TenantFieldNames.HeaderName, _tenantProvider.GetTenantId().ToString());
         var response = await _client.ExecutePostAsync<LoginResponseModel>(request);
         return response.ToResult();
-    }
-
-    public async Task<ResultT<GetUserResponseModel>> GetUserAsync(string Token)
-    {
-        using var scope = _serviceScopeFactory.CreateScope();
-        var _tenantProvider = scope.ServiceProvider.GetRequiredService<ITenantProvider>();
-
-        var request = new RestRequest("/Account/GetUser")
-        {
-            Authenticator = new JwtAuthenticator(Token)
-        };
-        request.AddHeader(TenantFieldNames.HeaderName, _tenantProvider.GetTenantId().ToString());
-
-        var response = await _client.ExecuteGetAsync<GetUserResponseModel>(request);
-        return response.ToResult();
-
     }
 
     public void Dispose()
