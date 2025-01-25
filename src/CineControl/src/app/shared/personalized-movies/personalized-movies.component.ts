@@ -16,7 +16,7 @@ import { CarouselComponent } from '../carousel/carousel.component';
 })
 export class PersonalizedMoviesComponent implements OnInit {
   personalizedMovies: Movie[] = [];
-  userId = 1; // Możesz dynamicznie pobierać ID użytkownika, jeśli jest dostępne
+  userId = 1;
 
   constructor(private movieService: MovieService) {}
 

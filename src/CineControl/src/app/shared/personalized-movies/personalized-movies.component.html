@@ -10,7 +10,7 @@
   <!-- Szablon dla rekomendacji -->
   <ng-template #personalizedMovieTemplate let-movie>
     <div class="movie-slide" *ngIf="movie">
-      <img [src]="movie.panoramicPosterUrl" alt="{{ movie.title }}" />
+      <img [src]="'data:image/jpeg;base64,' + movie.posterB64" alt="{{ movie.title }}" />
       <div class="movie-content">
         <h3>{{ movie.title }}</h3>
         <p>{{ movie.shortDescription }}</p>

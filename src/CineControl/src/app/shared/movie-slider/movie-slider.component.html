@@ -2,7 +2,7 @@
     <ng-container *ngIf="movies && movies.length > 0; else moviesPlaceholder">
       <div class="movies-scroll">
         <mat-card class="movie-card" *ngFor="let movie of movies">
-          <img mat-card-image [src]="movie.posterUrl" alt="{{ movie.title }}" loading="lazy" />
+          <img mat-card-image [src]="'data:image/jpeg;base64,' + movie.posterB64" alt="{{ movie.title }}" loading="lazy" />
           <mat-card-content>
             <h3>{{ movie.title }}</h3>
             <p>{{ movie.genre }}</p>
