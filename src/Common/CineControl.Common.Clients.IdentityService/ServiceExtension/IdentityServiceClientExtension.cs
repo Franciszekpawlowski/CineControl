@@ -11,7 +11,9 @@ public static class IdentityServiceClientExtension
         IConfiguration configuration)
         {
             services.Configure<IdentityServiceClientOptions>(GetConfiguration(configuration));
-            services.AddSingleton<IIdentityServiceClient, IdentityServiceClient>();
+            services.AddSingleton<IAdminClient, AdminClient>();
+            services.AddSingleton<IOperatorClient, OperatorClient>();
+            services.AddSingleton<IAccountClient, AccountClient>();
             return services;
         }
 

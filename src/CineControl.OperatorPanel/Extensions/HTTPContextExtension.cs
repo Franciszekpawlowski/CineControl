@@ -1,5 +1,5 @@
 using System;
-using CineControl.Common.Clients.IdentityService.Models.Login;
+using CineControl.Common.Clients.IdentityService.Models.Account;
 
 namespace CineControl.OperatorPanel.Extensions;
 

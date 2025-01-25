@@ -1,0 +1,72 @@
+@using CineControl.AdminPanel.Models.DTO
+@model TenantOperatorModelView
+@{
+    ViewData["Title"] = "Details Tenant";
+}
+
+<div>
+    <p>
+        <a asp-action="Index" class="btn btn-primary">Return</a>
+        <a asp-controller="TenantOperator"
+            asp-action="Create"
+            asp-route-tenantId="@Model.Tenant.Id"
+            class="btn btn-primary">Create Operator in Tenant</a>
+    </p>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(m => m.Tenant.Id)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(m => m.Tenant.Id)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(m => m.Tenant.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(m => m.Tenant.Name)
+        </dd>
+            <dt class="col-sm-2">
+            @Html.DisplayNameFor(m => m.Tenant.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(m => m.Tenant.Description)
+        </dd>
+    </dl>
+
+    <hr>
+
+    <table class="table"> 
+        <thead> 
+            <tr> 
+                <th>@Html.DisplayNameFor(m => m.TenantOperator.First().Id)</th>
+                <th>@Html.DisplayNameFor(m => m.TenantOperator.First().Name)</th> 
+                <th>@Html.DisplayNameFor(m => m.TenantOperator.First().Email)</th>
+                <th>options</th>
+            </tr> 
+        </thead> 
+        <tbody> 
+            @foreach (var Operator in Model.TenantOperator) 
+            { 
+                <tr> 
+                    <td>
+                        @Html.DisplayFor(m => Operator.Id )
+                    </td> 
+                    <td>
+                        @Html.DisplayFor(m => Operator.Name)
+                    </td> 
+                    <td>
+                        @Html.DisplayFor(m => Operator.Email)
+                    </td>
+                    <td>
+                        @* <a asp-action="Edit" asp-controller="TenantOperator" 
+                            asp-route-id="@Operator.Id"
+                            asp-route-tenantId="@Model.Tenant.Id">Edit</a> *@
+                        <a asp-action="Delete" asp-controller="TenantOperator"
+                            asp-route-id="@Operator.Id"
+                            asp-route-tenantId="@Model.Tenant.Id">Delete</a>
+                    </td>
+                </tr> 
+            } 
+        </tbody>
+    </table>
+</div>

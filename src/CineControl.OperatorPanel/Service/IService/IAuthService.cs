@@ -7,6 +7,5 @@ namespace CineControl.OperatorPanel.Service.IService;
 public interface IAuthService
 {
     Task<Result> LoginAsync(UserLoginRequest userRequest);
-    Task<ResultT<GetUserResult>> GetUserAsync();
     Task<Result> LogoutAsync();
 }

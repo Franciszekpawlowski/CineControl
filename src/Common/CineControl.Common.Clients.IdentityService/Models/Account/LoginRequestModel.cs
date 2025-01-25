@@ -1,4 +1,4 @@
-namespace CineControl.Common.Clients.IdentityService.Models.Login;
+namespace CineControl.Common.Clients.IdentityService.Models.Account;
 
 public class LoginRequestModel
 {

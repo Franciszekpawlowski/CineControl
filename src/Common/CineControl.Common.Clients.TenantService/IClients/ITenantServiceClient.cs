@@ -4,9 +4,9 @@ namespace CineControl.Common.Clients.TenantService.IClients;
 
 public interface ITenantServiceClient
 {
-    Task<ResultT<IEnumerable<GetResponseModel>>> GetAllAsync();
-    Task<ResultT<GetResponseModel>> GetAsync(Guid tenantId);
-    Task<ResultT<GetResponseModel>> CreateAsync(CreateTenantRequestModel requestModel);
+    Task<ResultT<IEnumerable<GetTenantResponseModel>>> GetAllAsync();
+    Task<ResultT<GetTenantResponseModel>> GetAsync(Guid tenantId);
+    Task<Result> CreateAsync(CreateTenantRequestModel requestModel);
     Task<Result> UpdateAsync(Guid tenantId, UpdateTenantRequestModel requestModel);
     Task<Result> DeleteAsync(Guid tenantId);
 }

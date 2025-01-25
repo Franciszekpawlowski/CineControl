@@ -54,7 +54,9 @@ namespace CineControl.SeanceService.API.Data
                     ReleaseDate = releaseDate,
                     Duration = 120,
                     PosterUrl = "https://example.com/poster.jpg",
+                    PosterB64 = "base64-encoded-poster-data",
                     PanoramicPosterUrl = "https://example.com/panorama.jpg",
+                    PanoramicPosterB64 = "base64-encoded-panorama-data",
                     Genre = "Action",
                     Rating = 4.5
                 });
@@ -73,53 +75,55 @@ namespace CineControl.SeanceService.API.Data
                     ReleaseDate = releaseDate,
                     Duration = 100,
                     PosterUrl = "https://example.com/poster-future.jpg",
+                    PosterB64 = "base64-encoded-poster-data",
                     PanoramicPosterUrl = "https://example.com/panorama-future.jpg",
+                    PanoramicPosterB64 = "base64-encoded-panorama-data",
                     Genre = "Comedy",
                     Rating = 4.2
                 });
             }
 
             
-            var allMoviesToSeed = new List<Movie>();
+            var allMoviesToSeed = futureMovies.Concat(pastMovies).ToList();
 
-            foreach (var tenantId in tenantIds)
-            {
+            // foreach (var tenantId in tenantIds)
+            // {
                 
-                foreach (var pm in pastMovies)
-                {
-                    allMoviesToSeed.Add(new Movie
-                    {
-                        TenantID = tenantId,
-                        Title = pm.Title,
-                        Description = pm.Description,
-                        ShortDescription = pm.ShortDescription,
-                        ReleaseDate = pm.ReleaseDate,
-                        Duration = pm.Duration,
-                        PosterUrl = pm.PosterUrl,
-                        PanoramicPosterUrl = pm.PanoramicPosterUrl,
-                        Genre = pm.Genre,
-                        Rating = pm.Rating
-                    });
-                }
+            //     foreach (var pm in pastMovies)
+            //     {
+            //         allMoviesToSeed.Add(new Movie
+            //         {
+            //             TenantID = tenantId,
+            //             Title = pm.Title,
+            //             Description = pm.Description,
+            //             ShortDescription = pm.ShortDescription,
+            //             ReleaseDate = pm.ReleaseDate,
+            //             Duration = pm.Duration,
+            //             PosterUrl = pm.PosterUrl,
+            //             PanoramicPosterUrl = pm.PanoramicPosterUrl,
+            //             Genre = pm.Genre,
+            //             Rating = pm.Rating
+            //         });
+            //     }
 
                 
-                foreach (var fm in futureMovies)
-                {
-                    allMoviesToSeed.Add(new Movie
-                    {
-                        TenantID = tenantId,
-                        Title = fm.Title,
-                        Description = fm.Description,
-                        ShortDescription = fm.ShortDescription,
-                        ReleaseDate = fm.ReleaseDate,
-                        Duration = fm.Duration,
-                        PosterUrl = fm.PosterUrl,
-                        PanoramicPosterUrl = fm.PanoramicPosterUrl,
-                        Genre = fm.Genre,
-                        Rating = fm.Rating
-                    });
-                }
-            }
+            //     foreach (var fm in futureMovies)
+            //     {
+            //         allMoviesToSeed.Add(new Movie
+            //         {
+            //             TenantID = tenantId,
+            //             Title = fm.Title,
+            //             Description = fm.Description,
+            //             ShortDescription = fm.ShortDescription,
+            //             ReleaseDate = fm.ReleaseDate,
+            //             Duration = fm.Duration,
+            //             PosterUrl = fm.PosterUrl,
+            //             PanoramicPosterUrl = fm.PanoramicPosterUrl,
+            //             Genre = fm.Genre,
+            //             Rating = fm.Rating
+            //         });
+            //     }
+            // }
 
             db.Movies.AddRange(allMoviesToSeed);
             db.SaveChanges();

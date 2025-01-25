@@ -1,5 +1,7 @@
 using System.Security.Claims;
+using CineControl.Common;
 using CineControl.Common.Enums;
+using Microsoft.AspNetCore.Identity;
 
 namespace CineControl.IdentityService.API.Models.DTOs.User;
 

@@ -37,6 +37,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CineControl.Common.Clients"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CineControl.Common.Clients.SeanceService", "src\Common\CineControl.Common.Clients.SeanceService\CineControl.Common.Clients.SeanceService.csproj", "{8C0E98A3-4685-4AD1-AD47-AAEB9AED5A70}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CineControl.AdminPanel", "src\CineControl.AdminPanel\CineControl.AdminPanel.csproj", "{E063F8F6-AAF0-4538-A591-F871D3FAB352}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -103,6 +105,10 @@ Global
 		{8C0E98A3-4685-4AD1-AD47-AAEB9AED5A70}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C0E98A3-4685-4AD1-AD47-AAEB9AED5A70}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C0E98A3-4685-4AD1-AD47-AAEB9AED5A70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E063F8F6-AAF0-4538-A591-F871D3FAB352}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E063F8F6-AAF0-4538-A591-F871D3FAB352}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E063F8F6-AAF0-4538-A591-F871D3FAB352}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E063F8F6-AAF0-4538-A591-F871D3FAB352}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -124,6 +130,7 @@ Global
 		{5E168D2B-AAA0-4F3D-8806-ED2A66CB6EA3} = {D361E00D-8A30-47EE-A2B4-F4A745C90D5D}
 		{AB5DB237-8086-4776-A5D4-10358D7D6C0B} = {D361E00D-8A30-47EE-A2B4-F4A745C90D5D}
 		{8C0E98A3-4685-4AD1-AD47-AAEB9AED5A70} = {D361E00D-8A30-47EE-A2B4-F4A745C90D5D}
+		{E063F8F6-AAF0-4538-A591-F871D3FAB352} = {253C2735-F514-4176-B53B-E2976768196A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EA997A1A-C23F-46CE-B2A7-3C2CEA3ADB41}

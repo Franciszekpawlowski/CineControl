@@ -33,7 +33,7 @@ namespace CineControl.IdentityService.API.Controllers
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest registerRequest)
+        public async Task<IActionResult> Register([FromBody] RegistrationRequest registerRequest)
         {
             var result = await _accountService.RegisterAsync(registerRequest);
 

@@ -21,10 +21,10 @@ public class TenantServiceClient : ITenantServiceClient, IDisposable
     }
 
 
-    public async Task<ResultT<GetResponseModel>> GetAsync(Guid tenantId)
+    public async Task<ResultT<GetTenantResponseModel>> GetAsync(Guid tenantId)
     {
         var request = new RestRequest($"/Tenant/{tenantId}");   
-        var response = await _client.ExecuteGetAsync<GetResponseModel>(request);
+        var response = await _client.ExecuteGetAsync<GetTenantResponseModel>(request);
 
         return response.ToResult();
     }
@@ -35,18 +35,18 @@ public class TenantServiceClient : ITenantServiceClient, IDisposable
         GC.SuppressFinalize(this);
     }
 
-    public async Task<ResultT<IEnumerable<GetResponseModel>>> GetAllAsync()
+    public async Task<ResultT<IEnumerable<GetTenantResponseModel>>> GetAllAsync()
     {
         var request = new RestRequest("/Tenant");
-        var response = await _client.ExecuteGetAsync<IEnumerable<GetResponseModel>>(request);
+        var response = await _client.ExecuteGetAsync<IEnumerable<GetTenantResponseModel>>(request);
         return response.ToResult();
     }
 
-    public async Task<ResultT<GetResponseModel>> CreateAsync(CreateTenantRequestModel requestModel)
+    public async Task<Result> CreateAsync(CreateTenantRequestModel requestModel)
     {
-        var request = new RestRequest("/Tenant/Create");
+        var request = new RestRequest("/Tenant");
         request.AddJsonBody(requestModel);
-        var response = await _client.ExecutePostAsync<GetResponseModel>(request);
+        var response = await _client.ExecutePostAsync(request);
         return response.ToResult();
     }
 
