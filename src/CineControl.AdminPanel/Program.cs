@@ -21,7 +21,9 @@ builder.Services.AddTenantProvider()
 builder.Services.AddIdentityServiceClient(builder.Configuration)
                 .AddTenantServiceClient(builder.Configuration);
 
-builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IAuthService, AuthService>()
+                .AddScoped<ITenantService, TenantService>()
+                .AddScoped<ITenantOperatorService, TenantOperatorService>();
 
 builder.Services.AddDataProtection()
                 .PersistKeysToFileSystem(new DirectoryInfo("./keys"));
@@ -56,6 +58,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Tenant}/{action=Index}/{id?}");
 
 app.Run();

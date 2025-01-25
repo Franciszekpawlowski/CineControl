@@ -4,10 +4,10 @@
     ViewData["Title"] = "Tenant Page";
 }
 
-<h1>Cinemas</h1>
+<h1>Tenants</h1>
 <p>
     <a asp-action="Create" 
-        class="btn btn-primary">Add Cinema</a>
+        class="btn btn-primary">Add Tenant</a>
 </p>
 <table> 
     <thead> 
@@ -29,6 +29,7 @@
                 </td> 
                 <td>
                     <a asp-action="Edit" asp-route-id="@tenant.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@tenant.Id">Details</a> |
                     <a asp-action="Delete" asp-route-id="@tenant.Id">Delete</a>
                 </td> 
             </tr> 

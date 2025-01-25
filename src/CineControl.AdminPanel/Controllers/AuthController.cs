@@ -35,7 +35,7 @@ public class AuthController(IAuthService authService) : Controller
             return View();
         }
 
-        return RedirectToAction("Index", "Cinema");
+        return RedirectToAction("Index", "Tenant");
     }
 
     public async Task<ActionResult> Logout()

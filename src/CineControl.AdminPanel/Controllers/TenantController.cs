@@ -1,15 +1,19 @@
-using System.Threading.Tasks;
+using CineControl.AdminPanel.Models.DTO;
 using CineControl.AdminPanel.Models.DTO.Tenant;
 using CineControl.AdminPanel.Service.IService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CineControl.AdminPanel.Controllers;
 
+[Authorize]
 public class TenantController(
-    ITenantService tenantService
+    ITenantService tenantService,
+    ITenantOperatorService tenantOperatorService
 ) : Controller
 {
     public readonly ITenantService _tenantService = tenantService;
+    public readonly ITenantOperatorService _tenantOperatorService = tenantOperatorService;
     // GET: TenantController
     public async Task<ActionResult> Index()
     {
@@ -23,6 +27,7 @@ public class TenantController(
         return View();
     }
 
+    [HttpPost]
     public async Task<ActionResult> Create(CreateTenantRequest request)
     {
         if (!ModelState.IsValid)
@@ -48,6 +53,7 @@ public class TenantController(
         return View(tenant.Value.ToUpdate());
     }
 
+    [HttpPost]
     public async Task<ActionResult> Edit(Guid id, UpdateTenantRequest request)
     {
         if (id != request.Id)
@@ -65,6 +71,25 @@ public class TenantController(
             return View(request);
         }
         return RedirectToAction("Index");
+    }
+
+    public async Task<ActionResult> Details(Guid id)
+    {
+        var tenant = await _tenantService.GetByIdAsync(id);
+        if (!tenant.IsSuccess)
+        {
+            return NotFound();
+        }
+        var tenantOperator = await _tenantOperatorService.GetTenantOperatorAsync(id);
+        if (!tenantOperator.IsSuccess)
+        {
+            return NotFound();
+        }
+        TenantOperatorModelView tenantOperatorModelView = new() {
+            Tenant = tenant.Value,
+            TenantOperator = tenantOperator.Value
+        };
+        return View(tenantOperatorModelView);
     }
 
     public async Task<ActionResult> Delete(Guid id)

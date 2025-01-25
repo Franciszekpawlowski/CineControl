@@ -1,20 +1,22 @@
 using System.Security.Claims;
 using CineControl.AdminPanel.Errors;
 using CineControl.AdminPanel.Extensions;
-using CineControl.AdminPanel.Models.GetUser;
 using CineControl.AdminPanel.Models.UserLogin;
 using CineControl.AdminPanel.Service.IService;
 using CineControl.Common.Clients.IdentityService.IClients;
-using CineControl.Common.Clients.IdentityService.Models.Login;
+using CineControl.Common.Clients.IdentityService.Models.Account;
 using CineControl.Common.Results;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace CineControl.AdminPanel.Service;
 
-public class AuthService(IIdentityServiceClient authServiceClient, IHttpContextAccessor httpContextAccessor) : IAuthService
+public class AuthService(
+    IAdminClient adminClient,
+    IHttpContextAccessor httpContextAccessor
+) : IAuthService
 {
-    private readonly IIdentityServiceClient _authServiceClient = authServiceClient;
+    private readonly IAdminClient _adminClient = adminClient;
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
     public async Task<Result> LoginAsync(UserLoginRequest userRequest)
@@ -24,7 +26,7 @@ public class AuthService(IIdentityServiceClient authServiceClient, IHttpContextA
             Username = userRequest.Username,
             Password = userRequest.Password
         };
-        var loginResponseModel = await _authServiceClient.LoginAsync(loginRequestModel);
+        var loginResponseModel = await _adminClient.LoginAsync(loginRequestModel);
         if (!loginResponseModel.IsSuccess)
         {
             return AuthServiceErrors.AccessUnauthorized();
@@ -51,23 +53,6 @@ public class AuthService(IIdentityServiceClient authServiceClient, IHttpContextA
         );
 
         return Result.Success();
-    }
-
-    public async Task<ResultT<GetUserResult>> GetUserAsync()
-    {
-        string token = _httpContextAccessor.HttpContext.Request.Cookies["Token"].ToString();
-        
-        if (string.IsNullOrEmpty(token))
-        {
-            return AuthServiceErrors.AccessUnauthorized();
-        }
-
-        var result = await _authServiceClient.GetUserAsync(token);
-        if (!result.IsSuccess)
-        {
-            return AuthServiceErrors.NotFound();
-        }
-        return new GetUserResult(result.Value);
     }
 
     public async Task<Result> LogoutAsync()

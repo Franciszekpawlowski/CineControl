@@ -1,4 +1,4 @@
-using CineControl.Common.Clients.IdentityService.Models.GetUser;
+using CineControl.Common.Clients.IdentityService.Models.Account;
 
 namespace CineControl.AdminPanel.Models.GetUser;
 

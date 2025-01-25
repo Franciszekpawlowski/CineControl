@@ -51,7 +51,7 @@ public class TenantService(ITenantServiceClient tenantServiceClient) : ITenantSe
         return Result.Success();    
     }
 
-    async Task<ResultT<IEnumerable<GetTenantResponse>>> ITenantService.GetTenantsAsync()
+    public async Task<ResultT<IEnumerable<GetTenantResponse>>> GetTenantsAsync()
     {
         var getTenant = await _tenantServiceClient.GetAllAsync();
         if(!getTenant.IsSuccess)
@@ -61,4 +61,5 @@ public class TenantService(ITenantServiceClient tenantServiceClient) : ITenantSe
 
         return getTenant.Value.ToResponse();
     }
+
 }
