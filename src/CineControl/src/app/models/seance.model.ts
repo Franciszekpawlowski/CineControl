@@ -2,7 +2,7 @@ export interface Seance {
     id: number;
     cinemaId: number;
     movieId: number;
-    posterUrl: string;
+    psterBase64: string;
     movieTitle: string;
     startTime: string; 
     endTime: string;

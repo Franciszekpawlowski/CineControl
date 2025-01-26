@@ -59,7 +59,7 @@
 <div *ngIf="groupedSeances.length > 0" class="grouped-seances">
   <div *ngFor="let group of groupedSeances; let last = last" class="movie-row">
     <div class="poster">
-      <img [src]="group.posterUrl" alt="{{ group.movieTitle }}" class="movie-poster" />
+      <img [src]="'data:image/jpeg;base64,' + group.posterB64" alt="{{ group.movieTitle }}" class="movie-poster" />
     </div>
     <div class="movie-details">
       <h3 class="movie-title">{{ group.movieTitle }}</h3>

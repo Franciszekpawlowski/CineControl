@@ -28,7 +28,7 @@ interface ShowTime {
 
 interface GroupedSeances {
   movieTitle: string;
-  posterUrl: string;
+  posterB64: string;
   shows: ShowTime[];
 }
 
@@ -187,7 +187,7 @@ export class RepertoireComponent implements OnInit {
       } else {
         acc.push({
           movieTitle: seance.movieTitle,
-          posterUrl: seance.posterUrl,
+          posterB64: seance.psterBase64,
           shows: [showTime]
         });
       }
