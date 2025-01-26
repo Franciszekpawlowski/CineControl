@@ -72,7 +72,7 @@ namespace CineControl.IdentityService.API.Controllers
             );
         }
 
-        [HttpPost("{tenantId}/{id}")]
+        [HttpGet("{tenantId}/{id}")]
         [Authorize(Policy = nameof(CustomPolicies.Admin))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
