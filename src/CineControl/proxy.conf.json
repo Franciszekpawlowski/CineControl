@@ -23,7 +23,7 @@
     "changeOrigin": true,
     "logLevel": "debug"
   },
-    "/Movies": {
+  "/Movies": {
     "target": "http://127.0.0.1:5222/api/v1",
     "secure": false,
     "changeOrigin": true,
@@ -41,7 +41,7 @@
     "changeOrigin": true,
     "logLevel": "debug"
   },
-    "/Seating": {
+  "/Seating": {
     "target": "http://127.0.0.1:5045/api/v1",
     "secure": false,
     "changeOrigin": true,

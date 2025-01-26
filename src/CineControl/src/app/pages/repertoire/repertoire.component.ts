@@ -187,7 +187,7 @@ export class RepertoireComponent implements OnInit {
       } else {
         acc.push({
           movieTitle: seance.movieTitle,
-          posterB64: seance.psterBase64,
+          posterB64: seance.posterBase64,
           shows: [showTime]
         });
       }
