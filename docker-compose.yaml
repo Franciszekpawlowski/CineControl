@@ -83,7 +83,7 @@ services:
       context: .
       dockerfile: src/CineControl.WebsiteGateway/Dockerfile
     ports:
-      - "8084:8080"
+      - "8085:8080"
     depends_on:
       - cinemaservice
       - identityservice

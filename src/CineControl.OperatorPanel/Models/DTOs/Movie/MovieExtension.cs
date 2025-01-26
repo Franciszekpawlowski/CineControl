@@ -30,9 +30,9 @@ public static class MovieExtensions
             ShortDescription = addMovieRequest.ShortDescription,
             ReleaseDate = addMovieRequest.ReleaseDate,
             Duration = addMovieRequest.Duration,
-            PosterUrl = addMovieRequest.PosterUrl,
+            // PosterUrl = addMovieRequest.PosterUrl,
             PosterB64 = FileProvider.ConvertToBase64(addMovieRequest.PosterFile),
-            PanoramicPosterUrl = addMovieRequest.PanoramicPosterUrl,
+            // PanoramicPosterUrl = addMovieRequest.PanoramicPosterUrl,
             PanoramicPosterB64 = FileProvider.ConvertToBase64(addMovieRequest.PanoramicPosterFile),
             Genre = addMovieRequest.Genre,
             Rating = addMovieRequest.Rating
@@ -45,8 +45,8 @@ public static class MovieExtensions
             ShortDescription = updateMovieRequest.ShortDescription,
             ReleaseDate = updateMovieRequest.ReleaseDate,
             Duration = updateMovieRequest.Duration,
-            PosterUrl = updateMovieRequest.PosterUrl,
-            PanoramicPosterUrl = updateMovieRequest.PanoramicPosterUrl,
+            // PosterUrl = updateMovieRequest.PosterUrl,
+            // PanoramicPosterUrl = updateMovieRequest.PanoramicPosterUrl,
             Genre = updateMovieRequest.Genre,
             Rating = updateMovieRequest.Rating
         };

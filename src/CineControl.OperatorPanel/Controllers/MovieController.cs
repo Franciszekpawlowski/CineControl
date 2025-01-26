@@ -68,8 +68,8 @@ namespace CineControl.OperatorPanel.Controllers
                 ShortDescription = result.Value.ShortDescription,
                 ReleaseDate = result.Value.ReleaseDate,
                 Duration = result.Value.Duration,
-                PosterUrl = result.Value.PosterUrl,
-                PanoramicPosterUrl = result.Value.PanoramicPosterUrl,
+                // PosterUrl = result.Value.PosterUrl,
+                // PanoramicPosterUrl = result.Value.PanoramicPosterUrl,
                 Genre = result.Value.Genre,
                 Rating = result.Value.Rating
             };
