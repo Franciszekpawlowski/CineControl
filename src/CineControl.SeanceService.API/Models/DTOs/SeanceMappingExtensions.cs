@@ -20,5 +20,8 @@ namespace CineControl.SeanceService.API.Models.DTOs
                 EndTime = seance.EndTime
             };
         }
+
+        public static List<SeanceDto> ToDto(this List<Seance> seance)
+            => seance.Select(ToDto).ToList();
     }
 }

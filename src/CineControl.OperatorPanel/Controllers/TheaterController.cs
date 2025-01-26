@@ -35,7 +35,7 @@ namespace CineControl.OperatorPanel.Controllers
                 ModelState.AddModelError("Error", result.Error.ToString());
                 return View(request);
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", "Cinema", new { id = cinemaId });
         }
 
         [HttpGet("Edit/{id}")]
@@ -45,7 +45,7 @@ namespace CineControl.OperatorPanel.Controllers
             if (!result.IsSuccess)
             {
                 ModelState.AddModelError("Error", result.Error.ToString());
-                return RedirectToAction("Index");
+            return RedirectToAction("Details", "Cinema", new { id = cinemaId });
             }
             UpdateTheaterRequest updateTheaterRequest = new()
             {
@@ -78,9 +78,9 @@ namespace CineControl.OperatorPanel.Controllers
             if (!result.IsSuccess)
             {
                 ModelState.AddModelError("Error", result.Error.ToString());
-                return RedirectToAction("Index");
+            return RedirectToAction("Details", "Cinema", new { id = cinemaId });
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", "Cinema", new { id = cinemaId });
         }
 
         [HttpGet("Delete/{id}")]
@@ -90,13 +90,13 @@ namespace CineControl.OperatorPanel.Controllers
             if (!result.IsSuccess)
             {
                 ModelState.AddModelError("Error", result.Error.ToString());
-                return RedirectToAction("Index");
+            return RedirectToAction("Details", "Cinema", new { id = cinemaId });
             }
             result.Value.CinemaId = cinemaId;
             return View(result.Value);
         }
 
-        [HttpDelete("Delete/{id}")]
+        [HttpPost("Delete/{id}")]
         public async Task<ActionResult> DeleteConfirmed(int cinemaId, int id)
         {
             var result = await _theaterService.DeleteTheaterAsync(cinemaId,id);
@@ -104,7 +104,7 @@ namespace CineControl.OperatorPanel.Controllers
             {
                 ModelState.AddModelError("Error", result.Error.ToString());
             }
-            return RedirectToAction("Details","Cinema");
+            return RedirectToAction("Details", "Cinema", new { id = cinemaId });
         }
 
     }

@@ -3,6 +3,7 @@ using CineControl.Common.Tenant;
 using CineControl.SeanceService.API.Data;
 using CineControl.SeanceService.API.Errors;
 using CineControl.SeanceService.API.Models;
+using CineControl.SeanceService.API.Models.DTOs;
 using CineControl.SeanceService.API.Models.DTOs.Seances;
 using CineControl.SeanceService.API.Service.IService;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +21,7 @@ namespace CineControl.SeanceService.API.Service
             _tenantProvider = tenantProvider;
         }
 
-        public async Task<ResultT<IEnumerable<Seance>>> GetAllSeances()
+        public async Task<ResultT<IEnumerable<SeanceDto>>> GetAllSeances()
         {
             if (!_tenantProvider.HasTenant())
             {
@@ -30,10 +31,10 @@ namespace CineControl.SeanceService.API.Service
             var seances = await _context.Seances
                 .Include(s => s.Movie)
                 .ToListAsync();
-            return seances;
+            return seances.ToDto();
         }
 
-        public async Task<ResultT<Seance>> GetSeanceById(int id)
+        public async Task<ResultT<SeanceDto>> GetSeanceById(int id)
         {
             if (!_tenantProvider.HasTenant())
             {
@@ -44,11 +45,11 @@ namespace CineControl.SeanceService.API.Service
                 .Include(s => s.Movie)
                 .FirstOrDefaultAsync(s => s.Id == id);
             return seance != null
-                ? seance
+                ? seance.ToDto()
                 : SeanceErrors.NotFound($"Seance with id {id} not found");
         }
 
-        public async Task<ResultT<IEnumerable<Seance>>> GetSeancesByCinemaAndDate(int cinemaId, DateTime date)
+        public async Task<ResultT<IEnumerable<SeanceDto>>> GetSeancesByCinemaAndDate(int cinemaId, DateTime date)
         {
             if (!_tenantProvider.HasTenant())
             {
@@ -62,10 +63,10 @@ namespace CineControl.SeanceService.API.Service
                 .Where(s => s.CinemaId == cinemaId && s.StartTime.Date == utcDate.Date)
                 .ToListAsync();
 
-            return seances;
+            return seances.ToDto();
         }
 
-        public async Task<ResultT<Seance>> AddSeance(SeanceCreateDto seanceCreateDto)
+        public async Task<ResultT<SeanceDto>> AddSeance(SeanceCreateDto seanceCreateDto)
         {
             if (!_tenantProvider.HasTenant())
             {
@@ -102,7 +103,7 @@ namespace CineControl.SeanceService.API.Service
 
             _context.Seances.Add(seance);
             await _context.SaveChangesAsync();
-            return seance;
+            return seance.ToDto();
         }
 
         public async Task<Result> UpdateSeance(int id, SeanceDto seanceDto)
@@ -193,7 +194,7 @@ namespace CineControl.SeanceService.API.Service
             return _context.Seances.Any(e => e.Id == id);
         }
 
-        public async Task<ResultT<IEnumerable<Seance>>> GetSeancesByCinema(int cinemaId)
+        public async Task<ResultT<IEnumerable<SeanceDto>>> GetSeancesByCinema(int cinemaId)
         {
             if (!_tenantProvider.HasTenant())
             {
@@ -205,7 +206,7 @@ namespace CineControl.SeanceService.API.Service
                 .Where(s => s.CinemaId == cinemaId)
                 .ToListAsync();
 
-            return seances;
+            return seances.ToDto();
         }
     }
 }

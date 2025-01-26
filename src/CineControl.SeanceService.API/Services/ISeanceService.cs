@@ -6,12 +6,12 @@ namespace CineControl.SeanceService.API.Service.IService
 {
     public interface ISeanceService
     {
-        Task<ResultT<IEnumerable<Seance>>> GetAllSeances();
-        Task<ResultT<Seance>> GetSeanceById(int id);
-        Task<ResultT<IEnumerable<Seance>>> GetSeancesByCinemaAndDate(int cinemaId, DateTime date);
-        Task<ResultT<Seance>> AddSeance(SeanceCreateDto seanceCreateDto);
+        Task<ResultT<IEnumerable<SeanceDto>>> GetAllSeances();
+        Task<ResultT<SeanceDto>> GetSeanceById(int id);
+        Task<ResultT<IEnumerable<SeanceDto>>> GetSeancesByCinemaAndDate(int cinemaId, DateTime date);
+        Task<ResultT<SeanceDto>> AddSeance(SeanceCreateDto seanceCreateDto);
         Task<Result> UpdateSeance(int id, SeanceDto seanceDto);
         Task<Result> DeleteSeance(int id);
-        Task<ResultT<IEnumerable<Seance>>> GetSeancesByCinema(int cinemaId);
+        Task<ResultT<IEnumerable<SeanceDto>>> GetSeancesByCinema(int cinemaId);
     }
 }

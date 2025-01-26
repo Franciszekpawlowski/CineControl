@@ -32,7 +32,8 @@
                 "johnpapa.Angular2",
                 "dbaeumer.vscode-eslint",
                 "christian-kohler.path-intellisense",
-                "Murugaratham.vscode-dotnet-watch"
+                "Murugaratham.vscode-dotnet-watch",
+                "cweijan.vscode-database-client2"
             ]
         }
     },

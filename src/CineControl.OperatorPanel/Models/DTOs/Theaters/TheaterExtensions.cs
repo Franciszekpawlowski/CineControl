@@ -20,7 +20,8 @@ public static class TheaterExtensions
         => new()
         {
             Name = addTheaterRequest.Name,
-            SeatingCapacity = addTheaterRequest.SeatingCapacity
+            SeatingCapacity = addTheaterRequest.SeatingCapacity,
+            SeatsPerRow = addTheaterRequest.SeatsPerRow
         };
 
     public static UpdateTheaterRequestModel ToRequest(this UpdateTheaterRequest addTheaterRequest)

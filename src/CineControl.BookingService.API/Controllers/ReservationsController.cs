@@ -44,7 +44,7 @@ namespace CineControl.BookingService.API.Controllers
             _jwtProvider.SetToken(token);
             var result = await _reservationService.CreateReservationAsync(request);
             return result.Match(
-                onSuccess: reservation => Ok(reservation),
+                onSuccess: Ok,
                 onFailure: Problem
             );
         }

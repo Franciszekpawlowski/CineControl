@@ -26,7 +26,7 @@ namespace CineControl.SeanceService.API.Controllers
         {
             var result = await _seanceService.GetAllSeances();
             return result.Match(
-                onSuccess: seances => Ok(seances.Select(s => s.ToDto())),
+                onSuccess: Ok,
                 onFailure: Problem
             );
         }
@@ -37,7 +37,7 @@ namespace CineControl.SeanceService.API.Controllers
         {
             var result = await _seanceService.GetSeanceById(id);
             return result.Match(
-                onSuccess: seance => Ok(seance.ToDto()),
+                onSuccess: Ok,
                 onFailure: Problem
             );
         }
@@ -48,7 +48,7 @@ namespace CineControl.SeanceService.API.Controllers
         {
             var result = await _seanceService.GetSeancesByCinemaAndDate(cinemaId, date);
             return result.Match(
-                onSuccess: seances => Ok(seances.Select(s => s.ToDto())),
+                onSuccess: Ok,
                 onFailure: Problem
             );
         }
@@ -59,7 +59,7 @@ namespace CineControl.SeanceService.API.Controllers
         {
             var result = await _seanceService.GetSeancesByCinema(cinemaId);
             return result.Match(
-                onSuccess: seances => Ok(seances.Select(s => s.ToDto())),
+                onSuccess: Ok,
                 onFailure: Problem
             );
         }
@@ -69,7 +69,7 @@ namespace CineControl.SeanceService.API.Controllers
         {
             var result = await _seanceService.AddSeance(seanceCreateDto);
             return result.Match(
-                onSuccess: seance => CreatedAtAction(nameof(GetSeance), new { id = seance.Id }, seance.ToDto()),
+                onSuccess: Created,
                 onFailure: Problem
             );
         }

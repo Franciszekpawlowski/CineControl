@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="../Common/CineControl.Common.JWTProvider/CineControl.Common.JWTProvider.csproj" />
+    <ProjectReference Include="../Common/CineControl.Common/CineControl.Common.csproj" />
     <ProjectReference Include="..\Common\CineControl.Common.ServiceDefaults\CineControl.Common.ServiceDefaults.csproj" />
   </ItemGroup>
 

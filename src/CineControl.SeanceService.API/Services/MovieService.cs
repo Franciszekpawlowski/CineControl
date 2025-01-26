@@ -59,9 +59,9 @@ namespace CineControl.SeanceService.API.Service
                 ShortDescription = request.ShortDescription,
                 ReleaseDate = DateTime.SpecifyKind(request.ReleaseDate, DateTimeKind.Utc),
                 Duration = request.Duration,
-                PosterUrl = request.PosterUrl,
+                PosterUrl = request.PosterUrl ?? "test",
                 PosterB64 = request.PosterB64,
-                PanoramicPosterUrl = request.PanoramicPosterUrl,
+                PanoramicPosterUrl = request.PanoramicPosterUrl ?? "test",
                 PanoramicPosterB64 = request.PanoramicPosterB64,
                 Genre = request.Genre,
                 Rating = request.Rating

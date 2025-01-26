@@ -123,7 +123,7 @@ public class CinemaController(
         return View(result.Value);
     }
 
-    [HttpPost("Delete/{id}")]
+    [HttpPost("DeleteConfirmed/{id}")]
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> DeleteConfirmed(int id)
     {

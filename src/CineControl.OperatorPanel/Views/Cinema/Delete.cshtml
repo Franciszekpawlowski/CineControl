@@ -43,8 +43,7 @@
         </dd>
     </dl>
 
-    <form asp-action="DeleteConfirmed" method="post">
-        <input type="hidden" asp-for="Id">
+    <form asp-action="DeleteConfirmed" asp-route-id="@Model.Id" method="post">
         <input type="submit" value="Delete" class="btn btn-danger">
     </form>
     <a asp-action="Index"
