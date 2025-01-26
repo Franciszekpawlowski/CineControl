@@ -158,9 +158,12 @@ namespace CineControl.IdentityService.API.Service
 
         public async Task<ResultT<IEnumerable<GetUserResponse>>> GetTenantOperator(Guid id)
         {
-            var users = await _appdbContext.Users
+            var users = (await _userManager.GetUsersForClaimAsync(
+                new Claim(CustomClaims.Role, Roles.Operator.ToString())
+                ))
                 .Where(u => u.TenantId == id)
-                .ToListAsync();
+                .ToList();
+            
 
             var applicationUser = new List<GetUserResponse>();
 

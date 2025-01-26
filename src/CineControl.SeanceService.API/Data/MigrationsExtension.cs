@@ -41,48 +41,49 @@ namespace CineControl.SeanceService.API.Data
 
             var now = DateTime.UtcNow.Date;
 
-            
             var pastMovies = new List<Movie>();
-            for (int i = 1; i <= 10; i++)
-            {
-                var releaseDate = now.AddDays(-14 + i);
-                pastMovies.Add(new Movie
-                {
-                    Title = $"Past Movie #{i}",
-                    Description = $"Opis filmu (premiera {releaseDate:yyyy-MM-dd})",
-                    ShortDescription = $"Krótki opis {i}",
-                    ReleaseDate = releaseDate,
-                    Duration = 120,
-                    PosterUrl = "https://example.com/poster.jpg",
-                    PosterB64 = "base64-encoded-poster-data",
-                    PanoramicPosterUrl = "https://example.com/panorama.jpg",
-                    PanoramicPosterB64 = "base64-encoded-panorama-data",
-                    Genre = "Action",
-                    Rating = 4.5
-                });
-            }
-
-            
             var futureMovies = new List<Movie>();
-            for (int i = 1; i <= 5; i++)
+            
+            foreach (Guid tenantid in tenantIds)
             {
-                var releaseDate = now.AddDays(i);
-                futureMovies.Add(new Movie
+                for (int i = 1; i <= 10; i++)
                 {
-                    Title = $"Future Movie #{i}",
-                    Description = $"Opis filmu (premiera {releaseDate:yyyy-MM-dd})",
-                    ShortDescription = $"Krótki opis {i}",
-                    ReleaseDate = releaseDate,
-                    Duration = 100,
-                    PosterUrl = "https://example.com/poster-future.jpg",
-                    PosterB64 = "base64-encoded-poster-data",
-                    PanoramicPosterUrl = "https://example.com/panorama-future.jpg",
-                    PanoramicPosterB64 = "base64-encoded-panorama-data",
-                    Genre = "Comedy",
-                    Rating = 4.2
-                });
-            }
+                    var releaseDate = now.AddDays(-14 + i);
+                    pastMovies.Add(new Movie
+                    {
+                        Title = $"Past Movie #{i}",
+                        Description = $"Opis filmu (premiera {releaseDate:yyyy-MM-dd})",
+                        ShortDescription = $"Krótki opis {i}",
+                        ReleaseDate = releaseDate,
+                        Duration = 120,
+                        PosterUrl = "https://example.com/poster.jpg",
+                        PosterB64 = "base64-encoded-poster-data",
+                        PanoramicPosterUrl = "https://example.com/panorama.jpg",
+                        PanoramicPosterB64 = "base64-encoded-panorama-data",
+                        Genre = "Action",
+                        Rating = 4.5
+                    });
+                }
 
+                for (int i = 1; i <= 5; i++)
+                {
+                    var releaseDate = now.AddDays(i);
+                    futureMovies.Add(new Movie
+                    {
+                        Title = $"Future Movie #{i}",
+                        Description = $"Opis filmu (premiera {releaseDate:yyyy-MM-dd})",
+                        ShortDescription = $"Krótki opis {i}",
+                        ReleaseDate = releaseDate,
+                        Duration = 100,
+                        PosterUrl = "https://example.com/poster-future.jpg",
+                        PosterB64 = "base64-encoded-poster-data",
+                        PanoramicPosterUrl = "https://example.com/panorama-future.jpg",
+                        PanoramicPosterB64 = "base64-encoded-panorama-data",
+                        Genre = "Comedy",
+                        Rating = 4.2
+                    });
+                }
+            };
             
             var allMoviesToSeed = futureMovies.Concat(pastMovies).ToList();
 
