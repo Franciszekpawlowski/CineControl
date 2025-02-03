@@ -22,7 +22,8 @@ namespace CineControl.IdentityService.API.Service
         IJwtTokenGenerator jwtTokenGenerator,
         ITenantProvider tenantProvider,
         ITenantServiceClient tenantServiceClient,
-        appdbContext dbContext
+        appdbContext dbContext,
+        ILogger<AccountService> logger
         ) : IAccountService
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
@@ -30,12 +31,14 @@ namespace CineControl.IdentityService.API.Service
         private readonly ITenantServiceClient _tenantServiceClient = tenantServiceClient;
         private readonly ITenantProvider _tenantProvider = tenantProvider;
         private readonly appdbContext _appdbContext = dbContext;
+        private readonly ILogger<AccountService> _logger = logger;
 
         public async Task<ResultT<LoginResponse>> LoginAsync(LoginRequest loginRequest, Roles LoginRole = Roles.User)
         {
-            ApplicationUser? user = await _userManager.FindByNameAsync(loginRequest.Username);
+            ApplicationUser? user = await _userManager.FindByEmailAsync(loginRequest.Username);
             if (user == null)
             {
+                _logger.LogError($"User {loginRequest.Username} not found");
                 return AuthErrors.AccessUnauthorized();
             }
             var claimsList = await _userManager.GetClaimsAsync(user);
@@ -43,11 +46,13 @@ namespace CineControl.IdentityService.API.Service
 
             if (role!.Value != LoginRole.ToString())
             {
+                _logger.LogError($"User {loginRequest.Username} is not a {LoginRole}");
                 return AuthErrors.AccessUnauthorized();
             }
 
-            if (role!.Value == Roles.User.ToString() && user.TenantId != _tenantProvider.GetTenantId())
+            if (user.TenantId != _tenantProvider.GetTenantId())
             {
+                _logger.LogError($"User {loginRequest.Username} is not in the current tenant");
                 return AuthErrors.AccessUnauthorized();
             }
 
@@ -70,8 +75,9 @@ namespace CineControl.IdentityService.API.Service
         public async Task<Result> RegisterAsync(RegistrationRequest registerRequest, Roles RegisterRole = Roles.User)
         {
             var tenantIdExist = await _tenantServiceClient.GetAsync(_tenantProvider.GetTenantId());
-            if (!tenantIdExist.IsSuccess && tenantIdExist.Value.Id == Guid.Empty)
+            if (!tenantIdExist.IsSuccess || tenantIdExist.Value.Id == Guid.Empty)
             {
+                _logger.LogError(tenantIdExist.Error.Description);
                 return AuthErrors.NotFound();
             }
             var user = registerRequest.ToApplicationUser();
@@ -79,6 +85,8 @@ namespace CineControl.IdentityService.API.Service
             var createAsyncResult = await _userManager.CreateAsync(user, registerRequest.Password);
             if (!createAsyncResult.Succeeded)
             {
+                _logger.LogError(createAsyncResult.Errors.Select(e => e.Description)
+                    .FirstOrDefault());
                 return AuthErrors.Conflict();
             }
 

@@ -23,7 +23,7 @@ public class TenantServiceClient : ITenantServiceClient, IDisposable
 
     public async Task<ResultT<GetTenantResponseModel>> GetAsync(Guid tenantId)
     {
-        var request = new RestRequest($"/Tenant/{tenantId}");   
+        var request = new RestRequest($"/Tenant/{tenantId}");
         var response = await _client.ExecuteGetAsync<GetTenantResponseModel>(request);
 
         return response.ToResult();

@@ -30,7 +30,7 @@ namespace CineControl.TenantService.API.Controllers
             );
         }
 
-        [HttpGet("{id:guid}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid id)
         {
             var result = await _tenantService.GetByIdAsync(id);
