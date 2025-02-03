@@ -145,7 +145,7 @@ namespace CineControl.IdentityService.API.Service
         public async Task<Result> RegisterByAdminAsync(RegistrationRequestByAdmin registerRequest)
         {
             var tenantIdExist = await _tenantServiceClient.GetAsync(registerRequest.TenantId);
-            if (!tenantIdExist.IsSuccess && tenantIdExist.Value.Id == Guid.Empty)
+            if (!tenantIdExist.IsSuccess || tenantIdExist.Value.Id == Guid.Empty)
             {
                 return AuthErrors.NotFound();
             }
