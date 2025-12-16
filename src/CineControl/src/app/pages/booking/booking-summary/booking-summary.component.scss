@@ -1,0 +1,50 @@
+.summary-container {
+    background: #1e1e1e;
+    color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 300px;
+    margin: 20px auto;
+    font-family: sans-serif;
+    text-align: center;
+  }
+  
+  .info {
+    margin-bottom: 20px;
+    p {
+      margin: 5px 0;
+    }
+  }
+  
+  .order-button {
+    background: #800080; 
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s;
+  
+    &:hover:not(:disabled) {
+      background: #a000a0;
+    }
+  }
+  
+  .order-button:disabled {
+    background: #555;
+    cursor: not-allowed;
+  }
+  
+  .status-message {
+    margin-top: 10px;
+  }
+  
+  .status-message.success {
+    color: #0f0;
+  }
+  
+  .status-message.error {
+    color: #f00;
+  }
+  

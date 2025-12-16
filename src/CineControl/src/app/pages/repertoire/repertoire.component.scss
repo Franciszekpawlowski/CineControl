@@ -1,0 +1,54 @@
+.grouped-seances {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Środkowanie filmów */
+}
+
+.movie-row {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  width: 80%; /* Dostosuj szerokość filmu, aby nie zajmował całej strony */
+  margin-bottom: 20px;
+}
+
+.poster img {
+  width: 150px; /* Mniejsze zdjęcie */
+  height: auto;
+  border-radius: 5px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.movie-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.movie-title {
+  font-size: 1.4em;
+  font-weight: bold;
+  margin: 0;
+  color: #ffffff; /* Dostosowanie koloru */
+}
+
+.showtimes {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.time-button {
+  background-color: #8b008b;
+  color: #fff;
+  font-size: 0.9em;
+  padding: 5px 15px;
+  border-radius: 20px;
+}
+
+.separator {
+  border: 1px solid #666; /* Styl separatora */
+  width: 100%; /* Cała szerokość kontenera */
+  margin: 10px 0;
+}

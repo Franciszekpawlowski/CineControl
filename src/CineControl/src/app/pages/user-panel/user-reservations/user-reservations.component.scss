@@ -1,0 +1,39 @@
+.reservations-panel {
+    margin-top: 20px;
+    background-color: #1f1f1f;
+    padding: 20px;
+    border-radius: 8px;
+  
+    h2 {
+      color: #bb86fc;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+  
+    .loading {
+      color: #ffb74d;
+      text-align: center;
+    }
+  
+    .error {
+      color: #e57373;
+      text-align: center;
+    }
+  
+    ul {
+      list-style: none;
+      padding: 0;
+  
+      .reservation-item {
+        background-color: #2e2e2e;
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 6px;
+  
+        p {
+          margin: 5px 0;
+        }
+      }
+    }
+  }
+  

@@ -1,0 +1,21 @@
+<div class="movie-details" *ngIf="movie">
+    <div class="movie-poster">
+      <img [src]="movie.panoramicPosterUrl" alt="Panoramic Poster" />
+    </div>
+    <div class="movie-info">
+      <h1>{{ movie.title }}</h1>
+      <p class="genre">{{ movie.genre }}</p>
+      <p class="description">{{ movie.description }}</p>
+      <p class="release-date">
+        <strong>Release Date:</strong> {{ movie.releaseDate | date: 'longDate' }}
+      </p>
+      <p class="duration">
+        <strong>Duration:</strong> {{ movie.duration }} minutes
+      </p>
+      <p class="rating">
+        <strong>Rating:</strong>
+        <span *ngFor="let star of [].constructor(movie.rating)">&#9733;</span>
+      </p>
+    </div>
+  </div>
+  

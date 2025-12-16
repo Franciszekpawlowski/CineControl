@@ -1,0 +1,23 @@
+<div class="section">
+    <app-carousel
+      [items]="promotions"
+      [itemTemplate]="promoTemplate"
+      [autoPlay]="true"
+      [autoPlayInterval]="5000"
+    ></app-carousel>
+  
+    <!-- Template for each promotion -->
+    <ng-template #promoTemplate let-promo>
+      <div class="promo-slide">
+        <img [src]="promo.imageUrl" alt="{{ promo.title }}" />
+        <div class="promo-content">
+          <h2>{{ promo.title }}</h2>
+          <p>{{ promo.description }}</p>
+          <button mat-raised-button color="accent" >
+            {{ promo.ctaText }}
+          </button>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+  

@@ -1,0 +1,81 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "compounds": [
+        {
+            "name": "Run All",
+            "configurations": [
+                "C#: CineControl.CinemaService.API Debug",
+                "C#: CineControl.IdentityService.API Debug",
+                "C#: CineControl.SeanceService.API Debug",
+                "C#: CineControl.OperatorPanel Debug",
+                "C#: CineControl.BookingService.API Debug",
+                "C#: CineControl.TenantService.API Debug",
+                "C#: CineControl.AdminPanel Debug"
+            ],
+            "stopAll": true
+        }
+    ],
+    "configurations": [
+        {
+            "name": "Launch Chrome",
+            "request": "launch",
+            "type": "chrome",
+            "url": "http://localhost:8080",
+            "webRoot": "${workspaceFolder}/src/CineControl"
+        },
+        {
+            "name": "C#: CineControl.CinemaService.API Debug",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/src/CineControl.CinemaService.API/CineControl.CinemaService.API.csproj"
+        },
+        {
+            "name": "C#: CineControl.IdentityService.API Debug",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/src/CineControl.IdentityService.API/CineControl.IdentityService.API.csproj"
+        },
+        {
+            "name": "C#: CineControl.SeanceService.API Debug",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/src/CineControl.SeanceService.API/CineControl.SeanceService.API.csproj"
+        },
+        {
+            "name": "C#: CineControl.OperatorPanel Debug",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/src/CineControl.OperatorPanel/CineControl.OperatorPanel.csproj"
+        },
+        {
+            "name": "C#: CineControl.BookingService.API Debug",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/src/CineControl.BookingService.API/CineControl.BookingService.API.csproj"
+        },
+        {
+            "name": "C#: CineControl.TenantService.API Debug",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/src/CineControl.TenantService.API/CineControl.TenantService.API.csproj"
+        },
+        {
+            "name": "C#: CineControl.AdminPanel Debug",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/src/CineControl.AdminPanel/CineControl.AdminPanel.csproj"
+        },
+        {
+            "name": "Docker .NET Launch",
+            "type": "docker",
+            "request": "launch",
+            "preLaunchTask": "docker-run: debug",
+            "netCore": {
+                "appProject": "${workspaceFolder}/src/CineControl.TenantService.API/CineControl.TenantService.API.csproj"
+            }
+        }
+    ]
+}

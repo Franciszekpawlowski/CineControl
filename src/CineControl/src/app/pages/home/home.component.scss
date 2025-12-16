@@ -1,0 +1,12 @@
+$background-color: #121212;
+$text-color: #ffffff;
+$primary-color: #9c27b0;
+$secondary-color: #7b1fa2;
+
+:host {
+  display: block;
+  background-color: $background-color;
+  color: $text-color;
+  padding: 20px;
+  min-height: 100vh;
+}

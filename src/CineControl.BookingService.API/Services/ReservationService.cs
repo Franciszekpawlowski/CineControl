@@ -1,0 +1,192 @@
+using CineControl.BookingService.API.Data;
+using CineControl.BookingService.API.Models;
+using CineControl.BookingService.API.Models.DTOs.Reservations;
+using CineControl.Common.Results;
+using CineControl.Common.Tenant;
+using CineControl.BookingService.Errors;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using CineControl.Common.JWTProvider;
+using BookingService.API.Models.DTOs;
+
+namespace CineControl.BookingService.API.Services
+{
+    public class ReservationService : IReservationService 
+    {
+        private readonly AppDbContext _context;
+        private readonly ILogger<ReservationService> _logger;
+        private readonly ITenantProvider _tenantProvider;
+        private readonly IJWTProvider _jwtProvider;
+
+        public ReservationService(
+            AppDbContext context,
+            ILogger<ReservationService> logger,
+            ITenantProvider tenantProvider,
+            IJWTProvider jWTProvider)
+        {
+            _context = context;
+            _logger = logger;
+            _tenantProvider = tenantProvider;
+            _jwtProvider = jWTProvider;
+        }
+
+        public async Task<bool> AreSeatsAvailableAsync(int seanceId, List<int> seatIds)
+        {
+            var reservedSeats = await _context.Tickets
+                .Where(t => t.SeanceId == seanceId && seatIds.Contains(t.SeatId))
+                .Select(t => t.SeatId)
+                .ToListAsync();
+
+            return !reservedSeats.Any();
+        }
+
+        public async Task<ResultT<List<int>>> GetReservedSeatsAsync(int seanceId)
+        {
+            var seats = await _context.Tickets
+                .Where(t => t.SeanceId == seanceId)
+                .Select(t => t.SeatId)
+                .ToListAsync();
+
+            return seats;
+        }
+
+        public async Task<ResultT<ReservationResponse>> CreateReservationAsync(ReservationRequest request)
+        {
+            
+
+
+            if (!_tenantProvider.HasTenant())
+            {
+                return BookingErrors.AccessUnauthorized("Brak określonego tenant.");
+            }
+            
+
+            using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
+            {
+                var areAvailable = await AreSeatsAvailableAsync(request.SeanceId, request.SeatIds);
+                if (!areAvailable)
+                {
+                    var reservedSeats = await _context.Tickets
+                        .Where(t => t.SeanceId == request.SeanceId && request.SeatIds.Contains(t.SeatId))
+                        .Select(t => t.SeatId)
+                        .ToListAsync();
+
+                    var unavailableSeats = request.SeatIds.Intersect(reservedSeats).ToList();
+                    return BookingErrors.Conflict($"Siedzenia o ID {string.Join(", ", unavailableSeats)} są już zarezerwowane.");
+                }
+                var reservation = new Reservation
+                {
+                    TenantId = _tenantProvider.GetTenantId(),
+                    SeanceId = request.SeanceId,
+                    ReservationTime = DateTime.UtcNow,
+                    UserId = _jwtProvider.GetUserId(),
+                    Tickets = request.SeatIds.Select(seatId => new Ticket
+                    {
+                        TenantId = _tenantProvider.GetTenantId(),
+                        SeanceId = request.SeanceId,
+                        SeatId = seatId,
+                        UserId = _jwtProvider.GetUserId(),
+                    }).ToList()
+                };
+
+                _context.Reservations.Add(reservation);
+                await _context.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+
+                var response = new ReservationResponse
+                {
+                    ReservationId = reservation.Id,
+                    SeanceId = reservation.SeanceId,
+                    SeatIds = reservation.Tickets.Select(t => t.SeatId).ToList(),
+                    ReservationTime = reservation.ReservationTime
+                };
+
+                return response; 
+            }
+            catch (DbUpdateException dbEx)
+            {
+                await transaction.RollbackAsync();
+                if (dbEx.InnerException != null && dbEx.InnerException.Message.Contains("IX_Ticket_SeanceId_SeatId"))
+                {
+                    var conflictingSeats = request.SeatIds.ToList(); 
+                    return BookingErrors.Conflict($"Siedzenia o ID {string.Join(", ", conflictingSeats)} są już zarezerwowane.");
+                }
+
+                _logger.LogError(dbEx, "Wystąpił błąd podczas tworzenia rezerwacji.");
+                return BookingErrors.Failure("Wystąpił błąd podczas tworzenia rezerwacji.");
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                _logger.LogError(ex, "Wystąpił błąd podczas tworzenia rezerwacji.");
+                return BookingErrors.Failure("Wystąpił błąd podczas tworzenia rezerwacji.");
+            }
+        }
+        public async Task<ResultT<List<ReservationResponse>>> GetUserReservationsAsync()
+        {
+            var userId = _jwtProvider.GetUserId();
+
+            if (!_tenantProvider.HasTenant())
+            {
+                return BookingErrors.AccessUnauthorized("Brak określonego tenant.");
+            }
+
+            var tenantId = _tenantProvider.GetTenantId();
+            var reservations = await _context.Reservations
+                .Include(r => r.Tickets)
+                .Where(r => r.TenantId == tenantId && r.UserId == userId)
+                .ToListAsync();
+            var reservationResponses = reservations
+                .Select(r => r.ToResponse()) 
+                .ToList();
+
+            return reservationResponses;
+        }
+
+        public async Task<Result> CancelReservationAsync(int reservationId)
+        {
+            if (!_tenantProvider.HasTenant())
+            {
+                return BookingErrors.AccessUnauthorized("Brak określonego tenant.");
+            }
+
+            var tenantId = _tenantProvider.GetTenantId();
+            var userId = _jwtProvider.GetUserId();
+
+            var reservation = await _context.Reservations
+                .Where(r => r.TenantId == tenantId && r.Id == reservationId)
+                .Include(r => r.Tickets) 
+                .FirstOrDefaultAsync();
+            if (reservation == null)
+            {
+                return BookingErrors.NotFound($"Rezerwacja o id {reservationId} nie została znaleziona.");
+            }
+            if (reservation.UserId != userId)
+            {
+                return BookingErrors.Forbidden($"Brak uprawnień do anulowania tej rezerwacji.");
+            }
+
+            try
+            {
+                _context.Tickets.RemoveRange(reservation.Tickets);
+                _context.Reservations.Remove(reservation);
+                await _context.SaveChangesAsync();
+
+                return Result.Success();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Wystąpił błąd podczas anulowania rezerwacji.");
+                return BookingErrors.Failure("Wystąpił błąd podczas anulowania rezerwacji.");
+            }
+        }
+
+    }
+}

@@ -1,0 +1,33 @@
+using CineControl.Common.Clients.IdentityService.Models.Account;
+
+namespace CineControl.AdminPanel.Extensions;
+
+public static class HTTPContextExtension
+{
+    public static HttpContext AddCookies(this HttpContext httpContext, 
+        LoginResponseModel loginResponseModel
+    )
+    {
+        httpContext.Response.Cookies.Append("Token", loginResponseModel.Token,
+            new CookieOptions
+            {
+                Expires = DateTimeOffset.UtcNow.AddDays(1),
+                HttpOnly = true
+            });
+
+        httpContext.Response.Cookies.Append("RefreshToken", loginResponseModel.RefreshToken,
+            new CookieOptions
+            {
+                Expires = DateTimeOffset.UtcNow.AddDays(1),
+                HttpOnly = true
+            });
+        // httpContext.Response.Cookies.Append("ExpiresIn", loginResponseModel.ExpiresIn.ToString(),
+        //     new CookieOptions
+        //     {
+        //         Expires = DateTimeOffset.UtcNow.AddDays(1),
+        //         HttpOnly = true
+        //     });
+
+        return httpContext;
+    }
+}

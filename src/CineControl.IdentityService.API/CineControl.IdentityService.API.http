@@ -1,0 +1,75 @@
+@CineControl.IdentityService.API_HostAddress = http://localhost:5093
+# @CineControl.IdentityService.API_HostAddress = http://identityservice.cinecontrol.local
+# @CineControl.IdentityService.API_HostAddress = http://gateway.cinecontrol.local/identity
+
+POST {{CineControl.IdentityService.API_HostAddress}}/api/v1/Account/Register
+Content-Type: application/json
+X-TenantId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+
+{
+    "Username": "Testowy",
+    "Email": "Testowy@test.com",
+    "Password":"T3st@wy"
+}
+
+###
+@AdmAuthToken = {{AdmLogin.response.body.accessToken}}
+POST {{CineControl.IdentityService.API_HostAddress}}/api/v1/Operator/RegisterByAdmin
+Content-Type: application/json
+X-TenantId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+Authorization: Bearer {{AdmAuthToken}}
+
+{
+    "tenantId":"3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "Username": "Testowy2",
+    "Email": "Testowy2@test.com",
+    "Password":"T3st@wy"
+}
+###
+POST {{CineControl.IdentityService.API_HostAddress}}/api/v1/Admin/Register
+Content-Type: application/json
+# X-TenantId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+
+{
+    "Username": "Testowy3",
+    "Email": "Testowy3@test.com",
+    "Password":"T3st@wy"
+}
+
+###
+# @name AccLogin
+POST {{CineControl.IdentityService.API_HostAddress}}/api/v1/Account/Login
+Content-Type: application/json
+X-TenantId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+
+{
+    "Username": "Testowy2",
+    "Password":"T3st@wy"
+}
+###
+# @name OpLogin
+POST {{CineControl.IdentityService.API_HostAddress}}/api/v1/Operator/Login
+Content-Type: application/json
+X-TenantId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+
+{
+    "Username": "Testowy2",
+    "Password":"T3st@wy"
+}
+
+###
+# @name AdmLogin
+POST {{CineControl.IdentityService.API_HostAddress}}/api/v1/Admin/Login
+Content-Type: application/json
+X-TenantId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+
+{
+    "Username": "Testowy3",
+    "Password":"T3st@wy"
+}
+
+###
+# @name GetUser
+@authToken = {{AccLogin.response.body.accessToken}}
+GET {{CineControl.IdentityService.API_HostAddress}}/api/v1/User/GetUser
+Authorization: Bearer {{authToken}}

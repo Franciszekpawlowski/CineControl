@@ -1,0 +1,26 @@
+@using CineControl.OperatorPanel.Models.Components;
+@model CinemaViewModel
+
+<form asp-controller="Cinema" 
+    asp-action="Details" 
+    method="get"
+    class="form-inline">
+    <div class="form-group mb-2">
+        <label asp-for="id" class="sr-only">Select Cinema</label>
+        @* <input type="hidden" name="cinemaId"> *@
+        <select 
+            asp-for="id" 
+            asp-items="@Model.selectListItems"
+            onchange="this.form.submit()"
+            class="form-control"></select>
+
+    </div>
+</form>
+@* <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('.form-control').on('change', function () {
+            $('input[name=cinemaId]').val($(this).val());
+        });
+    });
+</script> *@

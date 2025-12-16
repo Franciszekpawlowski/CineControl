@@ -1,0 +1,10 @@
+namespace CineControl.IdentityService.API.Models.DTOs.User
+{
+    public class GetUserResponse
+    {
+        public string UserId { get; set; }
+        public string Username { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Role { get; set; }
+    }
+}
